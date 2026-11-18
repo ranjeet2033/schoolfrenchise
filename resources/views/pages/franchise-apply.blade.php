@@ -20,32 +20,8 @@
     <section class="py-5">
         <div class="container">
             <div class="row g-5">
-                <!-- Left: Benefits & Information -->
-                <div class="col-lg-4">
-                    <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-primary text-white">
-                        <h4 class="fw-bold mb-3"><i class="fa-solid fa-handshake me-2 text-warning"></i>Why Partner With {{ $instituteSettings['institute_name'] ?? 'TECH ERA COMPUTER' }}?</h4>
-                        <ul class="list-unstyled small mb-0">
-                            <li class="py-2 border-bottom border-white-50"><i class="fa-solid fa-check text-warning me-2"></i>Structured Job-Oriented Curricula</li>
-                            <li class="py-2 border-bottom border-white-50"><i class="fa-solid fa-check text-warning me-2"></i>Complete Student Self-Service Portal</li>
-                            <li class="py-2 border-bottom border-white-50"><i class="fa-solid fa-check text-warning me-2"></i>Instant QR-Verified Marksheets & Certificates</li>
-                            <li class="py-2 border-bottom border-white-50"><i class="fa-solid fa-check text-warning me-2"></i>Automated Admission & Receipt Generation</li>
-                            <li class="py-2 border-bottom border-white-50"><i class="fa-solid fa-check text-warning me-2"></i>Bilingual Typing (Hindi/English) Lab Setup Guidance</li>
-                            <li class="py-2 border-bottom border-white-50"><i class="fa-solid fa-check text-warning me-2"></i>Dedicated Operational & Technical Support</li>
-                            <li class="py-2"><i class="fa-solid fa-check text-warning me-2"></i>Digital Examination & Grading Framework</li>
-                        </ul>
-                    </div>
-
-                    <div class="card border-0 shadow-sm rounded-4 p-4 bg-light">
-                        <h5 class="fw-bold text-dark mb-2"><i class="fa-solid fa-circle-question text-info me-2"></i>Need Franchise Help?</h5>
-                        <p class="text-muted small mb-3">Speak with our campus expansion team for guidance on infrastructure requirements and affiliation setup.</p>
-                        <a href="tel:{{ $instituteSettings['contact_phone'] ?? '9162384660' }}" class="btn btn-warning w-100 fw-bold text-dark">
-                            <i class="fa-solid fa-phone me-1"></i> Call {{ $instituteSettings['contact_phone'] ?? '9162384660' }}
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Right: Application Form -->
-                <div class="col-lg-8">
+                <!-- Left: Application Form (Desktop First / Mobile First) -->
+                <div class="col-lg-8 order-1 order-lg-1">
                     <div class="card border-0 shadow-lg rounded-4 p-4 p-md-5">
                         <div class="border-bottom pb-3 mb-4">
                             <h3 class="fw-bold text-primary mb-1">Franchise Affiliation Application Form</h3>
@@ -123,6 +99,33 @@
                         </form>
                     </div>
                 </div>
+
+                <!-- Right: Benefits & Information -->
+                <div class="col-lg-4 order-2 order-lg-2">
+                    <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-primary text-white">
+                        <h4 class="fw-bold mb-3"><i class="fa-solid fa-handshake me-2 text-warning"></i>Why Partner With {{ $instituteSettings['institute_name'] ?? 'TECH ERA COMPUTER' }}?</h4>
+                        <ul class="list-unstyled small mb-0">
+                            <li class="py-2 border-bottom border-white-50"><i class="fa-solid fa-check text-warning me-2"></i>Structured Job-Oriented Curricula</li>
+                            <li class="py-2 border-bottom border-white-50"><i class="fa-solid fa-check text-warning me-2"></i>Complete Student Self-Service Portal</li>
+                            <li class="py-2 border-bottom border-white-50"><i class="fa-solid fa-check text-warning me-2"></i>Instant QR-Verified Marksheets & Certificates</li>
+                            <li class="py-2 border-bottom border-white-50"><i class="fa-solid fa-check text-warning me-2"></i>Automated Admission & Receipt Generation</li>
+                            <li class="py-2 border-bottom border-white-50"><i class="fa-solid fa-check text-warning me-2"></i>Bilingual Typing (Hindi/English) Lab Setup Guidance</li>
+                            <li class="py-2 border-bottom border-white-50"><i class="fa-solid fa-check text-warning me-2"></i>Dedicated Operational & Technical Support</li>
+                            <li class="py-2"><i class="fa-solid fa-check text-warning me-2"></i>Digital Examination & Grading Framework</li>
+                        </ul>
+                    </div>
+
+                    <div class="card border-0 shadow-sm rounded-4 p-4 bg-light">
+                        <h5 class="fw-bold text-dark mb-2"><i class="fa-solid fa-circle-question text-info me-2"></i>Need Franchise Help?</h5>
+                        <p class="text-muted small mb-3">Speak with our campus expansion team for guidance on infrastructure requirements and affiliation setup.</p>
+                        <a href="tel:{{ $instituteSettings['contact_phone'] ?? '9162384660' }}" class="btn btn-warning w-100 fw-bold text-dark">
+                            <i class="fa-solid fa-phone me-1"></i> Call {{ $instituteSettings['contact_phone'] ?? '9162384660' }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
             </div>
         </div>
     </section>

@@ -280,6 +280,17 @@
 
                         <!-- Signatures: Student, Centre, and Head Office -->
                         <div class="adm-sig-item">
+                            @if(!empty($stu?->signature_url))
+                                <div style="height: 38px; display: flex; align-items: flex-end; justify-content: center;">
+                                    <img src="{{ $stu->signature_url }}" alt="Candidate Signature" style="max-height: 35px; max-width: 110px; object-fit: contain;">
+                                </div>
+                            @elseif(!empty($stu?->signature_path) && file_exists(public_path('uploads/' . $stu->signature_path)))
+                                <div style="height: 38px; display: flex; align-items: flex-end; justify-content: center;">
+                                    <img src="{{ asset('uploads/' . $stu->signature_path) }}" alt="Candidate Signature" style="max-height: 35px; max-width: 110px; object-fit: contain;">
+                                </div>
+                            @else
+                                <div style="height: 38px;"></div>
+                            @endif
                             <div class="adm-sig-line"></div>
                             <div class="adm-sig-lbl">Candidate Signature</div>
                             <div class="adm-sig-sub">{{ $stu?->full_name ?? 'Student' }}</div>

@@ -170,6 +170,9 @@
                 <a class="nav-link {{ request()->routeIs('admin.cms.gallery*') ? 'active' : '' }}" href="{{ Route::has('admin.cms.gallery') ? route('admin.cms.gallery') : '#' }}">
                     <i class="fa-solid fa-camera-retro"></i> Photo Gallery
                 </a>
+                <a class="nav-link {{ request()->routeIs('admin.blog*') ? 'active' : '' }}" href="{{ route('admin.blog.index') }}">
+                    <i class="fa-solid fa-newspaper"></i> Blog Posts
+                </a>
                 <a class="nav-link {{ request()->routeIs('admin.cms*') && !request()->routeIs('admin.cms.gallery*') ? 'active' : '' }}" href="{{ Route::has('admin.cms.index') ? route('admin.cms.index') : '#' }}">
                     <i class="fa-solid fa-globe"></i> Website CMS
                 </a>

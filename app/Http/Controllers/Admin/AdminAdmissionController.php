@@ -221,6 +221,7 @@ class AdminAdmissionController extends Controller
                     'pincode'               => $application->pincode,
                     'highest_qualification' => $application->highest_qualification,
                     'photo_path'            => $application->photo_path,
+                    'signature_path'        => $application->signature_path,
                     'id_proof_doc'          => $application->id_proof_doc,
                     'status'                => 'enrolled',
                 ]

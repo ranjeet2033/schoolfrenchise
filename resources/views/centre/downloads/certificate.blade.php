@@ -184,22 +184,35 @@
             <div>STATUS: <span class="text-success text-uppercase">AUTHORIZED ACTIVE</span></div>
         </div>
 
-        <!-- Signatures & Official Embossed Seal -->
+        <!-- Signatures, Official Mohar & QR Scanner -->
         <div class="row align-items-center text-center pt-3">
-            <div class="col-4">
+            <div class="col-3">
+                <div style="height: 45px; display: flex; align-items: flex-end; justify-content: center;">
+                    <img src="{{ asset('images/deepak-kumar-signature.png') }}" alt="Signature" style="max-height: 40px; max-width: 140px; object-fit: contain;">
+                </div>
                 <div class="signature-line"></div>
                 <div class="fw-bold small text-dark">Director of Affiliations</div>
                 <div class="small text-muted" style="font-size: 0.75rem;">Central Accreditation Cell</div>
             </div>
-            <div class="col-4">
-                <div class="seal-box">
-                    OFFICIAL<br>COUNCIL<br>SEAL
+            <div class="col-3">
+                <div style="height: 45px; display: flex; align-items: flex-end; justify-content: center;">
+                    <img src="{{ asset('images/deepak-kumar-signature.png') }}" alt="Signature" style="max-height: 40px; max-width: 140px; object-fit: contain;">
+                </div>
+                <div class="signature-line"></div>
+                <div class="fw-bold small text-dark">Chairman &amp; Managing Director</div>
+                <div class="small text-muted" style="font-size: 0.75rem;">{{ $instituteSettings['institute_name'] ?? 'TECH ERA COMPUTER' }}</div>
+            </div>
+            <div class="col-3">
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <img src="{{ asset('images/tech-era-seal.png') }}" alt="Official Seal" style="width: 75px; height: 75px; object-fit: contain;">
+                    <div class="small fw-bold text-uppercase mt-1" style="font-size: 9px; color: #b45309;">Official Mohar</div>
                 </div>
             </div>
-            <div class="col-4">
-                <div class="signature-line"></div>
-                <div class="fw-bold small text-dark">Chairman & Managing Director</div>
-                <div class="small text-muted" style="font-size: 0.75rem;">{{ $instituteSettings['institute_name'] ?? 'TECH ERA COMPUTER' }}</div>
+            <div class="col-3">
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ urlencode(route('franchise.search', ['centre_code' => $centre->centre_code])) }}" alt="Scanner QR" style="width: 70px; height: 70px; border: 1px solid #ddd; padding: 2px; background: #fff;">
+                    <div class="small fw-bold text-uppercase mt-1" style="font-size: 9px; color: #1e1b4b;">Scanner</div>
+                </div>
             </div>
         </div>
     </div>

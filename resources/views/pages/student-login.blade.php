@@ -24,10 +24,10 @@
                         <form action="{{ route('student.login.submit') }}" method="POST">
                             @csrf
                             <div class="mb-3">
-                                <label class="form-label">Registration No. / Roll No. / Email <span class="text-danger">*</span></label>
+                                <label class="form-label">Mobile Number / Email / Roll No <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-light"><i class="fa-solid fa-id-badge text-muted"></i></span>
-                                    <input type="text" name="login_id" class="form-control" placeholder="e.g. TEC2601001 or student email" value="{{ old('login_id') }}" required autofocus>
+                                    <input type="text" name="login_id" class="form-control" placeholder="Enter Mobile No, Email or Roll No" value="{{ old('login_id') }}" required autofocus>
                                 </div>
                             </div>
 

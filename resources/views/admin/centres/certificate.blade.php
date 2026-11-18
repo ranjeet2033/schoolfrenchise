@@ -298,33 +298,41 @@
                     </div>
                 </div>
 
-                <!-- Signatures & Seal -->
-                <div class="row align-items-center cert-footer">
-                    <div class="col-4">
+                <!-- Signatures, Mohar & QR Scanner -->
+                <div class="row align-items-center cert-footer" style="margin-top: 15px;">
+                    <div class="col-3 text-center">
                         <div class="sig-block">
-                            <div class="font-monospace text-muted small" style="height: 35px;">
-                                <i class="fa-solid fa-shield-halved text-success fa-2x"></i>
+                            <div style="height: 45px; display: flex; align-items: flex-end; justify-content: center;">
+                                <img src="{{ asset('images/deepak-kumar-signature.png') }}" alt="Signature" style="max-height: 40px; max-width: 140px; object-fit: contain;">
                             </div>
                             <div class="sig-line"></div>
-                            <div class="sig-title">Director of Accreditation</div>
+                            <div class="sig-title" style="font-weight: 800;">Director of Affiliations</div>
                             <div class="small text-muted" style="font-size: 9px;">Central Verification Board</div>
                         </div>
                     </div>
 
-                    <div class="col-4 text-center">
-                        <div class="gold-seal">
-                            <span>Official<br>Affiliation<br>Seal</span>
+                    <div class="col-3 text-center">
+                        <div class="sig-block">
+                            <div style="height: 45px; display: flex; align-items: flex-end; justify-content: center;">
+                                <img src="{{ asset('images/deepak-kumar-signature.png') }}" alt="Signature" style="max-height: 40px; max-width: 140px; object-fit: contain;">
+                            </div>
+                            <div class="sig-line"></div>
+                            <div class="sig-title" style="font-weight: 800;">Chairman &amp; Managing Director</div>
+                            <div class="small text-muted" style="font-size: 9px;">{{ $instituteSettings['institute_name'] ?? 'TECH ERA COMPUTER' }}</div>
                         </div>
                     </div>
 
-                    <div class="col-4">
-                        <div class="sig-block">
-                            <div style="font-family: 'Great Vibes', cursive; font-size: 26px; color: #222; height: 35px; line-height: 35px;">
-                                R. K. Sharma
-                            </div>
-                            <div class="sig-line"></div>
-                            <div class="sig-title">Chairman / Director General</div>
-                            <div class="small text-muted" style="font-size: 9px;">{{ $instituteSettings['institute_name'] ?? 'TECH ERA COMPUTER' }}</div>
+                    <div class="col-3 text-center">
+                        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                            <img src="{{ asset('images/tech-era-seal.png') }}" alt="Official Seal" style="width: 75px; height: 75px; object-fit: contain;">
+                            <div class="small fw-bold text-uppercase mt-1" style="font-size: 9px; color: #b8860b; letter-spacing: 0.5px;">Official Mohar (Seal)</div>
+                        </div>
+                    </div>
+
+                    <div class="col-3 text-center">
+                        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ urlencode(route('franchise.search', ['centre_code' => $centre->centre_code])) }}" alt="Scanner QR" style="width: 70px; height: 70px; border: 1px solid #ddd; padding: 2px; background: #fff;">
+                            <div class="small fw-bold text-uppercase mt-1" style="font-size: 9px; color: #0284c7; letter-spacing: 0.5px;">Scanner (Verify)</div>
                         </div>
                     </div>
                 </div>

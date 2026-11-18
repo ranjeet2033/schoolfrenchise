@@ -227,6 +227,20 @@ class VerificationController extends Controller
         ]);
     }
 
+    public function studentIdCardIndex()
+    {
+        return view('pages.check-student-id-card');
+    }
+
+    public function verifyStudentIdCard(Request $request)
+    {
+        $request->validate([
+            'query' => 'required|string|max:100',
+        ]);
+
+        return $this->verifyStudentCard($request, $request->input('query'));
+    }
+
     /**
      * Dedicated Student ID Card Online QR Verification Endpoint.
      * Validates cryptographic verification token against database.

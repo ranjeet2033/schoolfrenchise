@@ -232,6 +232,10 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @php
+                                $totalRowsNeeded = 9; // fixed standard rows for consistent A4 marksheet height
+                                $currentCount = count($subjectsList);
+                            @endphp
                             @foreach($subjectsList as $subj)
                                 <tr>
                                     <td class="text-center font-monospace">{{ $subj['sl'] }}</td>
@@ -240,6 +244,14 @@
                                     <td class="text-center font-monospace fw-bold">{{ $subj['obtained'] }}</td>
                                 </tr>
                             @endforeach
+                            @for($emptyIdx = $currentCount + 1; $emptyIdx <= $totalRowsNeeded; $emptyIdx++)
+                                <tr class="ms-tr-empty">
+                                    <td class="text-center text-muted font-monospace" style="color: #94a3b8 !important;">{{ $emptyIdx }}</td>
+                                    <td class="text-start text-muted" style="color: #cbd5e1 !important;">&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;</td>
+                                    <td class="text-center text-muted" style="color: #cbd5e1 !important;">&mdash;</td>
+                                    <td class="text-center text-muted" style="color: #cbd5e1 !important;">&mdash;</td>
+                                </tr>
+                            @endfor
                         </tbody>
                         <tfoot>
                             <tr class="ms-tr-total">
@@ -602,6 +614,7 @@
 .ms-marks-table th, .ms-marks-table td {
     border: 1px solid #1e3a8a;
     padding: 3.5px 6px;
+    height: 24px;
 }
 .ms-marks-table thead {
     background: #1e3a8a;

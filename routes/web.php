@@ -5,6 +5,8 @@ use App\Http\Controllers\Admin\AdminAuditLogController;
 use App\Http\Controllers\Admin\AdminBannerController;
 use App\Http\Controllers\Admin\AdminBatchController;
 use App\Http\Controllers\Admin\AdminCertificateController;
+use App\Http\Controllers\Admin\AdminBlogController;
+use App\Http\Controllers\BlogPublicController;
 use App\Http\Controllers\Admin\AdminCentreController;
 use App\Http\Controllers\Admin\AdminCmsController;
 use App\Http\Controllers\Admin\AdminCourseController;
@@ -99,6 +101,10 @@ Route::get('/admission/acknowledgement/{application_no}', [EnquiryPublicControll
 Route::get('/courses', [CoursePublicController::class, 'index'])->name('courses.index');
 Route::get('/course/{slug}', [CoursePublicController::class, 'show'])->name('courses.show');
 
+// Blog Public Routes
+Route::get('/blog', [BlogPublicController::class, 'index'])->name('blog.index');
+Route::get('/blog/{slug}', [BlogPublicController::class, 'show'])->name('blog.show');
+
 // 4. Verification Engine (Certificates, Marksheets, QR scan, and Admissions - Rate limited)
 Route::middleware('throttle:30,1')->group(function () {
     Route::get('/check-certificate-marksheet', [VerificationController::class, 'certificateIndex'])->name('verify.certificate');
@@ -108,6 +114,8 @@ Route::middleware('throttle:30,1')->group(function () {
     Route::get('/verify/marksheet/{token}', [VerificationController::class, 'directVerifyMarksheet'])->where('token', '.*')->name('verify.marksheet.token');
     Route::get('/check-admission', [VerificationController::class, 'admissionIndex'])->name('verify.admission');
     Route::post('/check-admission', [VerificationController::class, 'verifyAdmission'])->name('verify.admission.submit');
+    Route::get('/check-student-id-card', [VerificationController::class, 'studentIdCardIndex'])->name('verify.student.search');
+    Route::post('/check-student-id-card', [VerificationController::class, 'verifyStudentIdCard'])->name('verify.student.search.submit');
     Route::get('/verify/student/{token}', [VerificationController::class, 'verifyStudentCard'])->name('verify.student');
 });
 
@@ -342,6 +350,9 @@ Route::middleware(['role:super_admin,admin'])->prefix('admin')->name('admin.')->
     Route::get('/cms/content', [AdminCmsController::class, 'content'])->name('cms.content');
     Route::post('/cms/content', [AdminCmsController::class, 'updateContent'])->name('cms.content.update');
 
+    // Admin Blog Management
+    Route::resource('/cms/blog', AdminBlogController::class, ['as' => 'admin']);
+
     // Hero Banners & Slider
     Route::post('/banners/{banner}/toggle-status', [AdminBannerController::class, 'toggleStatus'])->name('banners.toggle-status');
     Route::resource('banners', AdminBannerController::class);
@@ -392,6 +403,7 @@ Route::middleware(['role:super_admin,centre,staff', 'centre.active'])->prefix('c
     Route::get('/students/create', [CentreStudentController::class, 'create'])->name('students.create');
     Route::post('/students', [CentreStudentController::class, 'store'])->name('students.store');
     Route::get('/students/{student}', [CentreStudentController::class, 'show'])->name('students.show');
+    Route::post('/students/{student}/add-course', [CentreStudentController::class, 'addCourse'])->name('students.add-course');
     Route::get('/students/{student}/edit', [CentreStudentController::class, 'edit'])->name('students.edit');
     Route::put('/students/{student}', [CentreStudentController::class, 'update'])->name('students.update');
     Route::get('/students/{student}/id-card', [CentreStudentController::class, 'idCard'])->name('students.id-card');
@@ -456,6 +468,7 @@ Route::middleware(['role:super_admin,centre,staff', 'centre.active'])->prefix('c
 
     // Profile & Settings
     Route::get('/profile', [CentreProfileController::class, 'show'])->name('profile.show');
+    Route::get('/profile/director-id-card', [CentreProfileController::class, 'directorIdCard'])->name('profile.director-id-card');
     Route::post('/profile', [CentreProfileController::class, 'update'])->name('profile.update');
     Route::post('/profile/change-password', [CentreProfileController::class, 'changePassword'])->name('profile.change-password');
 });

@@ -103,12 +103,18 @@ class EnquiryPublicController extends Controller
             'pincode'                => 'required|string|max:10',
             'highest_qualification'  => 'nullable|string|max:100',
             'photo'                  => 'nullable|image|mimes:jpeg,png,webp|max:2048',
+            'signature'              => 'nullable|image|mimes:jpeg,png,webp|max:2048',
             'id_proof'               => 'nullable|file|mimes:pdf,jpeg,png,webp|max:5120',
         ]);
 
         $photoPath = null;
         if ($request->hasFile('photo')) {
             $photoPath = FileUploadService::uploadImage($request->file('photo'), 'admissions/photos');
+        }
+
+        $signaturePath = null;
+        if ($request->hasFile('signature')) {
+            $signaturePath = FileUploadService::uploadImage($request->file('signature'), 'admissions/signatures');
         }
 
         $idProofPath = null;
@@ -136,6 +142,7 @@ class EnquiryPublicController extends Controller
             'pincode'               => $validated['pincode'],
             'highest_qualification' => $validated['highest_qualification'] ?? null,
             'photo_path'            => $photoPath,
+            'signature_path'        => $signaturePath,
             'id_proof_doc'          => $idProofPath,
             'status'                => 'pending',
         ]);

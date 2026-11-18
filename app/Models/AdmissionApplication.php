@@ -27,6 +27,7 @@ class AdmissionApplication extends Model
         'pincode',
         'highest_qualification',
         'photo_path',
+        'signature_path',
         'id_proof_doc',
         'status',
         'rejection_reason',

@@ -535,8 +535,8 @@
     text-align: left;
 }
 .cert-statement-row {
-    font-size: 0.82rem;
-    margin-bottom: 3px;
+    font-size: 0.85rem;
+    margin-bottom: 5px;
     display: flex;
     align-items: baseline;
     flex-wrap: wrap;

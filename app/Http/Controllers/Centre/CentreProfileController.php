@@ -41,6 +41,14 @@ class CentreProfileController extends Controller
         return view('centre.profile.show', compact('centre', 'states', 'districts'));
     }
 
+    public function directorIdCard()
+    {
+        $centre = $this->getAuthCentre();
+        $centre->load(['state', 'district']);
+
+        return view('centre.director_id_card', compact('centre'));
+    }
+
     public function update(Request $request)
     {
         // Enforce backend authorization: Franchise users must not edit their own franchise profile

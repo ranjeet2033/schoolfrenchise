@@ -650,41 +650,41 @@
                 <div class="col-6 col-lg-3">
                     <div class="dce-modern-stat-card stat-blue h-100">
                         <div class="dce-stat-badge bg-primary-subtle text-primary">
-                            <i class="fa-solid fa-user-graduate"></i>
+                            <i class="fa-solid fa-building-columns"></i>
                         </div>
-                        <div class="dce-stat-val dce-counter" data-target="2500">2,500+</div>
-                        <div class="dce-stat-lbl">Students Trained</div>
-                        <div class="dce-stat-sub d-none d-sm-block">Job & Career Ready</div>
+                        <div class="dce-stat-val dce-counter" data-target="1200">1200+</div>
+                        <div class="dce-stat-lbl">Authorized Study Centres</div>
+                        <div class="dce-stat-sub d-none d-sm-block">Across Pan India</div>
                     </div>
                 </div>
                 <div class="col-6 col-lg-3">
                     <div class="dce-modern-stat-card stat-amber h-100">
                         <div class="dce-stat-badge bg-warning-subtle text-warning-emphasis">
-                            <i class="fa-solid fa-book-bookmark"></i>
+                            <i class="fa-solid fa-user-graduate"></i>
                         </div>
-                        <div class="dce-stat-val dce-counter" data-target="{{ $allCourses->count() }}">{{ $allCourses->count() }}</div>
-                        <div class="dce-stat-lbl">Certified Courses</div>
-                        <div class="dce-stat-sub d-none d-sm-block">Basic to Advanced</div>
+                        <div class="dce-stat-val dce-counter" data-target="5000">5000+</div>
+                        <div class="dce-stat-lbl">Students Trained</div>
+                        <div class="dce-stat-sub d-none d-sm-block">Job & Career Ready</div>
                     </div>
                 </div>
                 <div class="col-6 col-lg-3">
                     <div class="dce-modern-stat-card stat-info h-100">
                         <div class="dce-stat-badge bg-info-subtle text-info">
-                            <i class="fa-solid fa-desktop"></i>
+                            <i class="fa-solid fa-book-bookmark"></i>
                         </div>
-                        <div class="dce-stat-val dce-counter" data-target="50">50+</div>
-                        <div class="dce-stat-lbl">Modern PCs</div>
-                        <div class="dce-stat-sub d-none d-sm-block">1:1 Practical Ratio</div>
+                        <div class="dce-stat-val dce-counter" data-target="350">350+</div>
+                        <div class="dce-stat-lbl">Job Oriented Course</div>
+                        <div class="dce-stat-sub d-none d-sm-block">Skill & Tech Curriculum</div>
                     </div>
                 </div>
                 <div class="col-6 col-lg-3">
                     <div class="dce-modern-stat-card stat-green h-100">
                         <div class="dce-stat-badge bg-success-subtle text-success">
-                            <i class="fa-solid fa-shield-halved"></i>
+                            <i class="fa-solid fa-map-location-dot"></i>
                         </div>
-                        <div class="dce-stat-val dce-counter" data-target="100">100%</div>
-                        <div class="dce-stat-lbl">Verified Diplomas</div>
-                        <div class="dce-stat-sub d-none d-sm-block">QR Code Enabled</div>
+                        <div class="dce-stat-val dce-counter" data-target="100">100+</div>
+                        <div class="dce-stat-lbl">Cities & Districts</div>
+                        <div class="dce-stat-sub d-none d-sm-block">Active Network</div>
                     </div>
                 </div>
             </div>

@@ -94,48 +94,96 @@
 
     <!-- Right Column: Academic Course, Fee Ledger & Attendance -->
     <div class="col-lg-8">
-        <!-- 1. Enrolled Course & Batch Card -->
-        @php $admission = $student->admissions->first(); @endphp
+        <!-- 1. Enrolled Courses & Add Course Card -->
         <div class="card border-0 rounded-3 shadow-sm mb-4">
-            <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
-                <h6 class="fw-bold mb-0 text-dark"><i class="fa-solid fa-graduation-cap text-primary me-2"></i>Course & Batch Assignment</h6>
-                @if($admission)
-                <span class="badge bg-primary-subtle text-primary rounded-2">{{ ucfirst($admission->status) }}</span>
-                @endif
+            <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <h6 class="fw-bold mb-0 text-dark"><i class="fa-solid fa-graduation-cap text-primary me-2"></i>Enrolled Courses ({{ $student->admissions->count() }})</h6>
+                <button type="button" class="btn btn-sm btn-primary rounded-2 shadow-sm" data-bs-toggle="modal" data-bs-target="#addCourseModal">
+                    <i class="fa-solid fa-plus me-1"></i> Add Another Course (₹200)
+                </button>
             </div>
             <div class="card-body p-4">
-                @if($admission)
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <div class="small text-muted">Course Name:</div>
-                        <div class="fw-bold text-dark fs-6">{{ $admission->course?->course_name }}</div>
-                        <div class="font-monospace text-primary small">{{ $admission->course?->course_code }} ({{ $admission->course?->duration_months }} Months)</div>
+                @forelse($student->admissions as $admIdx => $admission)
+                    <div class="{{ !$loop->first ? 'border-top pt-4 mt-4' : '' }}">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="badge bg-secondary-subtle text-secondary font-monospace">{{ $admission->admission_no }}</span>
+                            <span class="badge bg-primary-subtle text-primary rounded-2">{{ ucfirst($admission->status) }}</span>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="small text-muted">Course Name:</div>
+                                <div class="fw-bold text-dark fs-6">{{ $admission->course?->course_name }}</div>
+                                <div class="font-monospace text-primary small">{{ $admission->course?->course_code }} ({{ $admission->course?->duration_months }} Months)</div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="small text-muted">Assigned Batch:</div>
+                                @if($admission->batch)
+                                <div class="fw-bold text-dark">{{ $admission->batch->batch_name }}</div>
+                                <div class="small text-muted"><i class="fa-solid fa-clock me-1"></i>{{ $admission->batch->start_time }} - {{ $admission->batch->end_time }} ({{ $admission->batch->days }})</div>
+                                @else
+                                <div class="text-muted">No specific batch assigned</div>
+                                @endif
+                            </div>
+                            <div class="col-md-4">
+                                <div class="small text-muted">Total Net Fee:</div>
+                                <div class="fw-bold text-dark fs-5">₹{{ number_format($admission->net_fee, 2) }}</div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="small text-muted">Total Paid:</div>
+                                <div class="fw-bold text-success fs-5">₹{{ number_format($admission->total_paid, 2) }}</div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="small text-muted">Remaining Balance:</div>
+                                <div class="fw-bold text-danger fs-5">₹{{ number_format(max(0, $admission->net_fee - $admission->total_paid), 2) }}</div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="small text-muted">Assigned Batch:</div>
-                        @if($admission->batch)
-                        <div class="fw-bold text-dark">{{ $admission->batch->batch_name }}</div>
-                        <div class="small text-muted"><i class="fa-solid fa-clock me-1"></i>{{ $admission->batch->start_time }} - {{ $admission->batch->end_time }} ({{ $admission->batch->days }})</div>
-                        @else
-                        <div class="text-muted">No specific batch assigned</div>
-                        @endif
-                    </div>
-                    <div class="col-md-4">
-                        <div class="small text-muted">Total Net Fee:</div>
-                        <div class="fw-bold text-dark fs-5">₹{{ number_format($admission->net_fee, 2) }}</div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="small text-muted">Total Paid:</div>
-                        <div class="fw-bold text-success fs-5">₹{{ number_format($admission->total_paid, 2) }}</div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="small text-muted">Remaining Balance:</div>
-                        <div class="fw-bold text-danger fs-5">₹{{ number_format(max(0, $admission->net_fee - $admission->total_paid), 2) }}</div>
-                    </div>
+                @empty
+                    <div class="text-center py-3 text-muted">No course admission record found for this candidate.</div>
+                @endforelse
+            </div>
+        </div>
+
+        <!-- Add Course Modal -->
+        <div class="modal fade" id="addCourseModal" tabindex="-1" aria-labelledby="addCourseModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content rounded-4 border-0 shadow">
+                    <form action="{{ route('centre.students.add-course', $student->id) }}" method="POST">
+                        @csrf
+                        <div class="modal-header border-bottom">
+                            <h5 class="modal-title fw-bold" id="addCourseModalLabel">
+                                <i class="fa-solid fa-graduation-cap text-primary me-2"></i>Enroll in Additional Course
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body p-4">
+                            <div class="alert alert-info border-0 rounded-3 mb-3 small">
+                                <i class="fa-solid fa-circle-info me-1"></i> Student ek se zyada course kar sakte hain. Is course ko add karne par centre wallet se <strong>₹200.00</strong> fee deduct hogi.
+                                <div class="mt-1">Current Wallet Balance: <strong>₹{{ number_format($walletBalance ?? 0, 2) }}</strong></div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Select Course <span class="text-danger">*</span></label>
+                                <select name="course_id" class="form-select" required>
+                                    <option value="">-- Choose Course --</option>
+                                    @foreach($availableCourses ?? [] as $crs)
+                                        <option value="{{ $crs->id }}">{{ $crs->course_name }} ({{ $crs->course_code }}) - ₹{{ number_format($crs->fee ?? 0, 2) }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Agreed Student Course Fee (₹)</label>
+                                <input type="number" step="0.01" name="net_fee" class="form-control" placeholder="Course tuition fee charged to student">
+                                <div class="form-text">Course tuition fee payable by the student.</div>
+                            </div>
+                        </div>
+                        <div class="modal-footer border-top">
+                            <button type="button" class="btn btn-light rounded-2" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary rounded-2 px-4 fw-bold">Confirm &amp; Pay ₹200</button>
+                        </div>
+                    </form>
                 </div>
-                @else
-                <div class="text-center py-3 text-muted">No course admission record found for this candidate.</div>
-                @endif
             </div>
         </div>
 

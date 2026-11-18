@@ -3,11 +3,18 @@
 @section('title', 'Centre Profile & Settings - ' . ($instituteSettings['institute_name'] ?? 'TECH ERA COMPUTER'))
 
 @section('content')
-<div class="mb-3 mb-md-4">
-    <h3 class="fw-bold text-dark mb-1 fs-5 fs-md-4">
-        <i class="fa-solid fa-id-card-clip text-primary me-2"></i>Study Centre Profile & Settings
-    </h3>
-    <p class="text-muted small mb-0">Authorized franchise branch credentials, director profile, registered campus address, and security credentials.</p>
+<div class="mb-3 mb-md-4 d-flex justify-content-between align-items-center flex-wrap gap-2">
+    <div>
+        <h3 class="fw-bold text-dark mb-1 fs-5 fs-md-4">
+            <i class="fa-solid fa-id-card-clip text-primary me-2"></i>Study Centre Profile & Settings
+        </h3>
+        <p class="text-muted small mb-0">Authorized franchise branch credentials, director profile, registered campus address, and security credentials.</p>
+    </div>
+    <div>
+        <a href="{{ route('centre.profile.director-id-card') }}" target="_blank" class="btn btn-primary rounded-3 px-3 py-2 fw-semibold shadow-sm">
+            <i class="fa-solid fa-id-card me-1"></i> Print Director ID Card
+        </a>
+    </div>
 </div>
 
 <!-- Main Admin Profile Protection Notice -->

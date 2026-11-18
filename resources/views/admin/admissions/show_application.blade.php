@@ -109,7 +109,7 @@
             </div>
             <div class="card-body p-3">
                 <div class="row g-3">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label class="form-label text-muted small fw-semibold">Passport Photo</label>
                         @if($application->photo_url)
                             <div class="border rounded p-2 text-center bg-light">
@@ -120,7 +120,18 @@
                             <div class="border rounded p-3 text-center text-muted small bg-light">No photo uploaded</div>
                         @endif
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small fw-semibold">Candidate Signature</label>
+                        @if(!empty($application->signature_path))
+                            <div class="border rounded p-2 text-center bg-light">
+                                <img src="{{ asset('storage/' . $application->signature_path) }}" alt="Candidate Signature" class="rounded img-fluid mb-2" style="max-height: 100px; max-width: 160px; object-fit: contain;">
+                                <div><a href="{{ asset('storage/' . $application->signature_path) }}" target="_blank" class="btn btn-sm btn-outline-secondary">Open Signature</a></div>
+                            </div>
+                        @else
+                            <div class="border rounded p-3 text-center text-muted small bg-light">No signature uploaded</div>
+                        @endif
+                    </div>
+                    <div class="col-md-4">
                         <label class="form-label text-muted small fw-semibold">KYC / Educational Document</label>
                         @if($application->id_proof_url)
                             <div class="border rounded p-3 text-center bg-light">

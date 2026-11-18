@@ -138,6 +138,8 @@
                             <ul class="dropdown-menu shadow-sm border-0 mt-2">
                                 <li><a class="dropdown-item py-2" href="{{ route('verify.certificate') }}"><i class="fa-solid fa-certificate text-warning me-2"></i>Check Certificate / Marksheet</a></li>
                                 <li><a class="dropdown-item py-2" href="{{ route('verify.admission') }}"><i class="fa-solid fa-id-badge text-primary me-2"></i>Check Admission Status</a></li>
+                                <li><a class="dropdown-item py-2" href="{{ route('verify.student.search') }}"><i class="fa-solid fa-id-card text-purple me-2"></i>Check Student ID Card</a></li>
+                                <li><a class="dropdown-item py-2" href="{{ route('franchise.search') }}"><i class="fa-solid fa-address-card text-success me-2"></i>Check Center ID Card</a></li>
                                 <li><a class="dropdown-item py-2" href="{{ route('payment.index') }}"><i class="fa-solid fa-credit-card text-success me-2"></i>Online Fee Payment</a></li>
                                 <li><a class="dropdown-item py-2" href="{{ route('student.login') }}"><i class="fa-solid fa-graduation-cap text-info me-2"></i>Student Login</a></li>
                                 <li><a class="dropdown-item py-2" href="{{ route('enquiry.admission') }}"><i class="fa-solid fa-clipboard-question text-danger me-2"></i>Admission Enquiry</a></li>
@@ -159,6 +161,10 @@
 
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('gallery') ? 'active' : '' }}" href="{{ route('gallery') }}">Gallery</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('blog.*') ? 'active' : '' }}" href="{{ route('blog.index') }}">Blog</a>
                         </li>
 
                         <li class="nav-item">
@@ -252,6 +258,8 @@
                                 <div class="ps-4 bg-light py-1 border-start border-3 border-warning ms-3">
                                     <a href="{{ route('verify.certificate') }}" class="dce-mobile-sub-item"><i class="fa-solid fa-certificate me-2 text-warning"></i>Check Certificate / Marksheet</a>
                                     <a href="{{ route('verify.admission') }}" class="dce-mobile-sub-item"><i class="fa-solid fa-id-badge me-2 text-primary"></i>Check Admission Status</a>
+                                    <a href="{{ route('verify.student.search') }}" class="dce-mobile-sub-item"><i class="fa-solid fa-id-card me-2 text-purple"></i>Check Student ID Card</a>
+                                    <a href="{{ route('franchise.search') }}" class="dce-mobile-sub-item"><i class="fa-solid fa-address-card me-2 text-success"></i>Check Center ID Card</a>
                                     <a href="{{ route('payment.index') }}" class="dce-mobile-sub-item"><i class="fa-solid fa-credit-card me-2 text-success"></i>Online Fee Payment</a>
                                     <a href="{{ route('student.login') }}" class="dce-mobile-sub-item"><i class="fa-solid fa-graduation-cap me-2 text-info"></i>Student Login</a>
                                     <a href="{{ route('enquiry.admission') }}" class="dce-mobile-sub-item"><i class="fa-solid fa-clipboard-question me-2 text-danger"></i>Admission Enquiry</a>
@@ -278,6 +286,12 @@
                         <li>
                             <a href="{{ route('gallery') }}" class="dce-mobile-nav-item {{ request()->routeIs('gallery') ? 'active' : '' }}">
                                 <i class="fa-solid fa-images me-3 text-purple"></i> Campus Gallery
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('blog.index') }}" class="dce-mobile-nav-item {{ request()->routeIs('blog.*') ? 'active' : '' }}">
+                                <i class="fa-solid fa-newspaper me-3 text-info"></i> Blog &amp; News
                             </a>
                         </li>
 
@@ -543,6 +557,44 @@
     <div class="dce-float-helpline d-none d-md-flex">
         <a href="tel:{{ $instituteSettings['contact_phone'] ?? '9162384660' }}" title="Call Helpline"><i class="fa-solid fa-phone"></i></a>
     </div>
+
+    <!-- 9. Mobile Bottom Footer Navigation Bar -->
+    <nav class="d-md-none fixed-bottom bg-white border-top shadow-lg py-1" style="z-index: 1040;">
+        <div class="container-fluid px-1">
+            <div class="row g-0 text-center align-items-center">
+                <div class="col">
+                    <a href="{{ route('home') }}" class="d-flex flex-column align-items-center text-decoration-none py-1 {{ request()->routeIs('home') ? 'text-primary fw-bold' : 'text-secondary' }}">
+                        <i class="fa-solid fa-house mb-1" style="font-size: 1.15rem;"></i>
+                        <span style="font-size: 0.68rem;">Home</span>
+                    </a>
+                </div>
+                <div class="col">
+                    <a href="{{ route('student.login') }}" class="d-flex flex-column align-items-center text-decoration-none py-1 {{ request()->routeIs('student.login*') ? 'text-primary fw-bold' : 'text-secondary' }}">
+                        <i class="fa-solid fa-user-graduate mb-1" style="font-size: 1.15rem;"></i>
+                        <span style="font-size: 0.68rem;">Student Login</span>
+                    </a>
+                </div>
+                <div class="col">
+                    <a href="{{ route('login') }}" class="d-flex flex-column align-items-center text-decoration-none py-1 {{ request()->is('login*') ? 'text-primary fw-bold' : 'text-secondary' }}">
+                        <i class="fa-solid fa-building-columns mb-1" style="font-size: 1.15rem;"></i>
+                        <span style="font-size: 0.68rem;">Franchise Login</span>
+                    </a>
+                </div>
+                <div class="col">
+                    <a href="{{ route('blog.index') }}" class="d-flex flex-column align-items-center text-decoration-none py-1 {{ request()->routeIs('blog.*') ? 'text-primary fw-bold' : 'text-secondary' }}">
+                        <i class="fa-solid fa-newspaper mb-1" style="font-size: 1.15rem;"></i>
+                        <span style="font-size: 0.68rem;">Blog</span>
+                    </a>
+                </div>
+                <div class="col">
+                    <a href="javascript:void(0)" class="d-flex flex-column align-items-center text-decoration-none py-1 text-secondary" data-bs-toggle="offcanvas" data-bs-target="#dceOffcanvasNav">
+                        <i class="fa-solid fa-bars mb-1" style="font-size: 1.15rem;"></i>
+                        <span style="font-size: 0.68rem;">Menu</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
 
     <!-- Bootstrap 5.3.3 JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

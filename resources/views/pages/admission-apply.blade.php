@@ -180,19 +180,27 @@
                             <i class="fa-solid fa-file-arrow-up me-2 text-primary"></i>4. Document Verification Uploads
                         </h6>
                         <div class="row g-3 mb-4">
-                            <div class="col-md-6">
-                                <div class="border rounded-3 p-3 bg-light">
+                            <div class="col-md-4">
+                                <div class="border rounded-3 p-3 bg-light h-100">
                                     <label class="form-label small fw-semibold">Passport Sized Photograph</label>
                                     <input type="file" name="photo" class="form-control @error('photo') is-invalid @enderror" accept="image/jpeg,image/png,image/webp">
                                     <div class="form-text small">JPEG/PNG, Max 2MB. Clear frontal headshot.</div>
                                     @error('photo') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="border rounded-3 p-3 bg-light">
-                                    <label class="form-label small fw-semibold">Identity Proof / Educational Marksheet</label>
+                            <div class="col-md-4">
+                                <div class="border rounded-3 p-3 bg-light h-100">
+                                    <label class="form-label small fw-semibold">Candidate Signature <span class="text-danger">*</span></label>
+                                    <input type="file" name="signature" class="form-control @error('signature') is-invalid @enderror" accept="image/jpeg,image/png,image/webp" required>
+                                    <div class="form-text small">JPEG/PNG, Max 2MB. Sign on white paper.</div>
+                                    @error('signature') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="border rounded-3 p-3 bg-light h-100">
+                                    <label class="form-label small fw-semibold">Identity Proof / Marksheet</label>
                                     <input type="file" name="id_proof" class="form-control @error('id_proof') is-invalid @enderror" accept="application/pdf,image/jpeg,image/png,image/webp">
-                                    <div class="form-text small">PDF/JPEG/PNG, Max 5MB. Aadhaar, Voter ID, or 10th marksheet.</div>
+                                    <div class="form-text small">PDF/JPEG/PNG, Max 5MB. Aadhaar or 10th.</div>
                                     @error('id_proof') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                 </div>
                             </div>

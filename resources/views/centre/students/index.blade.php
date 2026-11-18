@@ -92,7 +92,7 @@
                 <span>Scroll horizontally to view all student records</span>
             </div>
         @endif
-        <div class="table-responsive">
+        <div class="table-responsive" style="min-height: 280px; overflow-x: auto; overflow-y: visible;">
             <table class="table-custom table-hover align-middle mb-0" style="min-width: 780px;">
                 <thead>
                     <tr>
@@ -136,10 +136,10 @@
                         </td>
                         <td class="pe-4 text-end text-nowrap">
                             <div class="dropdown">
-                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle rounded-2" type="button" data-bs-toggle="dropdown">
+                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle rounded-2" type="button" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
                                     Manage
                                 </button>
-                                <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                                <ul class="dropdown-menu dropdown-menu-end shadow" style="z-index: 1050;">
                                     <li>
                                         <a class="dropdown-item py-2" href="{{ route('centre.students.show', $student->id) }}">
                                             <i class="fa-solid fa-eye text-primary me-2"></i>Full Profile Dossier

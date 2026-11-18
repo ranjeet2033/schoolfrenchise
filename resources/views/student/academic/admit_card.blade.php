@@ -174,20 +174,29 @@
                     </ol>
                 </div>
 
-                <!-- Signatures Row -->
-                <div class="row pt-4 mt-3 text-center border-top">
+                <!-- Signatures & Official Mohar Row -->
+                <div class="row pt-4 mt-3 text-center border-top align-items-center">
                     <div class="col-4">
-                        <div class="border-bottom border-dark mx-auto mb-1" style="width: 140px; height: 40px;"></div>
+                        <div style="height: 45px; display: flex; align-items: flex-end; justify-content: center;">
+                            @if(!empty($student->signature_url))
+                                <img src="{{ $student->signature_url }}" alt="Candidate Sign" style="max-height: 40px; max-width: 120px; object-fit: contain;">
+                            @endif
+                        </div>
+                        <div class="border-bottom border-dark mx-auto mb-1" style="width: 140px;"></div>
                         <div class="small fw-semibold text-dark" style="font-size: 0.75rem;">Candidate Signature</div>
                     </div>
                     <div class="col-4">
-                        <div class="border-bottom border-dark mx-auto mb-1 d-flex align-items-center justify-content-center text-muted" style="width: 140px; height: 40px;">
-                            <span class="badge border text-muted px-2 py-1" style="font-size: 0.65rem;">CENTRE SEAL</span>
+                        <div style="height: 45px; display: flex; align-items: center; justify-content: center;">
+                            <img src="{{ asset('images/tech-era-seal.png') }}" alt="Official Mohar" style="width: 45px; height: 45px; object-fit: contain;">
                         </div>
-                        <div class="small fw-semibold text-dark" style="font-size: 0.75rem;">Centre Superintendent</div>
+                        <div class="border-bottom border-dark mx-auto mb-1" style="width: 140px;"></div>
+                        <div class="small fw-semibold text-dark" style="font-size: 0.75rem;">Centre Seal &amp; Mohar</div>
                     </div>
                     <div class="col-4">
-                        <div class="border-bottom border-dark mx-auto mb-1" style="width: 140px; height: 40px;"></div>
+                        <div style="height: 45px; display: flex; align-items: flex-end; justify-content: center;">
+                            <img src="{{ asset('images/deepak-kumar-signature.png') }}" alt="Controller Sign" style="max-height: 40px; max-width: 120px; object-fit: contain;">
+                        </div>
+                        <div class="border-bottom border-dark mx-auto mb-1" style="width: 140px;"></div>
                         <div class="small fw-semibold text-dark" style="font-size: 0.75rem;">Controller of Examinations</div>
                     </div>
                 </div>
@@ -197,6 +206,10 @@
 </div>
 
 <style>
+@page {
+    size: A4 portrait;
+    margin: 10mm;
+}
 @media print {
     .student-header,
     .student-subnav,
@@ -213,6 +226,9 @@
     .print-card-container {
         border: none !important;
         box-shadow: none !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 !important;
     }
 }
 </style>

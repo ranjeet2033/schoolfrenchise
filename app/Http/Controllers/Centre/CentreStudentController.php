@@ -262,7 +262,76 @@ class CentreStudentController extends Controller
             'fees', 'payments', 'attendances', 'certificates', 'marksheets', 'results'
         ]);
 
-        return view('centre.students.show', ['centre' => $centre, 'student' => $studentModel]);
+        $availableCourses = Course::where('status', 'active')->orderBy('course_name')->get();
+        $walletBalance = $centre->wallet ? (float) $centre->wallet->balance : 0.00;
+
+        return view('centre.students.show', [
+            'centre'           => $centre,
+            'student'          => $studentModel,
+            'availableCourses' => $availableCourses,
+            'walletBalance'    => $walletBalance,
+        ]);
+    }
+
+    public function addCourse(Request $request, $student)
+    {
+        $centre = $this->getAuthCentre();
+        $studentModel = $student instanceof Student ? $student : Student::withoutGlobalScope('centre_isolation')->findOrFail($student);
+
+        if ($studentModel->centre_id !== $centre->id && !Auth::user()->isSuperAdmin()) {
+            abort(403, 'Unauthorized access.');
+        }
+
+        $validated = $request->validate([
+            'course_id' => 'required|exists:courses,id',
+            'net_fee'   => 'nullable|numeric|min:0',
+        ]);
+
+        $course = Course::findOrFail($validated['course_id']);
+
+        // Check if student already enrolled in this active course
+        $alreadyEnrolled = $studentModel->admissions()->where('course_id', $course->id)->where('status', 'active')->exists();
+        if ($alreadyEnrolled) {
+            return back()->with('error', "Student is already actively enrolled in {$course->course_name}.");
+        }
+
+        // Deduction check: 200 INR from wallet
+        $admissionFee = WalletService::getRequiredAdmissionFee(); // defaults to 200
+        $centreWallet = CentreWallet::firstOrCreate(['centre_id' => $centre->id]);
+        if ((float) $centreWallet->balance < $admissionFee) {
+            return back()->with('error', "Insufficient wallet balance (₹" . number_format($centreWallet->balance, 2) . "). ₹" . number_format($admissionFee, 2) . " is required to enroll into a new course.");
+        }
+
+        try {
+            DB::transaction(function () use ($studentModel, $centre, $course, $validated, $admissionFee) {
+                $admission = Admission::create([
+                    'student_id'          => $studentModel->id,
+                    'centre_id'           => $centre->id,
+                    'course_id'           => $course->id,
+                    'admission_no'        => 'ADM-' . date('Y') . '-' . strtoupper(Str::random(6)),
+                    'admission_date'      => now(),
+                    'batch_id'            => null,
+                    'net_fee'             => $validated['net_fee'] ?? ($course->fee ?? 0),
+                    'total_paid'          => 0,
+                    'status'              => 'active',
+                    'commission_credited' => false,
+                ]);
+
+                // Wallet debit ₹200 for this additional course
+                WalletService::processAdmissionFeeDeduction($admission, true);
+
+                AuditLog::record('centre_student_course_added', $admission, null, [
+                    'student_id' => $studentModel->id,
+                    'course_id'  => $course->id,
+                    'centre_id'  => $centre->id,
+                    'deducted'   => $admissionFee,
+                ]);
+            });
+
+            return back()->with('success', "Course {$course->course_name} successfully added to student! ₹" . number_format($admissionFee, 2) . " deducted from wallet.");
+        } catch (\Throwable $e) {
+            return back()->with('error', 'Failed to enroll course: ' . $e->getMessage());
+        }
     }
 
     public function idCard($student)

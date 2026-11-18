@@ -38,7 +38,24 @@ class CentreExamController extends Controller
     public function index(Request $request)
     {
         $centre = $this->getAuthCentre();
-        $query = Exam::with('course')->withCount('results');
+
+        // Enforce centre isolation: Only show exams for courses where this centre has enrolled students or exam results
+        $centreCourseIds = Student::where('centre_id', $centre->id)
+            ->whereHas('admissions')
+            ->with('admissions')
+            ->get()
+            ->pluck('admissions')
+            ->flatten()
+            ->pluck('course_id')
+            ->merge(ExamResult::where('centre_id', $centre->id)->pluck('course_id'))
+            ->unique()
+            ->filter();
+
+        $query = Exam::whereIn('course_id', $centreCourseIds)
+            ->with('course')
+            ->withCount(['results' => function ($rq) use ($centre) {
+                $rq->where('centre_id', $centre->id);
+            }]);
 
         if ($request->filled('search')) {
             $s = trim($request->search);
@@ -62,7 +79,20 @@ class CentreExamController extends Controller
     {
         $centre = $this->getAuthCentre();
 
-        $exams = Exam::with('course')->orderBy('exam_date', 'desc')->get();
+        $centreCourseIds = Student::where('centre_id', $centre->id)
+            ->whereHas('admissions')
+            ->with('admissions')
+            ->get()
+            ->pluck('admissions')
+            ->flatten()
+            ->pluck('course_id')
+            ->unique()
+            ->filter();
+
+        $exams = Exam::whereIn('course_id', $centreCourseIds)
+            ->with('course')
+            ->orderBy('exam_date', 'desc')
+            ->get();
 
         $selectedExam = null;
         if ($request->filled('exam_id')) {

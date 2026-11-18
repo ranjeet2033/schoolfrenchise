@@ -28,10 +28,11 @@ class StudentAuthController extends Controller
         $loginId = trim($request->login_id);
         $password = $request->password;
 
-        // Find student by Registration No, Roll No, or Email
+        // Find student by Registration No, Roll No, Email, or Mobile
         $student = Student::where('registration_no', $loginId)
             ->orWhere('roll_no', $loginId)
             ->orWhere('email', $loginId)
+            ->orWhere('mobile', $loginId)
             ->first();
 
         if ($student && $student->user_id) {
@@ -42,13 +43,18 @@ class StudentAuthController extends Controller
             }
         }
 
-        // Direct attempt via User table
-        if (Auth::attempt(['email' => $loginId, 'password' => $password, 'role' => 'student', 'is_active' => true], $request->filled('remember'))) {
+        // Direct attempt via User table by email or mobile
+        $userDirect = User::where(function ($q) use ($loginId) {
+            $q->where('email', $loginId)
+              ->orWhere('mobile', $loginId);
+        })->where('role', 'student')->first();
+
+        if ($userDirect && Auth::attempt(['email' => $userDirect->email, 'password' => $password, 'role' => 'student', 'is_active' => true], $request->filled('remember'))) {
             $request->session()->regenerate();
             return redirect()->intended('/student/dashboard')->with('success', "Welcome back!");
         }
 
         return back()->withInput($request->only('login_id', 'remember'))
-            ->with('error', 'Invalid Student Registration / Roll No or Password. Please check with your study centre.');
+            ->with('error', 'Invalid Student Registration / Roll No / Mobile / Email or Password. Please check with your study centre.');
     }
 }

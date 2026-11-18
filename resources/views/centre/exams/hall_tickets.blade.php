@@ -192,17 +192,28 @@
             </tbody>
         </table>
 
-        <!-- Signatures -->
-        <div class="row pt-4 text-center">
+        <!-- Signatures & Mohar -->
+        <div class="row pt-4 text-center align-items-center">
             <div class="col-4">
+                <div style="height: 40px; display: flex; align-items: flex-end; justify-content: center;">
+                    @if(!empty($student->signature_url))
+                        <img src="{{ $student->signature_url }}" alt="Candidate Sign" style="max-height: 35px; max-width: 110px; object-fit: contain;">
+                    @endif
+                </div>
                 <div class="border-top border-dark mx-auto" style="width: 80%;"></div>
                 <div class="small fw-bold mt-1">Candidate's Signature</div>
             </div>
             <div class="col-4">
+                <div style="height: 40px; display: flex; align-items: center; justify-content: center;">
+                    <img src="{{ asset('images/tech-era-seal.png') }}" alt="Seal" style="width: 40px; height: 40px; object-fit: contain;">
+                </div>
                 <div class="border-top border-dark mx-auto" style="width: 80%;"></div>
-                <div class="small fw-bold mt-1">Centre Superintendent</div>
+                <div class="small fw-bold mt-1">Centre Seal &amp; Mohar</div>
             </div>
             <div class="col-4">
+                <div style="height: 40px; display: flex; align-items: flex-end; justify-content: center;">
+                    <img src="{{ asset('images/deepak-kumar-signature.png') }}" alt="Controller Sign" style="max-height: 35px; max-width: 110px; object-fit: contain;">
+                </div>
                 <div class="border-top border-dark mx-auto" style="width: 80%;"></div>
                 <div class="small fw-bold mt-1">Controller of Examinations</div>
             </div>
