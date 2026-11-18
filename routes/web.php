@@ -351,7 +351,7 @@ Route::middleware(['role:super_admin,admin'])->prefix('admin')->name('admin.')->
     Route::post('/cms/content', [AdminCmsController::class, 'updateContent'])->name('cms.content.update');
 
     // Admin Blog Management
-    Route::resource('/cms/blog', AdminBlogController::class, ['as' => 'admin']);
+    Route::resource('blog', AdminBlogController::class);
 
     // Hero Banners & Slider
     Route::post('/banners/{banner}/toggle-status', [AdminBannerController::class, 'toggleStatus'])->name('banners.toggle-status');
