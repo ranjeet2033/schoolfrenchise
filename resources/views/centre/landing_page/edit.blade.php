@@ -88,6 +88,18 @@
                     @csrf
                     <div class="row g-3">
                         <div class="col-md-6">
+                            <label class="form-label small fw-bold">Header Centre Name (Brand Title)</label>
+                            <input type="text" name="custom_centre_name" value="{{ old('custom_centre_name', $landingPage->custom_centre_name ?? $centre->centre_name) }}" class="form-control" placeholder="e.g. {{ $centre->centre_name }}">
+                            <span class="form-text small text-muted">Displays in the top navbar and header brand area. Leave empty to use default.</span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold">Header Subtitle / Campus Location</label>
+                            <input type="text" name="header_subtext" value="{{ old('header_subtext', $landingPage->header_subtext ?? ('Code: ' . $centre->centre_code . ' | ' . $centre->city)) }}" class="form-control" placeholder="e.g. Code: {{ $centre->centre_code }} | {{ $centre->city }}">
+                            <span class="form-text small text-muted">Sub-line under your centre name in the top navbar.</span>
+                        </div>
+
+                        <div class="col-md-6">
                             <label class="form-label small fw-bold">Custom URL Slug <span class="text-danger">*</span></label>
                             <div class="input-group">
                                 <span class="input-group-text bg-light text-muted small">{{ url('/branch') }}/</span>
@@ -118,12 +130,20 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label class="form-label small fw-bold">Custom Branch Logo (Optional)</label>
+                            <label class="form-label small fw-bold">Custom Branch Logo (Navbar Header)</label>
                             <input type="file" name="custom_logo" class="form-control" accept="image/*">
                             @if($landingPage->custom_logo)
-                                <div class="mt-2 d-flex align-items-center gap-2">
-                                    <img src="{{ $landingPage->effective_logo_url }}" alt="Logo" height="35" class="rounded border p-1 bg-light">
-                                    <span class="small text-muted">Current Custom Logo</span>
+                                <div class="mt-2 d-flex align-items-center gap-3 p-2 bg-light rounded-3 border">
+                                    <img src="{{ $landingPage->effective_logo_url }}" alt="Logo" height="40" class="rounded border p-1 bg-white">
+                                    <div>
+                                        <span class="small fw-bold text-dark d-block">Current Custom Logo</span>
+                                        <div class="form-check mt-1">
+                                            <input class="form-check-input" type="checkbox" name="remove_custom_logo" value="1" id="removeLogoCheck">
+                                            <label class="form-check-label small text-danger fw-semibold" for="removeLogoCheck">
+                                                Remove custom logo & use default institute logo
+                                            </label>
+                                        </div>
+                                    </div>
                                 </div>
                             @endif
                         </div>

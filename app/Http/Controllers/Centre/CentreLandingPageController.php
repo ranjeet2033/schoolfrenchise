@@ -72,10 +72,13 @@ class CentreLandingPageController extends Controller
 
         $validated = $request->validate([
             'slug'             => 'nullable|string|max:150|unique:centre_landing_pages,slug,' . ($landingPage->id ?? 0),
+            'custom_centre_name' => 'nullable|string|max:191',
+            'header_subtext'   => 'nullable|string|max:191',
             'tagline'          => 'nullable|string|max:255',
             'theme_color'      => 'nullable|string|max:20',
             'accent_color'     => 'nullable|string|max:20',
             'custom_logo'      => 'nullable|image|max:2048',
+            'remove_custom_logo' => 'nullable|boolean',
             'about_heading'    => 'nullable|string|max:255',
             'about_content'    => 'nullable|string',
             'owner_name'       => 'nullable|string|max:191',
@@ -96,7 +99,10 @@ class CentreLandingPageController extends Controller
             'is_published'     => 'nullable|boolean',
         ]);
 
-        if ($request->hasFile('custom_logo')) {
+        if ($request->boolean('remove_custom_logo')) {
+            $landingPage->custom_logo = null;
+            $landingPage->save();
+        } elseif ($request->hasFile('custom_logo')) {
             $landingPage->custom_logo = $request->file('custom_logo')->store('centres/landing/logos', 'public');
             $landingPage->save();
         }
@@ -108,6 +114,12 @@ class CentreLandingPageController extends Controller
 
         $dataToUpdate = [];
 
+        if ($request->has('custom_centre_name')) {
+            $dataToUpdate['custom_centre_name'] = !empty(trim((string)$validated['custom_centre_name'])) ? trim($validated['custom_centre_name']) : null;
+        }
+        if ($request->has('header_subtext')) {
+            $dataToUpdate['header_subtext'] = !empty(trim((string)$validated['header_subtext'])) ? trim($validated['header_subtext']) : null;
+        }
         if ($request->has('slug') && !empty($validated['slug'])) {
             $dataToUpdate['slug'] = Str::slug($validated['slug']);
         }

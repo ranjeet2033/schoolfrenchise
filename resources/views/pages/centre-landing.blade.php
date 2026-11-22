@@ -201,6 +201,186 @@
             transform: scale(1.1);
             color: #ffffff;
         }
+
+        /* Public-Aligned Academic Course Card Styling */
+        .dce-course-grid-card {
+            background: #ffffff;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
+            transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+            position: relative;
+        }
+        .dce-course-grid-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(15, 23, 42, 0.1);
+            border-color: var(--centre-accent, #0284c7);
+        }
+        .dce-course-img-wrap {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 10;
+            overflow: hidden;
+            background: #0b1329;
+            border-radius: 7px 7px 0 0;
+        }
+        .dce-course-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.35s ease;
+        }
+        .dce-course-grid-card:hover .dce-course-img {
+            transform: scale(1.05);
+        }
+        .dce-course-code-badge {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: rgba(15, 23, 42, 0.88);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            color: #38bdf8;
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            font-size: 0.68rem;
+            font-weight: 800;
+            padding: 2.5px 7px;
+            border-radius: 4px;
+            letter-spacing: 0.4px;
+            z-index: 2;
+        }
+        .dce-course-cat-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: var(--centre-accent, #0284c7);
+            color: #ffffff;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 2.5px 7px;
+            border-radius: 4px;
+            z-index: 2;
+        }
+        .dce-course-body {
+            padding: 0.9rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        .dce-course-title-clamp {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: #0f172a;
+            line-height: 1.35;
+            margin-bottom: 0.45rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            min-height: 2.65em;
+            text-decoration: none;
+            transition: color 0.2s ease;
+            text-transform: capitalize;
+        }
+        .dce-course-title-clamp:hover {
+            color: var(--centre-primary, #0284c7);
+        }
+        .dce-course-meta-row {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 0.75rem;
+            flex-wrap: wrap;
+        }
+        .dce-course-pill {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            color: #475569;
+            font-size: 0.72rem;
+            font-weight: 600;
+            padding: 2px 7px;
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .dce-course-footer {
+            margin-top: auto;
+            padding-top: 0.65rem;
+            border-top: 1px solid #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .dce-course-pricing {
+            display: flex;
+            flex-direction: column;
+        }
+        .dce-course-price {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: #0f172a;
+            line-height: 1;
+        }
+        .dce-course-price-lbl {
+            font-size: 0.64rem;
+            color: #94a3b8;
+            text-transform: uppercase;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 2px;
+        }
+        .dce-course-btn {
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 6px !important;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            text-decoration: none;
+            background: var(--centre-primary, #0284c7);
+            border: 1px solid var(--centre-primary, #0284c7);
+            color: #ffffff;
+            transition: all 0.2s ease;
+        }
+        .dce-course-btn:hover {
+            background: var(--centre-dark, #0369a1);
+            color: #ffffff;
+        }
+        @media (max-width: 575.98px) {
+            .dce-course-body {
+                padding: 0.65rem 0.55rem 0.55rem;
+            }
+            .dce-course-title-clamp {
+                font-size: 0.78rem;
+                line-height: 1.25;
+                min-height: 2.5em;
+                margin-bottom: 0.35rem;
+            }
+            .dce-course-meta-row {
+                gap: 3px;
+                margin-bottom: 0.45rem;
+            }
+            .dce-course-pill {
+                font-size: 0.62rem;
+                padding: 1.5px 5px;
+            }
+            .dce-course-footer {
+                padding-top: 0.45rem;
+            }
+            .dce-course-price {
+                font-size: 0.88rem;
+            }
+            .dce-course-btn {
+                font-size: 0.72rem;
+                padding: 4px 9px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -231,10 +411,10 @@
     <nav class="navbar navbar-expand-lg centre-nav sticky-top py-3">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url()->current() }}">
-                <img src="{{ $landingPage->effective_logo_url }}" alt="{{ $centre->centre_name }}" height="48" class="rounded" onerror="this.onerror=null;this.src='{{ asset('images/tech-era-logo.png') }}';">
+                <img src="{{ $landingPage->effective_logo_url }}" alt="{{ $landingPage->custom_centre_name ?? $centre->centre_name }}" height="48" class="rounded" onerror="this.onerror=null;this.src='{{ asset('images/tech-era-logo.png') }}';">
                 <div>
-                    <h5 class="fw-bold mb-0 text-centre-primary" style="letter-spacing: -0.3px;">{{ $centre->centre_name }}</h5>
-                    <span class="small text-muted d-block font-monospace" style="font-size: 0.75rem;">Code: {{ $centre->centre_code }} | {{ $centre->city }}</span>
+                    <h5 class="fw-bold mb-0 text-centre-primary" style="letter-spacing: -0.3px;">{{ $landingPage->custom_centre_name ?? $centre->centre_name }}</h5>
+                    <span class="small text-muted d-block font-monospace" style="font-size: 0.75rem;">{{ $landingPage->header_subtext ?? ('Code: ' . $centre->centre_code . ' | ' . $centre->city) }}</span>
                 </div>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#centreNavCollapse">
@@ -462,25 +642,53 @@
                 <p class="text-muted">Nationally accredited certificates and diplomas valid for private and government job selections.</p>
             </div>
 
-            <div class="row g-4">
+            <div class="row g-2.5 g-sm-3 g-lg-4">
                 @forelse($courses as $course)
-                    <div class="col-md-6 col-lg-3">
-                        <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden d-flex flex-column transition-hover" style="border: 1px solid rgba(0,0,0,0.06) !important;">
-                            <div class="card-body p-4 d-flex flex-column">
-                                <div class="d-flex justify-content-between align-items-start mb-2">
-                                    <span class="badge bg-light text-centre-primary border font-monospace px-2 py-1">{{ $course->course_code }}</span>
-                                    <span class="small text-muted"><i class="fa-solid fa-clock text-centre-accent me-1"></i> {{ $course->duration }}</span>
+                    @php
+                        $courseImg = $course->thumbnail_url;
+                    @endphp
+                    <div class="col-6 col-md-4 col-lg-3">
+                        <div class="dce-course-grid-card">
+                            <!-- Course Thumbnail Image with Floating Badges -->
+                            <div class="dce-course-img-wrap">
+                                <div class="d-block w-100 h-100 position-relative">
+                                    <img src="{{ $courseImg }}" 
+                                         alt="{{ $course->course_name }}" 
+                                         class="dce-course-img"
+                                         loading="lazy"
+                                         onerror="this.onerror=null; this.src='{{ asset('images/courses/default-course.svg') }}';">
                                 </div>
-                                <h6 class="fw-bold text-dark mb-2 lh-base">{{ $course->course_name }}</h6>
-                                <p class="text-muted small mb-3 flex-grow-1">{{ Str::limit($course->short_description ?? $course->description ?? 'Accredited computer curriculum with practical laboratory sessions and genuine certification.', 85) }}</p>
-                                <div class="pt-3 border-top d-flex justify-content-between align-items-center">
-                                    <span class="small text-success fw-semibold"><i class="fa-solid fa-circle-check me-1"></i>Job Oriented</span>
-                                    <button type="button" class="btn btn-sm btn-centre-primary rounded-pill px-3 fw-bold btn-apply-course shadow-sm"
+                                <span class="dce-course-code-badge">{{ $course->course_code }}</span>
+                                <span class="dce-course-cat-badge">{{ $course->category->name ?? 'Certified' }}</span>
+                            </div>
+
+                            <!-- Course Body -->
+                            <div class="dce-course-body">
+                                <div class="dce-course-title-clamp" title="{{ $course->course_name }}">
+                                    {{ ucwords(strtolower($course->course_name)) }}
+                                </div>
+
+                                <div class="dce-course-meta-row">
+                                    <span class="dce-course-pill">
+                                        <i class="fa-regular fa-clock text-primary"></i> {{ $course->duration }}
+                                    </span>
+                                    <span class="dce-course-pill d-none d-sm-inline-flex">
+                                        <i class="fa-solid fa-laptop-code text-success"></i> Practical
+                                    </span>
+                                </div>
+
+                                <div class="dce-course-footer">
+                                    <div class="dce-course-pricing">
+                                        <span class="dce-course-price-lbl">Fee</span>
+                                        <span class="dce-course-price">₹{{ number_format($course->default_course_fee ?? $course->course_fee ?? 0, 0) }}</span>
+                                    </div>
+                                    <button type="button" class="btn btn-centre-primary dce-course-btn btn-apply-course shadow-sm"
                                             data-bs-toggle="modal"
                                             data-bs-target="#enquiryModal"
                                             data-course-id="{{ $course->id }}"
                                             data-course-name="{{ $course->course_name }} ({{ $course->course_code }})">
-                                        <i class="fa-solid fa-file-pen me-1"></i> Apply
+                                        <span>Apply</span>
+                                        <i class="fa-solid fa-paper-plane small ms-1"></i>
                                     </button>
                                 </div>
                             </div>

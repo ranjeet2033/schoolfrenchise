@@ -80,7 +80,7 @@ class FranchiseLandingController extends Controller
             ]);
         }
 
-        $courses = Course::where('status', true)->orderBy('course_code')->get();
+        $courses = Course::with('category')->where('status', true)->orderBy('course_code')->get();
 
         return view('pages.centre-landing', compact('centre', 'landingPage', 'courses'));
     }

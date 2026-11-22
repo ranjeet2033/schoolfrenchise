@@ -12,6 +12,8 @@ class CentreLandingPage extends Model
     protected $fillable = [
         'centre_id',
         'slug',
+        'custom_centre_name',
+        'header_subtext',
         'tagline',
         'theme_color',
         'accent_color',
