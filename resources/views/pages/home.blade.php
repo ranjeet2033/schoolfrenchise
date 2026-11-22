@@ -401,9 +401,9 @@
             <div class="row g-2.5 g-sm-3 g-lg-4">
                 @foreach($digitalProducts as $prod)
                     <div class="col-6 col-md-4 col-lg-3">
-                        <div class="card h-100 border-0 shadow-sm rounded-3 overflow-hidden d-flex flex-column transition-hover" style="border: 1px solid #e2e8f0 !important; background: #ffffff;">
+                        <div class="card h-100 border-0 shadow-sm rounded-3 overflow-hidden d-flex flex-column transition-hover dce-store-card" style="border: 1px solid #e2e8f0 !important; background: #ffffff;">
                             <!-- Thumbnail & Badges -->
-                            <div class="position-relative" style="height: 160px; background-color: #0d2238; overflow: hidden;">
+                            <div class="position-relative dce-store-thumb" style="height: 160px; background-color: #0d2238; overflow: hidden;">
                                 @if($prod->thumbnail)
                                     <img src="{{ $prod->thumbnail_url }}" alt="{{ $prod->title }}" class="w-100 h-100 object-fit-cover">
                                 @else

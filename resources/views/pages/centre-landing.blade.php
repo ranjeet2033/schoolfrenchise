@@ -350,6 +350,26 @@
             color: #ffffff;
         }
         @media (max-width: 575.98px) {
+            .centre-nav .navbar-brand {
+                max-width: calc(100% - 65px);
+            }
+            .centre-nav .navbar-brand img {
+                height: 38px;
+            }
+            .centre-nav .navbar-brand h5 {
+                font-size: 0.86rem !important;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 200px;
+            }
+            .centre-nav .navbar-brand span {
+                font-size: 0.66rem !important;
+            }
+            .centre-nav .navbar-toggler {
+                padding: 4px 8px;
+                font-size: 0.85rem;
+            }
             .dce-course-body {
                 padding: 0.65rem 0.55rem 0.55rem;
             }
@@ -376,6 +396,19 @@
             .dce-course-btn {
                 font-size: 0.72rem;
                 padding: 4px 9px;
+            }
+            .dce-store-thumb {
+                height: 125px !important;
+            }
+            .dce-store-desc {
+                display: none !important;
+            }
+            .dce-store-card .card-body {
+                padding: 0.65rem 0.55rem 0.55rem !important;
+            }
+            .dce-store-card h6 {
+                font-size: 0.80rem !important;
+                margin-bottom: 0.25rem !important;
             }
         }
     </style>
@@ -721,9 +754,9 @@
                 <div class="row g-2.5 g-sm-3 g-lg-4">
                     @foreach($digitalProducts as $prod)
                         <div class="col-6 col-md-4 col-lg-3">
-                            <div class="card h-100 border-0 shadow-sm rounded-3 overflow-hidden d-flex flex-column transition-hover" style="border: 1px solid #e2e8f0 !important; background: #ffffff;">
+                            <div class="card h-100 border-0 shadow-sm rounded-3 overflow-hidden d-flex flex-column transition-hover dce-store-card" style="border: 1px solid #e2e8f0 !important; background: #ffffff;">
                                 <!-- Thumbnail & Floating Badges -->
-                                <div class="position-relative" style="height: 160px; background-color: var(--centre-primary, #0d2238); overflow: hidden;">
+                                <div class="position-relative dce-store-thumb" style="height: 160px; background-color: var(--centre-primary, #0d2238); overflow: hidden;">
                                     @if($prod->thumbnail)
                                         <img src="{{ $prod->thumbnail_url }}" alt="{{ $prod->title }}" class="w-100 h-100 object-fit-cover">
                                     @else
@@ -758,7 +791,7 @@
                                             {{ $prod->title }}
                                         </a>
                                     </h6>
-                                    <p class="text-muted small mb-3 flex-grow-1" style="font-size: 0.78rem; min-height: 2.4em; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                                    <p class="text-muted small mb-3 flex-grow-1 dce-store-desc" style="font-size: 0.78rem; min-height: 2.4em; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
                                         {{ Str::limit($prod->short_description ?? strip_tags($prod->description ?? ''), 70) }}
                                     </p>
 

@@ -2773,6 +2773,32 @@ img {
         font-size: 0.82rem;
         border-radius: 6px !important;
     }
+
+    /* Digital Store 2-Column Mobile Optimization */
+    .dce-store-card .dce-store-thumb,
+    .dce-store-card .position-relative[style*="height: 160px"] {
+        height: 125px !important;
+    }
+    .dce-store-card .card-body {
+        padding: 0.65rem 0.55rem 0.55rem !important;
+    }
+    .dce-store-card h6 {
+        font-size: 0.80rem !important;
+        margin-bottom: 0.25rem !important;
+        min-height: 2.2em;
+    }
+    .dce-store-card .dce-store-desc,
+    .dce-store-card p.text-muted.small {
+        display: none !important;
+    }
+    .dce-store-card .badge {
+        font-size: 0.58rem !important;
+        padding: 2px 5px !important;
+    }
+    .dce-store-card .btn-sm {
+        font-size: 0.72rem !important;
+        padding: 3px 8px !important;
+    }
 }
 
 /* ==========================================================================
