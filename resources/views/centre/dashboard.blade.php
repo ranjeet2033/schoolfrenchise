@@ -38,8 +38,31 @@
 
 <!-- Quick Statistics KPI Grid -->
 <div class="row g-2.5 g-sm-3 mb-4">
+    <!-- Landing Page Leads -->
+    <div class="col-6 col-md-4 col-xl">
+        <div class="stat-card p-2.5 p-sm-3 h-100 border-start border-4 border-danger">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="text-muted small fw-semibold text-uppercase" style="font-size: 0.68rem;">Landing Leads</div>
+                    <div class="d-flex align-items-baseline gap-1 my-1">
+                        <h3 class="fw-bold text-dark mb-0 fs-5 fs-sm-4 fs-md-3">{{ number_format($stats['landing_enquiries'] ?? 0) }}</h3>
+                        @if(($stats['new_landing_enquiries'] ?? 0) > 0)
+                            <span class="badge bg-danger text-white rounded-pill px-1.5 py-0.5" style="font-size: 0.65rem;">{{ $stats['new_landing_enquiries'] }} New</span>
+                        @endif
+                    </div>
+                    <a href="{{ route('centre.enquiries.index') }}" class="text-decoration-none small text-danger fw-semibold" style="font-size: 0.72rem;">
+                        View Leads <i class="fa-solid fa-arrow-right ms-0.5"></i>
+                    </a>
+                </div>
+                <div class="rounded-circle bg-danger-subtle text-danger d-flex align-items-center justify-content-center" style="width: 36px; height: 36px; flex-shrink: 0; font-size: 0.95rem;">
+                    <i class="fa-solid fa-bullhorn"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Total Students -->
-    <div class="col-6 col-xl-3">
+    <div class="col-6 col-md-4 col-xl">
         <div class="stat-card p-2.5 p-sm-3 h-100 border-start border-4 border-primary">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
@@ -57,7 +80,7 @@
     </div>
 
     <!-- Active Batches -->
-    <div class="col-6 col-xl-3">
+    <div class="col-6 col-md-4 col-xl">
         <div class="stat-card p-2.5 p-sm-3 h-100 border-start border-4 border-info">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
@@ -75,7 +98,7 @@
     </div>
 
     <!-- Total Fee Collected -->
-    <div class="col-6 col-xl-3">
+    <div class="col-6 col-md-6 col-xl">
         <div class="stat-card p-2.5 p-sm-3 h-100 border-start border-4 border-success">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
@@ -93,7 +116,7 @@
     </div>
 
     <!-- Scheduled Exams -->
-    <div class="col-6 col-xl-3">
+    <div class="col-6 col-md-6 col-xl">
         <div class="stat-card p-2.5 p-sm-3 h-100 border-start border-4 border-warning">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
@@ -160,6 +183,95 @@
 <div class="row g-4">
     <!-- Left Column: Recent Students & Recent Payments -->
     <div class="col-lg-8">
+        <!-- Recent Landing Page Enquiries & Leads Card -->
+        <div class="card border-0 rounded-4 shadow-sm mb-4">
+            <div class="card-header bg-white py-3 px-3 px-md-4 border-bottom d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-2">
+                    <h6 class="fw-bold mb-0 text-dark">
+                        <i class="fa-solid fa-bullhorn text-warning me-2"></i>Landing Page Enquiries & Leads
+                    </h6>
+                    @if(($stats['new_landing_enquiries'] ?? 0) > 0)
+                        <span class="badge bg-danger rounded-pill px-2 py-0.5" style="font-size: 0.68rem;">{{ $stats['new_landing_enquiries'] }} New</span>
+                    @endif
+                </div>
+                <a href="{{ route('centre.enquiries.index') }}" class="btn btn-sm btn-link text-warning-emphasis text-decoration-none fw-semibold">
+                    View All Leads ({{ $stats['landing_enquiries'] ?? 0 }}) <i class="fa-solid fa-arrow-right ms-1"></i>
+                </a>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table-custom table-hover align-middle mb-0" style="min-width: 620px;">
+                        <thead>
+                            <tr>
+                                <th class="ps-4">Candidate</th>
+                                <th>Contact & Chat</th>
+                                <th>Course Applied</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th class="pe-4 text-end">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($recentLandingEnquiries as $enq)
+                            <tr>
+                                <td class="ps-4">
+                                    <div class="fw-bold text-dark">{{ $enq->name }}</div>
+                                    @if(!empty($enq->email))
+                                        <div class="small text-muted">{{ $enq->email }}</div>
+                                    @endif
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center gap-1.5">
+                                        <a href="tel:{{ $enq->mobile }}" class="btn btn-sm btn-outline-secondary py-0.5 px-1.5" title="Call candidate">
+                                            <i class="fa-solid fa-phone text-primary me-1"></i>{{ $enq->mobile }}
+                                        </a>
+                                        <a href="https://wa.me/91{{ preg_replace('/[^0-9]/', '', $enq->mobile) }}?text=Hello%20{{ urlencode($enq->name) }},%20greeting%20from%20{{ urlencode($centre->centre_name) }}." target="_blank" class="btn btn-sm btn-outline-success py-0.5 px-1.5" title="WhatsApp Chat">
+                                            <i class="fa-brands fa-whatsapp text-success"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                                <td>
+                                    @if($enq->course)
+                                        <span class="badge bg-primary-subtle text-primary font-monospace">{{ $enq->course->course_code }}</span>
+                                        <div class="small text-dark fw-medium text-truncate" style="max-width: 160px;">{{ $enq->course->course_name }}</div>
+                                    @else
+                                        <span class="badge bg-secondary-subtle text-secondary">General Admission</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <span class="small text-muted">{{ $enq->created_at->diffForHumans() }}</span>
+                                </td>
+                                <td>
+                                    @if($enq->status === 'new')
+                                        <span class="badge bg-danger">New</span>
+                                    @elseif($enq->status === 'contacted')
+                                        <span class="badge bg-warning text-dark">Contacted</span>
+                                    @elseif($enq->status === 'converted')
+                                        <span class="badge bg-success">Converted</span>
+                                    @else
+                                        <span class="badge bg-secondary">Closed</span>
+                                    @endif
+                                </td>
+                                <td class="pe-4 text-end">
+                                    <a href="{{ route('centre.students.create', ['name' => $enq->name, 'mobile' => $enq->mobile, 'course_id' => $enq->course_id]) }}" class="btn btn-sm btn-success rounded-2 py-1 px-2 fw-semibold" title="Direct Admission">
+                                        <i class="fa-solid fa-user-plus me-1"></i>Admit
+                                    </a>
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="6" class="text-center py-4 text-muted">
+                                    <i class="fa-solid fa-inbox fs-4 d-block mb-1 text-black-50"></i>
+                                    No enquiries yet. Share your <a href="{{ $centre->landing_page_url }}" target="_blank" class="fw-semibold">Landing Page Link</a> to get student leads!
+                                </td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
         <!-- Recent Students Table -->
         <div class="card border-0 rounded-4 shadow-sm mb-4">
             <div class="card-header bg-white py-3 px-3 px-md-4 border-bottom d-flex justify-content-between align-items-center">

@@ -200,6 +200,11 @@ class Centre extends Model
         return $this->hasOne(CentreLandingPage::class);
     }
 
+    public function enquiries()
+    {
+        return $this->hasMany(Enquiry::class);
+    }
+
     public function banners()
     {
         return $this->hasMany(CentreBanner::class)->orderBy('sort_order');

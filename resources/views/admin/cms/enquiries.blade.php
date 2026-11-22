@@ -96,7 +96,14 @@
                                 @endif
                             </td>
                             <td>
+                                @if($item->centre)
+                                    <span class="badge bg-dark font-monospace mb-1"><i class="fa-solid fa-code-branch me-1 text-warning"></i>{{ $item->centre->centre_code }}</span>
+                                    <div class="small text-muted fw-semibold">{{ $item->centre->centre_name }}</div>
+                                @endif
                                 <div class="fw-semibold text-dark">{{ Str::limit($item->subject, 35) }}</div>
+                                @if($item->course)
+                                    <span class="badge bg-primary-subtle text-primary font-monospace">{{ $item->course->course_code }}</span>
+                                @endif
                                 <div class="small text-muted">{{ Str::limit($item->message, 50) }}</div>
                             </td>
                             <td>

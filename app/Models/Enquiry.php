@@ -10,6 +10,8 @@ class Enquiry extends Model
     use HasFactory;
 
     protected $fillable = [
+        'centre_id',
+        'course_id',
         'name',
         'mobile',
         'email',
@@ -20,6 +22,16 @@ class Enquiry extends Model
         'type',
         'status',
     ];
+
+    public function centre()
+    {
+        return $this->belongsTo(Centre::class);
+    }
+
+    public function course()
+    {
+        return $this->belongsTo(Course::class);
+    }
 
     public function state()
     {

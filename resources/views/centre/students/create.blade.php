@@ -54,7 +54,7 @@
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">Candidate Full Name <span class="text-danger">*</span></label>
-                            <input type="text" name="full_name" class="form-control" value="{{ old('full_name') }}" placeholder="As per matriculation certificate" required>
+                            <input type="text" name="full_name" class="form-control" value="{{ old('full_name', request('name')) }}" placeholder="As per matriculation certificate" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">Father's Name <span class="text-danger">*</span></label>
@@ -81,7 +81,7 @@
                             <label class="form-label fw-semibold">Mobile Number <span class="text-danger">*</span> <small class="text-muted">(Default Password)</small></label>
                             <div class="input-group">
                                 <span class="input-group-text bg-light">+91</span>
-                                <input type="text" name="mobile" class="form-control" maxlength="10" value="{{ old('mobile') }}" placeholder="10-digit mobile" required>
+                                <input type="text" name="mobile" class="form-control" maxlength="10" value="{{ old('mobile', request('mobile')) }}" placeholder="10-digit mobile" required>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -150,7 +150,7 @@
                             <select name="course_id" id="course_select" class="form-select" required>
                                 <option value="">Select Computer Course</option>
                                 @foreach($courses as $c)
-                                <option value="{{ $c->id }}" data-fee="{{ $c->default_course_fee }}" {{ old('course_id') == $c->id ? 'selected' : '' }}>
+                                <option value="{{ $c->id }}" data-fee="{{ $c->default_course_fee }}" {{ old('course_id', request('course_id')) == $c->id ? 'selected' : '' }}>
                                     {{ $c->course_code }} - {{ $c->course_name }} ({{ $c->duration_months }} Months)
                                 </option>
                                 @endforeach

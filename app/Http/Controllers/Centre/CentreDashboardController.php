@@ -12,6 +12,7 @@ use App\Models\Exam;
 use App\Models\FeePayment;
 use App\Models\Student;
 use App\Models\SupportTicket;
+use App\Models\Enquiry;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -48,10 +49,18 @@ class CentreDashboardController extends Controller
             'fee_collected' => (float) FeePayment::where('centre_id', $centre->id)->sum('amount'),
             'open_tickets' => SupportTicket::where('centre_id', $centre->id)->whereIn('status', ['open', 'in_progress'])->count(),
             'upcoming_exams' => Exam::where('status', 'scheduled')->whereDate('exam_date', '>=', now()->toDateString())->count(),
+            'landing_enquiries' => Enquiry::where('centre_id', $centre->id)->count(),
+            'new_landing_enquiries' => Enquiry::where('centre_id', $centre->id)->where('status', 'new')->count(),
         ];
 
         $recentStudents = Student::where('centre_id', $centre->id)
             ->with(['admissions.course'])
+            ->latest()
+            ->take(6)
+            ->get();
+
+        $recentLandingEnquiries = Enquiry::where('centre_id', $centre->id)
+            ->with('course')
             ->latest()
             ->take(6)
             ->get();
@@ -77,6 +86,6 @@ class CentreDashboardController extends Controller
             ->take(4)
             ->get();
 
-        return view('centre.dashboard', compact('centre', 'stats', 'recentStudents', 'recentPayments', 'recentWalletTxns', 'notices'));
+        return view('centre.dashboard', compact('centre', 'stats', 'recentStudents', 'recentLandingEnquiries', 'recentPayments', 'recentWalletTxns', 'notices'));
     }
 }

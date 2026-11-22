@@ -1096,6 +1096,10 @@
                     <i class="fa-solid fa-id-card-clip"></i>
                     <span>Digital ID Cards</span>
                 </a>
+                <a class="nav-link {{ request()->routeIs('centre.enquiries.*') ? 'active' : '' }}" href="{{ route('centre.enquiries.index') }}">
+                    <i class="fa-solid fa-bullhorn text-warning"></i>
+                    <span>Landing Leads / Enquiries</span>
+                </a>
 
                 <!-- Group 3: Academics & Exams -->
                 <div class="centre-nav-heading">
@@ -1260,7 +1264,7 @@
             </div>
             @endif
 
-            @if($errors->any())
+            @if(isset($errors) && $errors->any())
             <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm rounded-3 mb-4" role="alert">
                 <div class="fw-bold mb-1"><i class="fa-solid fa-circle-xmark me-1"></i>Please correct the following errors:</div>
                 <ul class="mb-0 small ps-3">

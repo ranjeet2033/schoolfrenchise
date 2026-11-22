@@ -298,7 +298,7 @@ class AdminCmsController extends Controller
 
     public function enquiries(Request $request)
     {
-        $query = Enquiry::with(['state', 'district']);
+        $query = Enquiry::with(['state', 'district', 'centre', 'course']);
 
         if ($request->filled('search')) {
             $s = trim($request->search);

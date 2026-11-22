@@ -80,7 +80,7 @@ class FranchiseLandingController extends Controller
             ]);
         }
 
-        $courses = Course::where('status', true)->orderBy('course_name')->get();
+        $courses = Course::where('status', true)->orderBy('course_code')->get();
 
         return view('pages.centre-landing', compact('centre', 'landingPage', 'courses'));
     }
@@ -100,18 +100,23 @@ class FranchiseLandingController extends Controller
             'message'    => 'nullable|string|max:500',
         ]);
 
+        $course = !empty($validated['course_id']) ? Course::find($validated['course_id']) : null;
+        $courseTitle = $course ? $course->course_name : 'General Admission';
+
         Enquiry::create([
+            'centre_id'   => $centre->id,
+            'course_id'   => $course?->id,
             'name'        => $validated['name'],
             'mobile'      => $validated['mobile'],
             'email'       => $validated['email'] ?? null,
             'state_id'    => $centre->state_id,
             'district_id' => $centre->district_id,
-            'subject'     => 'Franchise Branch Enquiry (' . $centre->centre_code . ')',
+            'subject'     => 'Admission Enquiry: ' . $courseTitle . ' (' . $centre->centre_code . ')',
             'message'     => $validated['message'] ?? 'Enquiry submitted from Franchise Dedicated Landing Page.',
             'type'        => 'admission_enquiry',
             'status'      => 'new',
         ]);
 
-        return back()->with('enquiry_success', 'Thank you! Your enquiry has been received by ' . $centre->centre_name . '. Our counselor will call you shortly.');
+        return back()->with('enquiry_success', 'Thank you! Your enquiry has been submitted successfully to ' . $centre->centre_name . '. Our counselor will call you shortly.');
     }
 }

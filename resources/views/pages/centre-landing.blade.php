@@ -26,6 +26,14 @@
             --centre-dark: #071524;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
+        section {
+            scroll-margin-top: 85px;
+        }
+
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             color: #1e293b;
@@ -240,9 +248,9 @@
                     <li class="nav-item"><a class="nav-link fw-semibold" href="#gallery">Gallery</a></li>
                     <li class="nav-item"><a class="nav-link fw-semibold" href="#contact">Contact</a></li>
                     <li class="nav-item ms-lg-2">
-                        <a href="#enquiry" class="btn btn-centre-primary rounded-pill px-4 fw-bold shadow-sm">
+                        <button type="button" class="btn btn-centre-primary rounded-pill px-4 fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#enquiryModal">
                             <i class="fa-solid fa-file-pen me-1"></i> Apply / Enquiry
-                        </a>
+                        </button>
                     </li>
                 </ul>
             </div>
@@ -276,9 +284,9 @@
                                     <p class="lead text-white opacity-90 mb-4" style="text-shadow: 0 1px 4px rgba(0,0,0,0.5);">{{ $banner->subtitle }}</p>
                                 @endif
                                 <div class="d-flex flex-wrap gap-2">
-                                    <a href="{{ $banner->button_link ?? '#enquiry' }}" class="btn btn-centre-accent btn-lg px-4 rounded-pill fw-bold shadow">
+                                    <button type="button" class="btn btn-centre-accent btn-lg px-4 rounded-pill fw-bold shadow" data-bs-toggle="modal" data-bs-target="#enquiryModal">
                                         {{ $banner->button_text ?? 'Enroll in New Batch' }} <i class="fa-solid fa-arrow-right ms-1"></i>
-                                    </a>
+                                    </button>
                                     <a href="#courses" class="btn btn-outline-light btn-lg px-4 rounded-pill">
                                         View Courses
                                     </a>
@@ -313,9 +321,9 @@
                         <h1 class="display-5 fw-black text-white mb-3">{{ $centre->centre_name }}</h1>
                         <p class="lead opacity-90 mb-4">{{ $landingPage->tagline ?? 'Equipping students with industry-standard computer and software skills with 100% genuine certification.' }}</p>
                         <div class="d-flex flex-wrap gap-3">
-                            <a href="#enquiry" class="btn btn-centre-accent btn-lg px-4 rounded-pill fw-bold shadow">
+                            <button type="button" class="btn btn-centre-accent btn-lg px-4 rounded-pill fw-bold shadow" data-bs-toggle="modal" data-bs-target="#enquiryModal">
                                 <i class="fa-solid fa-file-pen me-2"></i> Join Our Batches
-                            </a>
+                            </button>
                             <a href="#courses" class="btn btn-outline-light btn-lg px-4 rounded-pill">
                                 View Courses
                             </a>
@@ -455,21 +463,34 @@
             </div>
 
             <div class="row g-4">
-                @foreach($courses->take(8) as $course)
+                @forelse($courses as $course)
                     <div class="col-md-6 col-lg-3">
-                        <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden d-flex flex-column">
+                        <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden d-flex flex-column transition-hover" style="border: 1px solid rgba(0,0,0,0.06) !important;">
                             <div class="card-body p-4 d-flex flex-column">
-                                <span class="badge bg-light text-centre-primary border mb-2 align-self-start font-monospace">{{ $course->course_code }}</span>
-                                <h6 class="fw-bold text-dark mb-2">{{ $course->course_name }}</h6>
-                                <p class="text-muted small mb-3 flex-grow-1">{{ Str::limit($course->short_description ?? $course->description ?? '', 70) }}</p>
-                                <div class="pt-3 border-top d-flex justify-content-between align-items-center small text-muted">
-                                    <span><i class="fa-solid fa-clock text-centre-accent me-1"></i> {{ $course->duration }}</span>
-                                    <a href="#enquiry" class="btn btn-sm btn-outline-primary rounded-pill">Apply</a>
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <span class="badge bg-light text-centre-primary border font-monospace px-2 py-1">{{ $course->course_code }}</span>
+                                    <span class="small text-muted"><i class="fa-solid fa-clock text-centre-accent me-1"></i> {{ $course->duration }}</span>
+                                </div>
+                                <h6 class="fw-bold text-dark mb-2 lh-base">{{ $course->course_name }}</h6>
+                                <p class="text-muted small mb-3 flex-grow-1">{{ Str::limit($course->short_description ?? $course->description ?? 'Accredited computer curriculum with practical laboratory sessions and genuine certification.', 85) }}</p>
+                                <div class="pt-3 border-top d-flex justify-content-between align-items-center">
+                                    <span class="small text-success fw-semibold"><i class="fa-solid fa-circle-check me-1"></i>Job Oriented</span>
+                                    <button type="button" class="btn btn-sm btn-centre-primary rounded-pill px-3 fw-bold btn-apply-course shadow-sm"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#enquiryModal"
+                                            data-course-id="{{ $course->id }}"
+                                            data-course-name="{{ $course->course_name }} ({{ $course->course_code }})">
+                                        <i class="fa-solid fa-file-pen me-1"></i> Apply
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                @endforeach
+                @empty
+                    <div class="col-12 text-center py-4 text-muted">
+                        No courses currently listed. Please contact the centre directly for batch details.
+                    </div>
+                @endforelse
             </div>
         </div>
     </section>
@@ -561,6 +582,100 @@
         </div>
     </section>
 
+    <!-- Fast Admission Enquiry & Counselor Helpline Section -->
+    <section id="enquiry" class="py-5 bg-light border-top border-bottom">
+        <div class="container py-3">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6">
+                    <span class="badge bg-centre-accent text-white px-3 py-2 fw-bold text-uppercase mb-2 font-monospace">Admissions Open</span>
+                    <h2 class="fw-black text-centre-primary mb-3">Direct Admission & Course Enquiry</h2>
+                    <p class="text-muted mb-4">Interested in enrolling or have questions regarding course curriculum, fees, and batch schedules? Fill in your details below and our branch counselor will contact you immediately.</p>
+
+                    <div class="card border-0 rounded-4 shadow-sm p-4 bg-white mb-3">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="rounded-circle bg-centre-primary text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; flex-shrink: 0;">
+                                <i class="fa-solid fa-headset fs-4"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-1 text-dark">Need Immediate Help?</h6>
+                                <p class="small text-muted mb-0">Call or WhatsApp our centre counselor directly for spot counseling.</p>
+                                <a href="tel:{{ $landingPage->custom_phone ?? $centre->mobile }}" class="fw-bold text-centre-primary text-decoration-none font-monospace">
+                                    <i class="fa-solid fa-phone me-1 text-centre-accent"></i> {{ $landingPage->custom_phone ?? $centre->mobile }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="card border-0 rounded-4 shadow-lg p-4 p-md-5 bg-white">
+                        <h4 class="fw-black text-centre-primary mb-1">
+                            <i class="fa-solid fa-paper-plane text-centre-accent me-2"></i>Quick Admission Enquiry
+                        </h4>
+                        <p class="small text-muted mb-4">Please submit your contact info to get full details and fee structure.</p>
+
+                        @if(session('enquiry_success'))
+                            <div class="alert alert-success alert-dismissible fade show rounded-3 small p-3 mb-3 shadow-sm" role="alert">
+                                <i class="fa-solid fa-circle-check me-2"></i>{{ session('enquiry_success') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        @endif
+
+                        @if(isset($errors) && $errors->any())
+                            <div class="alert alert-danger alert-dismissible fade show rounded-3 small p-3 mb-3 shadow-sm" role="alert">
+                                <i class="fa-solid fa-triangle-exclamation me-2"></i>Please check the required fields.
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        @endif
+
+                        <form action="{{ route('franchise.landing.enquiry', $centre->centre_code) }}" method="POST">
+                            @csrf
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold text-dark">Student's Full Name <span class="text-danger">*</span></label>
+                                <input type="text" name="name" class="form-control rounded-3" required placeholder="Enter student's full name" value="{{ old('name') }}">
+                            </div>
+
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold text-dark">Mobile Number <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light">+91</span>
+                                        <input type="tel" name="mobile" maxlength="10" pattern="[0-9]{10}" class="form-control" required placeholder="10-digit number" value="{{ old('mobile') }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold text-dark">Email Address <small class="text-muted">(Optional)</small></label>
+                                    <input type="email" name="email" class="form-control rounded-3" placeholder="email@example.com" value="{{ old('email') }}">
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold text-dark">Interested Course <span class="text-danger">*</span></label>
+                                <select name="course_id" class="form-select rounded-3" required>
+                                    <option value="">-- Choose Course --</option>
+                                    @foreach($courses as $c)
+                                        <option value="{{ $c->id }}" {{ old('course_id') == $c->id ? 'selected' : '' }}>
+                                            {{ $c->course_code }} - {{ $c->course_name }} ({{ $c->duration }})
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold text-dark">Query / Preferred Timing <small class="text-muted">(Optional)</small></label>
+                                <textarea name="message" rows="2" class="form-control rounded-3" placeholder="Morning / Evening batch preference, or questions...">{{ old('message') }}</textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-centre-primary w-100 py-2.5 rounded-pill fw-bold shadow-sm">
+                                <i class="fa-solid fa-paper-plane me-2"></i> Submit Enquiry to Centre
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer class="bg-centre-primary text-white py-4 border-top border-4 border-centre-accent">
         <div class="container text-center">
@@ -576,6 +691,112 @@
         </a>
     @endif
 
+    <!-- Interactive Apply / Admission Enquiry Modal -->
+    <div class="modal fade" id="enquiryModal" tabindex="-1" aria-labelledby="enquiryModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 rounded-4 shadow-lg overflow-hidden">
+                <div class="modal-header bg-centre-primary text-white py-3 px-4">
+                    <div>
+                        <h5 class="modal-title fw-bold" id="enquiryModalLabel">
+                            <i class="fa-solid fa-graduation-cap text-centre-accent me-2"></i>Apply for Course Admission
+                        </h5>
+                        <p class="small text-white-50 mb-0 font-monospace">{{ $centre->centre_name }} ({{ $centre->centre_code }})</p>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4 bg-white">
+                    <div id="modalSelectedCourseAlert" class="alert alert-primary py-2 px-3 small rounded-3 mb-3 d-none">
+                        <i class="fa-solid fa-bookmark me-1"></i> Selected Course: <strong id="modalSelectedCourseName"></strong>
+                    </div>
+
+                    <form action="{{ route('franchise.landing.enquiry', $centre->centre_code) }}" method="POST" id="enquiryModalForm">
+                        @csrf
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-dark">Student's Full Name <span class="text-danger">*</span></label>
+                            <input type="text" name="name" class="form-control rounded-3" required placeholder="Enter student's full name" value="{{ old('name') }}">
+                        </div>
+
+                        <div class="row g-2 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-dark">Mobile Number <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light font-monospace">+91</span>
+                                    <input type="tel" name="mobile" maxlength="10" pattern="[0-9]{10}" class="form-control" required placeholder="10-digit mobile" value="{{ old('mobile') }}">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-dark">Email <small class="text-muted">(Optional)</small></label>
+                                <input type="email" name="email" class="form-control rounded-3" placeholder="email@example.com" value="{{ old('email') }}">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-dark">Interested Course <span class="text-danger">*</span></label>
+                            <select name="course_id" id="modalCourseSelect" class="form-select rounded-3" required>
+                                <option value="">-- Choose Course --</option>
+                                @foreach($courses as $c)
+                                    <option value="{{ $c->id }}" {{ old('course_id') == $c->id ? 'selected' : '' }}>
+                                        {{ $c->course_code }} - {{ $c->course_name }} ({{ $c->duration }})
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-dark">Message / Preferred Shift <small class="text-muted">(Optional)</small></label>
+                            <textarea name="message" rows="2" class="form-control rounded-3" placeholder="Preferred timing or batch requirements...">{{ old('message') }}</textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-centre-primary w-100 py-2.5 rounded-pill fw-bold shadow-sm">
+                            <i class="fa-solid fa-paper-plane me-2"></i> Submit Application to Centre
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const modalEl = document.getElementById('enquiryModal');
+            const courseSelect = document.getElementById('modalCourseSelect');
+            const courseAlert = document.getElementById('modalSelectedCourseAlert');
+            const courseNameSpan = document.getElementById('modalSelectedCourseName');
+
+            // Wire up all "Apply" buttons on course cards
+            document.querySelectorAll('.btn-apply-course').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    const courseId = this.getAttribute('data-course-id');
+                    const courseName = this.getAttribute('data-course-name');
+
+                    if (courseSelect && courseId) {
+                        courseSelect.value = courseId;
+                    }
+                    if (courseAlert && courseNameSpan && courseName) {
+                        courseNameSpan.textContent = courseName;
+                        courseAlert.classList.remove('d-none');
+                    }
+                });
+            });
+
+            // When modal closed, reset course alert
+            if (modalEl) {
+                modalEl.addEventListener('hidden.bs.modal', function () {
+                    if (courseAlert) {
+                        courseAlert.classList.add('d-none');
+                    }
+                });
+            }
+
+            @if(session('enquiry_success'))
+                // Smooth scroll to enquiry confirmation if returned
+                const enqSection = document.getElementById('enquiry');
+                if (enqSection) {
+                    enqSection.scrollIntoView({ behavior: 'smooth' });
+                }
+            @endif
+        });
+    </script>
 </body>
 </html>

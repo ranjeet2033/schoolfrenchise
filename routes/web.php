@@ -36,6 +36,7 @@ use App\Http\Controllers\Auth\StudentAuthController;
 use App\Http\Controllers\Centre\CentreBatchController;
 use App\Http\Controllers\Centre\CentreDashboardController;
 use App\Http\Controllers\Centre\CentreDownloadController;
+use App\Http\Controllers\Centre\CentreEnquiryController;
 use App\Http\Controllers\Centre\CentreExamController;
 use App\Http\Controllers\Centre\CentreFeeController;
 use App\Http\Controllers\Centre\CentreProfileController;
@@ -515,6 +516,11 @@ Route::middleware(['role:super_admin,centre,staff', 'centre.active'])->prefix('c
     Route::delete('/landing-page/banners/{id}', [CentreLandingPageController::class, 'destroyBanner'])->name('landing.banners.destroy');
     Route::post('/landing-page/gallery', [CentreLandingPageController::class, 'storeGallery'])->name('landing.gallery.store');
     Route::delete('/landing-page/gallery/{id}', [CentreLandingPageController::class, 'destroyGallery'])->name('landing.gallery.destroy');
+
+    // Landing Page Enquiries & Leads
+    Route::get('/enquiries', [CentreEnquiryController::class, 'index'])->name('enquiries.index');
+    Route::post('/enquiries/{enquiry}/status', [CentreEnquiryController::class, 'updateStatus'])->name('enquiries.status');
+    Route::delete('/enquiries/{enquiry}', [CentreEnquiryController::class, 'destroy'])->name('enquiries.destroy');
 });
 
 Route::middleware(['role:super_admin,student'])->prefix('student')->name('student.')->group(function () {
