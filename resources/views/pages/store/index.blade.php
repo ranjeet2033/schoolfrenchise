@@ -83,12 +83,16 @@
                                 @endif
 
                                 <!-- Product Type Badge -->
-                                <span class="position-absolute top-0 start-0 m-2 badge {{ $prod->type === 'video' ? 'bg-danger' : 'bg-primary' }} text-white px-2 py-1 shadow-sm">
-                                    <i class="fa-solid {{ $prod->type === 'video' ? 'fa-video me-1' : 'fa-file-lines me-1' }}"></i>
-                                    {{ $prod->type === 'video' ? 'Video Lecture' : 'PDF E-Book' }}
+                                <span class="position-absolute top-0 start-0 m-2 badge {{ $prod->type === 'video' ? ($prod->isPublicVideo() ? 'bg-success' : 'bg-danger') : 'bg-primary' }} text-white px-2 py-1 shadow-sm font-monospace">
+                                    <i class="fa-solid {{ $prod->type === 'video' ? ($prod->isPublicVideo() ? 'fa-globe' : 'fa-lock') : 'fa-file-lines' }} me-1"></i>
+                                    @if($prod->type === 'video')
+                                        {{ $prod->isPublicVideo() ? 'Free Lecture' : 'Private Video' }}
+                                    @else
+                                        PDF E-Book
+                                    @endif
                                 </span>
 
-                                @if($prod->has_discount)
+                                @if($prod->has_discount && !$prod->isPublicVideo())
                                     <span class="position-absolute top-0 end-0 m-2 badge bg-success text-white px-2 py-1 shadow-sm">
                                         {{ $prod->discount_percentage }}% OFF
                                     </span>
@@ -114,21 +118,35 @@
                                         <span class="text-success"><i class="fa-solid fa-download me-1"></i> Instant</span>
                                     @else
                                         <span><i class="fa-solid fa-clock text-info me-1"></i> {{ $prod->duration ?? 'HD Lecture' }}</span>
-                                        <span class="badge bg-light text-dark border"><i class="fa-brands fa-youtube text-danger me-1"></i> Private</span>
+                                        @if($prod->isPublicVideo())
+                                            <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25"><i class="fa-solid fa-unlock me-1"></i> Free Public</span>
+                                        @else
+                                            <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25"><i class="fa-solid fa-lock me-1"></i> Private Invite</span>
+                                        @endif
                                     @endif
                                 </div>
 
                                 <!-- Price & Action -->
                                 <div class="d-flex align-items-center justify-content-between mt-auto">
                                     <div>
-                                        <span class="fs-5 fw-black text-primary">₹{{ number_format($prod->effective_price, 2) }}</span>
-                                        @if($prod->has_discount)
-                                            <span class="text-muted text-decoration-line-through small ms-1">₹{{ number_format($prod->price, 2) }}</span>
+                                        @if($prod->isPublicVideo() || $prod->effective_price <= 0)
+                                            <span class="fs-5 fw-black text-success">FREE</span>
+                                        @else
+                                            <span class="fs-5 fw-black text-primary">₹{{ number_format($prod->effective_price, 2) }}</span>
+                                            @if($prod->has_discount)
+                                                <span class="text-muted text-decoration-line-through small ms-1">₹{{ number_format($prod->price, 2) }}</span>
+                                            @endif
                                         @endif
                                     </div>
-                                    <a href="{{ route('store.show', ['type' => $prod->type, 'slug' => $prod->slug]) }}" class="btn btn-sm btn-primary px-3 rounded-pill fw-bold shadow-sm">
-                                        Buy Now <i class="fa-solid fa-arrow-right ms-1"></i>
-                                    </a>
+                                    @if($prod->isPublicVideo())
+                                        <a href="{{ route('store.show', ['type' => $prod->type, 'slug' => $prod->slug]) }}" class="btn btn-sm btn-success px-3 rounded-pill fw-bold shadow-sm">
+                                            Watch Free <i class="fa-solid fa-circle-play ms-1"></i>
+                                        </a>
+                                    @else
+                                        <a href="{{ route('store.show', ['type' => $prod->type, 'slug' => $prod->slug]) }}" class="btn btn-sm btn-primary px-3 rounded-pill fw-bold shadow-sm">
+                                            Buy Now <i class="fa-solid fa-arrow-right ms-1"></i>
+                                        </a>
+                                    @endif
                                 </div>
                             </div>
                         </div>

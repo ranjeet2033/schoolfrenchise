@@ -14,6 +14,7 @@ class DigitalProduct extends Model
         'title',
         'slug',
         'type',
+        'video_access_type',
         'category',
         'short_description',
         'description',
@@ -68,8 +69,26 @@ class DigitalProduct extends Model
         return $query->where('type', 'video');
     }
 
+    public function isPublicVideo(): bool
+    {
+        return $this->type === 'video' && $this->video_access_type === 'public';
+    }
+
+    public function isPrivateVideo(): bool
+    {
+        return $this->type === 'video' && $this->video_access_type !== 'public';
+    }
+
+    public function isFree(): bool
+    {
+        return $this->isPublicVideo() || $this->effective_price <= 0;
+    }
+
     public function getEffectivePriceAttribute(): float
     {
+        if ($this->isPublicVideo()) {
+            return 0.00;
+        }
         return (float) ($this->sale_price !== null && $this->sale_price > 0 ? $this->sale_price : $this->price);
     }
 

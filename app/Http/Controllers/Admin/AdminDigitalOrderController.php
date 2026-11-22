@@ -145,4 +145,65 @@ class AdminDigitalOrderController extends Controller
 
         return back()->with('success', "Access revoked for {$access->customer_email}.");
     }
+
+    /**
+     * Admin directly grants manual video access to a student or customer.
+     */
+    public function manualGrant(Request $request)
+    {
+        $validated = $request->validate([
+            'digital_product_id' => 'required|exists:digital_products,id',
+            'customer_name'      => 'required|string|max:191',
+            'customer_email'     => 'required|email|max:191',
+            'customer_gmail'     => 'required|email|max:191',
+            'customer_mobile'    => 'nullable|string|max:20',
+            'invite_status'      => 'required|in:pending_invite,invited',
+            'admin_notes'        => 'nullable|string|max:500',
+        ]);
+
+        $product = DigitalProduct::findOrFail($validated['digital_product_id']);
+
+        $order = DigitalOrder::create([
+            'order_number'    => 'MANUAL-' . strtoupper(Str::random(8)),
+            'customer_name'   => $validated['customer_name'],
+            'customer_email'  => $validated['customer_email'],
+            'customer_mobile' => $validated['customer_mobile'] ?? 'N/A',
+            'customer_gmail'  => $validated['customer_gmail'],
+            'total_amount'    => 0.00,
+            'payment_status'  => 'paid',
+            'payment_gateway' => 'admin_granted',
+            'payment_id'      => 'ADMIN_MANUAL_' . time(),
+            'notes'           => $validated['admin_notes'] ?? 'Manual access granted directly by Admin.',
+        ]);
+
+        DigitalOrderItem::create([
+            'digital_order_id'   => $order->id,
+            'digital_product_id' => $product->id,
+            'product_title'      => $product->title,
+            'product_type'       => $product->type,
+            'price'              => 0.00,
+            'quantity'           => 1,
+            'total_amount'       => 0.00,
+        ]);
+
+        $isInvited = $validated['invite_status'] === 'invited';
+
+        DigitalProductAccess::create([
+            'digital_order_id'      => $order->id,
+            'digital_product_id'    => $product->id,
+            'customer_email'        => $validated['customer_email'],
+            'customer_gmail'        => $validated['customer_gmail'],
+            'access_token'          => DigitalProductAccess::generateAccessToken(),
+            'youtube_invite_status' => $validated['invite_status'],
+            'youtube_invited_at'    => $isInvited ? now() : null,
+            'admin_notes'           => $validated['admin_notes'] ?? 'Granted manually by Admin.',
+            'status'                => 'active',
+        ]);
+
+        if ($product->type === 'video') {
+            $product->increment('current_invites');
+        }
+
+        return back()->with('success', "Access granted successfully to {$validated['customer_name']} ({$validated['customer_gmail']}) for {$product->title}!");
+    }
 }

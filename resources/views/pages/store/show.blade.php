@@ -36,12 +36,16 @@
                                 </div>
                             @endif
 
-                            <span class="position-absolute top-0 start-0 m-3 badge {{ $product->type === 'video' ? 'bg-danger' : 'bg-primary' }} text-white px-3 py-2 shadow-sm font-monospace text-uppercase">
-                                <i class="fa-solid {{ $product->type === 'video' ? 'fa-video me-1' : 'fa-file-lines me-1' }}"></i>
-                                {{ $product->type === 'video' ? 'Private Video Lecture' : 'PDF Digital Book' }}
+                            <span class="position-absolute top-0 start-0 m-3 badge {{ $product->type === 'video' ? ($product->isPublicVideo() ? 'bg-success' : 'bg-danger') : 'bg-primary' }} text-white px-3 py-2 shadow-sm font-monospace text-uppercase">
+                                <i class="fa-solid {{ $product->type === 'video' ? ($product->isPublicVideo() ? 'fa-globe' : 'fa-lock') : 'fa-file-lines' }} me-1"></i>
+                                @if($product->type === 'video')
+                                    {{ $product->isPublicVideo() ? 'Free Public Lecture' : 'Private Video Lecture' }}
+                                @else
+                                    PDF Digital Book
+                                @endif
                             </span>
 
-                            @if($product->has_discount)
+                            @if($product->has_discount && !$product->isPublicVideo())
                                 <span class="position-absolute top-0 end-0 m-3 badge bg-success text-white px-3 py-2 shadow-sm">
                                     {{ $product->discount_percentage }}% OFF
                                 </span>
@@ -52,29 +56,42 @@
                             <div class="d-flex align-items-center justify-content-between mb-3">
                                 <div>
                                     <span class="text-muted small d-block">All-Inclusive Price:</span>
-                                    <span class="display-6 fw-black text-primary">₹{{ number_format($product->effective_price, 2) }}</span>
-                                    @if($product->has_discount)
-                                        <span class="text-muted text-decoration-line-through ms-2">₹{{ number_format($product->price, 2) }}</span>
+                                    @if($product->isPublicVideo() || $product->effective_price <= 0)
+                                        <span class="display-6 fw-black text-success">FREE</span>
+                                    @else
+                                        <span class="display-6 fw-black text-primary">₹{{ number_format($product->effective_price, 2) }}</span>
+                                        @if($product->has_discount)
+                                            <span class="text-muted text-decoration-line-through ms-2">₹{{ number_format($product->price, 2) }}</span>
+                                        @endif
                                     @endif
                                 </div>
                                 <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-3 py-2">
-                                    <i class="fa-solid fa-check-circle me-1"></i> In Stock / Instant
+                                    <i class="fa-solid fa-check-circle me-1"></i> {{ $product->isPublicVideo() ? 'Free to Watch' : 'In Stock / Instant' }}
                                 </span>
                             </div>
 
-                            @if($product->type === 'video')
+                            @if($product->isPublicVideo())
+                                <div class="alert alert-success py-2 px-3 small border-0 mb-3 rounded-3">
+                                    <i class="fa-brands fa-youtube text-danger me-1"></i> <strong>Free Public Video:</strong> Ye video lecture sabhi ke liye open hai. Niche click karke bina payment/login ke directly dekhein.
+                                </div>
+                                <a href="#freeVideoPlayer" class="btn btn-success btn-lg w-100 py-3 rounded-pill fw-bold shadow-lg">
+                                    <i class="fa-solid fa-circle-play me-2"></i> Watch Free Video Now
+                                </a>
+                            @elseif($product->type === 'video')
                                 <div class="alert alert-info py-2 px-3 small border-0 mb-3 rounded-3">
                                     <i class="fa-brands fa-youtube text-danger me-1"></i> <strong>YouTube Private Access:</strong> Only invited Gmail accounts can watch. (Available seats: <strong>{{ $product->available_invites }}/{{ $product->max_invites }}</strong>)
                                 </div>
+                                <button type="button" class="btn btn-primary btn-lg w-100 py-3 rounded-pill fw-bold shadow-lg" data-bs-toggle="modal" data-bs-target="#checkoutModal">
+                                    <i class="fa-solid fa-cart-shopping me-2"></i> Buy Now — ₹{{ number_format($product->effective_price, 2) }}
+                                </button>
                             @else
                                 <div class="alert alert-success py-2 px-3 small border-0 mb-3 rounded-3">
                                     <i class="fa-solid fa-cloud-arrow-down me-1"></i> <strong>Instant PDF Download:</strong> High-resolution printable PDF available immediately after checkout.
                                 </div>
+                                <button type="button" class="btn btn-primary btn-lg w-100 py-3 rounded-pill fw-bold shadow-lg" data-bs-toggle="modal" data-bs-target="#checkoutModal">
+                                    <i class="fa-solid fa-cart-shopping me-2"></i> Buy Now — ₹{{ number_format($product->effective_price, 2) }}
+                                </button>
                             @endif
-
-                            <button type="button" class="btn btn-primary btn-lg w-100 py-3 rounded-pill fw-bold shadow-lg" data-bs-toggle="modal" data-bs-target="#checkoutModal">
-                                <i class="fa-solid fa-cart-shopping me-2"></i> Buy Now — ₹{{ number_format($product->effective_price, 2) }}
-                            </button>
 
                             <div class="mt-3 text-center">
                                 <span class="text-muted small"><i class="fa-solid fa-lock text-success me-1"></i> 100% Safe 256-bit Razorpay Checkout</span>
@@ -116,11 +133,25 @@
                         <div class="col-sm-6">
                             <div class="p-3 bg-light rounded-3 border">
                                 <span class="text-muted small d-block"><i class="fa-brands fa-youtube text-danger me-1"></i> Platform:</span>
-                                <strong class="fs-6">YouTube (Private Invited)</strong>
+                                <strong class="fs-6">{{ $product->isPublicVideo() ? 'YouTube (Free Public)' : 'YouTube (Private Invited)' }}</strong>
                             </div>
                         </div>
                     @endif
                 </div>
+
+                @if($product->isPublicVideo() && $product->youtube_video_id)
+                    <!-- Free Embedded YouTube Player -->
+                    <div id="freeVideoPlayer" class="mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h5 class="fw-bold mb-0 text-dark"><i class="fa-brands fa-youtube text-danger me-2"></i> Free Public Video Lecture</h5>
+                            <span class="badge bg-success font-monospace px-3 py-1.5"><i class="fa-solid fa-unlock me-1"></i> Open Access</span>
+                        </div>
+                        <div class="ratio ratio-16x9 rounded-4 overflow-hidden shadow-lg border border-2 border-primary border-opacity-25 bg-black">
+                            <iframe src="https://www.youtube.com/embed/{{ $product->youtube_video_id }}?rel=0&autoplay=0" title="{{ $product->title }}" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+                        </div>
+                        <span class="small text-muted d-block mt-2"><i class="fa-solid fa-circle-info text-info me-1"></i> You can play this lecture directly in full 1080p HD or open full screen.</span>
+                    </div>
+                @endif
 
                 <!-- Description -->
                 <div class="mb-4">
@@ -135,24 +166,31 @@
                 </div>
 
                 <!-- How it works -->
-                <div class="card border-0 bg-light rounded-4 p-4 my-4">
-                    <h5 class="fw-bold text-dark mb-3"><i class="fa-solid fa-circle-question text-primary me-2"></i> How Access Works After Purchase:</h5>
-                    @if($product->type === 'video')
-                        <ol class="mb-0 ps-3 small text-muted lh-lg">
-                            <li><strong>Provide your Gmail ID:</strong> Enter the exact Google/Gmail address you use to log in to YouTube.</li>
-                            <li><strong>Instant Payment:</strong> Complete payment securely using UPI, Google Pay, PhonePe, Debit/Credit Card, or Net Banking.</li>
-                            <li><strong>Invitation Delivery:</strong> Within 1-2 hours, an official YouTube Private Video invitation will be sent to your Gmail inbox.</li>
-                            <li><strong>Watch Safely:</strong> Click the invite link in your Gmail while logged in to your YouTube account to watch the video in full 1080p HD.</li>
-                            <li><strong>Access Protection:</strong> Only your invited Gmail ID can view the video. Even if the link is shared, unauthorized accounts will be blocked by YouTube.</li>
-                        </ol>
-                    @else
-                        <ol class="mb-0 ps-3 small text-muted lh-lg">
-                            <li><strong>Instant Payment:</strong> Complete checkout via Razorpay with UPI, QR, or Cards.</li>
-                            <li><strong>Immediate Download:</strong> A direct download button appears on your confirmation receipt.</li>
-                            <li><strong>Re-download Anytime:</strong> You can re-download your PDF at any time using our <a href="{{ route('store.purchases') }}">My Purchases</a> lookup tool using your email or phone number.</li>
-                        </ol>
-                    @endif
-                </div>
+                @if($product->isPublicVideo())
+                    <div class="card border-0 bg-success bg-opacity-10 rounded-4 p-4 my-4 border border-success border-opacity-25">
+                        <h5 class="fw-bold text-success mb-2"><i class="fa-solid fa-circle-check me-2"></i> 100% Free Public Lecture</h5>
+                        <p class="mb-0 text-dark small lh-lg">This lecture is released under open access. You can watch it directly anytime on this page or through your student dashboard without needing any purchase or authorization code.</p>
+                    </div>
+                @else
+                    <div class="card border-0 bg-light rounded-4 p-4 my-4">
+                        <h5 class="fw-bold text-dark mb-3"><i class="fa-solid fa-circle-question text-primary me-2"></i> How Access Works After Purchase:</h5>
+                        @if($product->type === 'video')
+                            <ol class="mb-0 ps-3 small text-muted lh-lg">
+                                <li><strong>Provide your Gmail ID:</strong> Enter the exact Google/Gmail address you use to log in to YouTube.</li>
+                                <li><strong>Instant Payment:</strong> Complete payment securely using UPI, Google Pay, PhonePe, Debit/Credit Card, or Net Banking.</li>
+                                <li><strong>Invitation Delivery:</strong> Within 1-2 hours, an official YouTube Private Video invitation will be sent to your Gmail inbox.</li>
+                                <li><strong>Watch Safely:</strong> Click the invite link in your Gmail while logged in to your YouTube account to watch the video in full 1080p HD.</li>
+                                <li><strong>Access Protection:</strong> Only your invited Gmail ID can view the video. Even if the link is shared, unauthorized accounts will be blocked by YouTube.</li>
+                            </ol>
+                        @else
+                            <ol class="mb-0 ps-3 small text-muted lh-lg">
+                                <li><strong>Instant Payment:</strong> Complete checkout via Razorpay with UPI, QR, or Cards.</li>
+                                <li><strong>Immediate Download:</strong> A direct download button appears on your confirmation receipt.</li>
+                                <li><strong>Re-download Anytime:</strong> You can re-download your PDF at any time using our <a href="{{ route('store.purchases') }}">My Purchases</a> lookup tool using your email or phone number.</li>
+                            </ol>
+                        @endif
+                    </div>
+                @endif
             </div>
         </div>
     </div>

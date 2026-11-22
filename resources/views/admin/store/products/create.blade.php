@@ -94,20 +94,54 @@
                 <!-- Video Specific Fields -->
                 <div id="videoFields" class="col-12 d-none">
                     <div class="p-3 bg-light rounded-3 border">
-                        <h6 class="fw-bold text-dark mb-3"><i class="fa-brands fa-youtube text-danger me-1"></i> YouTube Private Video Configuration</h6>
+                        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                            <h6 class="fw-bold text-dark mb-0"><i class="fa-brands fa-youtube text-danger me-1"></i> YouTube Video Configuration</h6>
+                            <span class="badge bg-secondary font-monospace">Public or Private Mode</span>
+                        </div>
+
+                        <!-- Video Access Type Selector (Public vs Private) -->
+                        <div class="card border-0 bg-white rounded-3 shadow-sm p-3 mb-3">
+                            <label class="form-label small fw-bold text-dark d-block mb-2">Video Access & Visibility Type <span class="text-danger">*</span></label>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-check p-3 border rounded-3 h-100 bg-light-subtle">
+                                        <input class="form-check-input ms-0 me-2" type="radio" name="video_access_type" id="accessPrivate" value="private" {{ old('video_access_type', 'private') === 'private' ? 'checked' : '' }} onchange="toggleVideoAccessMode()">
+                                        <label class="form-check-label fw-bold text-dark" for="accessPrivate">
+                                            <i class="fa-solid fa-lock text-danger me-1"></i> Private Video (Access / Invite Required)
+                                        </label>
+                                        <p class="text-muted small mb-0 mt-1" style="font-size: 0.78rem;">
+                                            Video locked rahegi. Student/customer ko admin panel se access dena hoga ya wo purchase karke Gmail invite receive karenge.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-check p-3 border rounded-3 h-100 bg-light-subtle">
+                                        <input class="form-check-input ms-0 me-2" type="radio" name="video_access_type" id="accessPublic" value="public" {{ old('video_access_type') === 'public' ? 'checked' : '' }} onchange="toggleVideoAccessMode()">
+                                        <label class="form-check-label fw-bold text-success" for="accessPublic">
+                                            <i class="fa-solid fa-globe text-success me-1"></i> Public Video (Free to Watch Openly)
+                                        </label>
+                                        <p class="text-muted small mb-0 mt-1" style="font-size: 0.78rem;">
+                                            Koi bhi student ya visitor website par bina kisi payment ya login ke directly YouTube video free me dekh sakega.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <label class="form-label small fw-bold">YouTube Video URL / Link</label>
-                                <input type="url" name="youtube_video_url" value="{{ old('youtube_video_url') }}" class="form-control" placeholder="https://www.youtube.com/watch?v=...">
+                                <label class="form-label small fw-bold">YouTube Video URL / Link <span class="text-danger">*</span></label>
+                                <input type="url" name="youtube_video_url" value="{{ old('youtube_video_url') }}" class="form-control" placeholder="https://www.youtube.com/watch?v=... or https://youtu.be/...">
+                                <span class="form-text small text-muted">YouTube video ka normal link ya short link paste karein.</span>
                             </div>
                             <div class="col-md-3">
                                 <label class="form-label small fw-bold">Class Duration</label>
                                 <input type="text" name="duration" value="{{ old('duration', '2 Hours 30 Mins') }}" class="form-control">
                             </div>
-                            <div class="col-md-3">
-                                <label class="form-label small fw-bold">Max Gmail Invites (Quota)</label>
-                                <input type="number" name="max_invites" value="{{ old('max_invites', 50) }}" max="50" min="1" class="form-control">
-                                <span class="form-text small text-muted">YouTube allows max 50 email invites per video.</span>
+                            <div class="col-md-3" id="maxInvitesWrapper">
+                                <label class="form-label small fw-bold">Max Gmail Invites (Private Quota)</label>
+                                <input type="number" name="max_invites" id="maxInvitesInput" value="{{ old('max_invites', 50) }}" max="50" min="1" class="form-control">
+                                <span class="form-text small text-muted">YouTube allows max 50 email invites for private videos.</span>
                             </div>
                         </div>
                     </div>
@@ -161,11 +195,31 @@ function toggleTypeFields() {
     if (isVideo) {
         pdfFields.classList.add('d-none');
         videoFields.classList.remove('d-none');
+        toggleVideoAccessMode();
     } else {
         pdfFields.classList.remove('d-none');
         videoFields.classList.add('d-none');
     }
 }
-document.addEventListener('DOMContentLoaded', toggleTypeFields);
+
+function toggleVideoAccessMode() {
+    const isPublic = document.getElementById('accessPublic') && document.getElementById('accessPublic').checked;
+    const priceInput = document.querySelector('input[name="price"]');
+    const salePriceInput = document.querySelector('input[name="sale_price"]');
+    const maxInvitesWrapper = document.getElementById('maxInvitesWrapper');
+
+    if (isPublic) {
+        if (priceInput) priceInput.value = '0.00';
+        if (salePriceInput) salePriceInput.value = '';
+        if (maxInvitesWrapper) maxInvitesWrapper.classList.add('opacity-50');
+    } else {
+        if (maxInvitesWrapper) maxInvitesWrapper.classList.remove('opacity-50');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    toggleTypeFields();
+    toggleVideoAccessMode();
+});
 </script>
 @endpush

@@ -9,6 +9,9 @@
         <p class="text-muted small mb-0">Manage customer Gmail invitations for private YouTube lecture courses (Max 50 emails per video).</p>
     </div>
     <div class="d-flex gap-2">
+        <button type="button" class="btn btn-success rounded-3 px-3 shadow-sm fw-semibold" data-bs-toggle="modal" data-bs-target="#grantAccessModal">
+            <i class="fa-solid fa-user-check me-1"></i> Give Access to Student / Gmail
+        </button>
         <a href="{{ route('admin.store.orders.index') }}" class="btn btn-outline-secondary rounded-3 px-3 shadow-sm fw-semibold">
             <i class="fa-solid fa-receipt me-1"></i> Store Orders
         </a>
@@ -181,6 +184,82 @@
             {{ $accesses->links() }}
         </div>
     @endif
+</div>
+
+<!-- Modal: Give Manual Access to Student / Gmail -->
+<div class="modal fade" id="grantAccessModal" tabindex="-1" aria-labelledby="grantAccessModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 rounded-4 shadow-lg overflow-hidden">
+            <div class="modal-header bg-danger text-white py-3 px-4">
+                <h5 class="modal-title fw-bold" id="grantAccessModalLabel">
+                    <i class="fa-brands fa-youtube me-2"></i> Give Access to Student (Private Video)
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ route('store.youtube.manual-grant') }}" method="POST">
+                @csrf
+                <div class="modal-body p-4 bg-white">
+                    <div class="alert alert-info py-2 px-3 small rounded-3 mb-3">
+                        <i class="fa-solid fa-circle-info me-1"></i> Admin yahan kisi bhi student ko private YouTube video lecture ka access bina payment ke directly de sakta hai.
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-dark">Select Video Course <span class="text-danger">*</span></label>
+                        <select name="digital_product_id" class="form-select rounded-3" required>
+                            <option value="">-- Choose Video Lecture --</option>
+                            @foreach($videoProducts as $v)
+                                <option value="{{ $v->id }}">
+                                    {{ $v->title }} ({{ $v->current_invites }}/{{ $v->max_invites }} Invites)
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-dark">Student / Customer Full Name <span class="text-danger">*</span></label>
+                        <input type="text" name="customer_name" class="form-control rounded-3" required placeholder="e.g. Raja Ram">
+                    </div>
+
+                    <div class="row g-2 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-dark">YouTube Gmail ID <span class="text-danger">*</span></label>
+                            <input type="email" name="customer_gmail" class="form-control rounded-3" required placeholder="student@gmail.com">
+                            <span class="form-text small text-muted" style="font-size: 0.72rem;">YouTube invite is Gmail par send hoga.</span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-dark">Primary Email</label>
+                            <input type="email" name="customer_email" class="form-control rounded-3" required placeholder="same or alternate email">
+                        </div>
+                    </div>
+
+                    <div class="row g-2 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-dark">Mobile Number</label>
+                            <input type="text" name="customer_mobile" class="form-control rounded-3" placeholder="10-digit mobile">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-dark">Invitation Status <span class="text-danger">*</span></label>
+                            <select name="invite_status" class="form-select rounded-3" required>
+                                <option value="invited">Mark as Invited Now</option>
+                                <option value="pending_invite">Pending Invite (Queue)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-dark">Admin Remarks / Notes <small class="text-muted">(Optional)</small></label>
+                        <input type="text" name="admin_notes" class="form-control rounded-3" placeholder="e.g. Free access granted by Admin for ADCA Batch">
+                    </div>
+                </div>
+                <div class="modal-footer bg-light py-2.5 px-4 border-top">
+                    <button type="button" class="btn btn-outline-secondary rounded-pill px-3" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger rounded-pill px-4 fw-bold shadow-sm">
+                        <i class="fa-solid fa-key me-1"></i> Grant Access Now
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 @endsection
 

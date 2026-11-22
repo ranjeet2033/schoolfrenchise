@@ -428,6 +428,7 @@ Route::middleware(['role:super_admin,admin'])->prefix('admin')->name('admin.')->
     Route::get('/store/orders', [AdminDigitalOrderController::class, 'index'])->name('store.orders.index');
     Route::get('/store/orders/{order}', [AdminDigitalOrderController::class, 'show'])->name('store.orders.show');
     Route::get('/store/youtube-invites', [AdminDigitalOrderController::class, 'youtubeInvites'])->name('store.youtube.invites');
+    Route::post('/store/youtube-invites/manual-grant', [AdminDigitalOrderController::class, 'manualGrant'])->name('store.youtube.manual-grant');
     Route::post('/store/youtube-invites/{access}/mark-invited', [AdminDigitalOrderController::class, 'markInvited'])->name('store.youtube.mark-invited');
     Route::post('/store/youtube-invites/batch-mark', [AdminDigitalOrderController::class, 'batchMarkInvited'])->name('store.youtube.batch-mark');
     Route::post('/store/youtube-invites/{access}/revoke', [AdminDigitalOrderController::class, 'revokeAccess'])->name('store.youtube.revoke');

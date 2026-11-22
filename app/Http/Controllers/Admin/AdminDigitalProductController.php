@@ -38,10 +38,11 @@ class AdminDigitalProductController extends Controller
         $validated = $request->validate([
             'title'             => 'required|string|max:255',
             'type'              => 'required|in:pdf,video',
+            'video_access_type' => 'nullable|in:private,public',
             'category'          => 'nullable|string|max:100',
             'short_description' => 'nullable|string|max:500',
             'description'       => 'nullable|string',
-            'price'             => 'required|numeric|min:0',
+            'price'             => 'nullable|numeric|min:0',
             'sale_price'        => 'nullable|numeric|min:0',
             'thumbnail'         => 'nullable|image|max:3072',
             // PDF fields
@@ -55,6 +56,9 @@ class AdminDigitalProductController extends Controller
             'status'            => 'required|in:active,inactive',
             'is_featured'       => 'nullable|boolean',
         ]);
+
+        $videoAccessType = ($validated['type'] === 'video') ? ($request->input('video_access_type', 'private')) : 'private';
+        $price = $videoAccessType === 'public' ? 0.00 : (float) ($validated['price'] ?? 0.00);
 
         $thumbnailPath = null;
         if ($request->hasFile('thumbnail')) {
@@ -86,11 +90,12 @@ class AdminDigitalProductController extends Controller
             'title'             => $validated['title'],
             'slug'              => $slug,
             'type'              => $validated['type'],
+            'video_access_type' => $videoAccessType,
             'category'          => $validated['category'] ?? 'General',
             'short_description' => $validated['short_description'] ?? null,
             'description'       => $validated['description'] ?? null,
-            'price'             => $validated['price'],
-            'sale_price'        => $validated['sale_price'] ?? null,
+            'price'             => $price,
+            'sale_price'        => $videoAccessType === 'public' ? null : ($validated['sale_price'] ?? null),
             'thumbnail'         => $thumbnailPath,
             'pdf_file_path'     => $pdfPath,
             'total_pages'       => $validated['total_pages'] ?? null,
@@ -115,10 +120,11 @@ class AdminDigitalProductController extends Controller
         $validated = $request->validate([
             'title'             => 'required|string|max:255',
             'type'              => 'required|in:pdf,video',
+            'video_access_type' => 'nullable|in:private,public',
             'category'          => 'nullable|string|max:100',
             'short_description' => 'nullable|string|max:500',
             'description'       => 'nullable|string',
-            'price'             => 'required|numeric|min:0',
+            'price'             => 'nullable|numeric|min:0',
             'sale_price'        => 'nullable|numeric|min:0',
             'thumbnail'         => 'nullable|image|max:3072',
             'pdf_file'          => 'nullable|file|mimes:pdf|max:51200',
@@ -130,6 +136,9 @@ class AdminDigitalProductController extends Controller
             'status'            => 'required|in:active,inactive',
             'is_featured'       => 'nullable|boolean',
         ]);
+
+        $videoAccessType = ($validated['type'] === 'video') ? ($request->input('video_access_type', $product->video_access_type ?? 'private')) : 'private';
+        $price = $videoAccessType === 'public' ? 0.00 : (float) ($validated['price'] ?? 0.00);
 
         if ($request->hasFile('thumbnail')) {
             $product->thumbnail = $request->file('thumbnail')->store('store/thumbnails', 'public');
@@ -150,11 +159,12 @@ class AdminDigitalProductController extends Controller
         $product->update([
             'title'             => $validated['title'],
             'type'              => $validated['type'],
+            'video_access_type' => $videoAccessType,
             'category'          => $validated['category'] ?? $product->category,
             'short_description' => $validated['short_description'],
             'description'       => $validated['description'],
-            'price'             => $validated['price'],
-            'sale_price'        => $validated['sale_price'] ?? null,
+            'price'             => $price,
+            'sale_price'        => $videoAccessType === 'public' ? null : ($validated['sale_price'] ?? null),
             'total_pages'       => $validated['total_pages'] ?? $product->total_pages,
             'youtube_video_id'  => $ytId,
             'youtube_video_url' => $validated['youtube_video_url'] ?? $product->youtube_video_url,
