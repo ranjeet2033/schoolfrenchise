@@ -117,6 +117,61 @@
                     {{ $courses->links() }}
                 </div>
             @endif
+
+            <!-- Digital Store Promo Banner -->
+            @if(isset($digitalProducts) && $digitalProducts->isNotEmpty())
+                <div class="mt-5 pt-4 border-top">
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+                        <div>
+                            <span class="badge bg-warning text-dark px-3 py-1.5 fw-bold text-uppercase mb-2 font-monospace">
+                                <i class="fa-solid fa-graduation-cap me-1"></i> E-Books & Video Store
+                            </span>
+                            <h3 class="fw-bold text-dark mb-1">Self-Study PDF Notes & Video Courses</h3>
+                            <p class="text-muted small mb-0">High-scoring computer exam study notes and specialized instructor video lectures.</p>
+                        </div>
+                        <div>
+                            <a href="{{ route('store.index') }}" class="btn btn-outline-primary fw-bold rounded-pill px-4 shadow-sm">
+                                Explore All Products <i class="fa-solid fa-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="row g-3">
+                        @foreach($digitalProducts as $prod)
+                            <div class="col-6 col-md-3">
+                                <div class="card h-100 border-0 shadow-sm rounded-3 overflow-hidden d-flex flex-column" style="border: 1px solid #e2e8f0 !important;">
+                                    <div class="position-relative" style="height: 140px; background-color: #0d2238; overflow: hidden;">
+                                        @if($prod->thumbnail)
+                                            <img src="{{ $prod->thumbnail_url }}" alt="{{ $prod->title }}" class="w-100 h-100 object-fit-cover">
+                                        @else
+                                            <div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-white p-2 text-center">
+                                                <i class="fa-solid {{ $prod->type === 'video' ? 'fa-play-circle fa-2x' : 'fa-file-pdf fa-2x' }} mb-1 text-warning"></i>
+                                                <span class="small fw-bold opacity-75" style="font-size: 0.65rem;">{{ $prod->category ?? 'Study Notes' }}</span>
+                                            </div>
+                                        @endif
+                                        <span class="position-absolute top-0 start-0 m-1.5 badge {{ $prod->type === 'video' ? 'bg-danger' : 'bg-primary' }} text-white font-monospace" style="font-size: 0.62rem;">
+                                            {{ $prod->type === 'video' ? 'Video' : 'PDF' }}
+                                        </span>
+                                    </div>
+                                    <div class="card-body p-2.5 d-flex flex-column flex-grow-1">
+                                        <h6 class="fw-bold text-dark mb-1 text-truncate" title="{{ $prod->title }}" style="font-size: 0.82rem;">
+                                            <a href="{{ route('store.show', ['type' => $prod->type, 'slug' => $prod->slug]) }}" class="text-dark text-decoration-none">
+                                                {{ $prod->title }}
+                                            </a>
+                                        </h6>
+                                        <div class="mt-auto pt-2 border-top d-flex justify-content-between align-items-center">
+                                            <span class="fw-bold text-dark fs-6">₹{{ number_format($prod->effective_price, 0) }}</span>
+                                            <a href="{{ route('store.show', ['type' => $prod->type, 'slug' => $prod->slug]) }}" class="btn btn-sm btn-primary py-0.5 px-2 fw-semibold" style="font-size: 0.72rem;">
+                                                Buy Now
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
         </div>
     </section>
 @endsection

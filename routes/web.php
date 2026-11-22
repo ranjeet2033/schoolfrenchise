@@ -162,6 +162,7 @@ Route::get('/admin', fn() => redirect()->route('admin.dashboard'));
 Route::get('/c/{code}', [FranchiseLandingController::class, 'showByCode'])->name('franchise.landing.code');
 Route::get('/branch/{slug}', [FranchiseLandingController::class, 'showBySlug'])->name('franchise.landing.slug');
 Route::get('/study-centre/{slug}', [FranchiseLandingController::class, 'showBySlug']);
+Route::get('/franchise-branch/{slug}', [FranchiseLandingController::class, 'showBySlug']);
 Route::post('/c/{code}/enquiry', [FranchiseLandingController::class, 'submitEnquiry'])->name('franchise.landing.enquiry');
 
 // 7. Authentication & Rate-limited Access Routes

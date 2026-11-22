@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Course;
 use App\Models\CourseCategory;
+use App\Models\DigitalProduct;
 use App\Models\State;
 use Illuminate\Http\Request;
 
@@ -31,8 +32,9 @@ class CoursePublicController extends Controller
         }
 
         $courses = $query->paginate(9)->withQueryString();
+        $digitalProducts = DigitalProduct::active()->orderBy('sort_order')->take(4)->get();
 
-        return view('pages.courses.index', compact('courses', 'categories'));
+        return view('pages.courses.index', compact('courses', 'categories', 'digitalProducts'));
     }
 
     public function show($slug)

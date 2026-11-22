@@ -11,37 +11,50 @@ use Illuminate\Http\Request;
 class FranchiseLandingController extends Controller
 {
     /**
-     * Show dedicated franchise landing page by centre_code (e.g. /c/DCE-BI825).
+     * Show dedicated franchise landing page by centre_code or slug (e.g. /c/DCE-1001 or /c/patna-center).
      */
     public function showByCode($code)
     {
-        $centre = Centre::with(['landingPage', 'banners' => function ($q) {
+        $centre = Centre::where('centre_code', $code)
+            ->orWhere('centre_code', strtoupper($code))
+            ->first();
+
+        if (!$centre) {
+            $landingPage = CentreLandingPage::where('slug', $code)->first();
+            if ($landingPage) {
+                $centre = $landingPage->centre;
+            }
+        }
+
+        if (!$centre) {
+            abort(404, 'Centre landing page not found.');
+        }
+
+        $centre->load(['landingPage', 'banners' => function ($q) {
             $q->where('is_active', true)->orderBy('sort_order');
         }, 'galleries' => function ($q) {
             $q->orderBy('sort_order');
-        }, 'state', 'district'])
-        ->where('centre_code', $code)
-        ->firstOrFail();
+        }, 'state', 'district']);
 
         return $this->renderLandingPage($centre);
     }
 
     /**
-     * Show dedicated franchise landing page by slug (e.g. /centre/patna-computer-centre).
+     * Show dedicated franchise landing page by slug or code (e.g. /branch/patna-center).
      */
     public function showBySlug($slug)
     {
-        $landingPage = CentreLandingPage::where('slug', $slug)
-            ->where('is_published', true)
-            ->first();
+        $landingPage = CentreLandingPage::where('slug', $slug)->first();
 
-        if (!$landingPage) {
+        if ($landingPage && $landingPage->centre) {
+            $centre = $landingPage->centre;
+        } else {
             // Check if slug matches centre_code
-            $centre = Centre::where('centre_code', $slug)->firstOrFail();
-            return $this->renderLandingPage($centre);
+            $centre = Centre::where('centre_code', $slug)
+                ->orWhere('centre_code', strtoupper($slug))
+                ->firstOrFail();
         }
 
-        $centre = $landingPage->centre;
         $centre->load(['landingPage', 'banners' => function ($q) {
             $q->where('is_active', true)->orderBy('sort_order');
         }, 'galleries' => function ($q) {
@@ -90,7 +103,20 @@ class FranchiseLandingController extends Controller
      */
     public function submitEnquiry(Request $request, $code)
     {
-        $centre = Centre::where('centre_code', $code)->firstOrFail();
+        $centre = Centre::where('centre_code', $code)
+            ->orWhere('centre_code', strtoupper($code))
+            ->first();
+
+        if (!$centre) {
+            $landingPage = CentreLandingPage::where('slug', $code)->first();
+            if ($landingPage) {
+                $centre = $landingPage->centre;
+            }
+        }
+
+        if (!$centre) {
+            abort(404, 'Centre not found.');
+        }
 
         $validated = $request->validate([
             'name'       => 'required|string|max:191',

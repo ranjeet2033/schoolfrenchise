@@ -379,6 +379,88 @@
         </div>
     </section>
 
+    <!-- 5.5 Digital Store: E-Books, Study Notes & Video Lectures -->
+    @if(isset($digitalProducts) && $digitalProducts->isNotEmpty())
+    <section class="py-5 bg-light border-top border-bottom">
+        <div class="container">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-4">
+                <div>
+                    <span class="dce-section-tag bg-warning-subtle text-dark mb-2">
+                        <i class="fa-solid fa-graduation-cap text-warning me-1"></i> Digital Learning Store
+                    </span>
+                    <h2 class="dce-section-title mb-1">E-Books, Notes & Video Courses</h2>
+                    <p class="dce-section-subtitle text-muted mb-0">Instant access to certified computer notes (PDF) and specialized private video lectures.</p>
+                </div>
+                <div class="mt-3 mt-md-0">
+                    <a href="{{ route('store.index') }}" class="btn btn-outline-primary fw-bold rounded-2 px-4 shadow-sm">
+                        View All Store Products <i class="fa-solid fa-arrow-right ms-1"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="row g-2.5 g-sm-3 g-lg-4">
+                @foreach($digitalProducts as $prod)
+                    <div class="col-6 col-md-4 col-lg-3">
+                        <div class="card h-100 border-0 shadow-sm rounded-3 overflow-hidden d-flex flex-column transition-hover" style="border: 1px solid #e2e8f0 !important; background: #ffffff;">
+                            <!-- Thumbnail & Badges -->
+                            <div class="position-relative" style="height: 160px; background-color: #0d2238; overflow: hidden;">
+                                @if($prod->thumbnail)
+                                    <img src="{{ $prod->thumbnail_url }}" alt="{{ $prod->title }}" class="w-100 h-100 object-fit-cover">
+                                @else
+                                    <div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-white p-3 text-center">
+                                        <i class="fa-solid {{ $prod->type === 'video' ? 'fa-play-circle fa-3x' : 'fa-file-pdf fa-3x' }} mb-2 text-warning"></i>
+                                        <span class="small text-uppercase fw-bold opacity-75">{{ $prod->category ?? 'Study Material' }}</span>
+                                    </div>
+                                @endif
+
+                                <!-- Product Type Badge -->
+                                <span class="position-absolute top-0 start-0 m-2 badge {{ $prod->type === 'video' ? 'bg-danger' : 'bg-primary' }} text-white px-2 py-1 shadow-sm font-monospace" style="font-size: 0.65rem;">
+                                    <i class="fa-solid {{ $prod->type === 'video' ? 'fa-video me-1' : 'fa-file-pdf me-1' }}"></i>
+                                    {{ $prod->type === 'video' ? 'Video Lecture' : 'PDF E-Book' }}
+                                </span>
+
+                                @if($prod->has_discount)
+                                    <span class="position-absolute top-0 end-0 m-2 badge bg-success text-white px-2 py-1 shadow-sm font-monospace" style="font-size: 0.65rem;">
+                                        {{ $prod->discount_percentage }}% OFF
+                                    </span>
+                                @endif
+                            </div>
+
+                            <!-- Content -->
+                            <div class="card-body p-3 d-flex flex-column flex-grow-1">
+                                <span class="text-muted text-uppercase fw-bold font-monospace" style="font-size: 0.68rem;">{{ $prod->category ?? 'Study Material' }}</span>
+                                <h6 class="fw-bold text-dark mt-1 mb-2 text-truncate" title="{{ $prod->title }}" style="font-size: 0.88rem;">
+                                    <a href="{{ route('store.show', ['type' => $prod->type, 'slug' => $prod->slug]) }}" class="text-dark text-decoration-none">
+                                        {{ $prod->title }}
+                                    </a>
+                                </h6>
+                                <p class="text-muted small mb-3 flex-grow-1" style="font-size: 0.78rem; min-height: 2.4em; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                                    {{ Str::limit($prod->short_description ?? strip_tags($prod->description ?? ''), 70) }}
+                                </p>
+
+                                <div class="pt-2 border-top d-flex justify-content-between align-items-center">
+                                    <div class="d-flex flex-column">
+                                        <span class="text-muted" style="font-size: 0.62rem; text-transform: uppercase; font-weight: 700;">Price</span>
+                                        <div class="d-flex align-items-baseline gap-1">
+                                            <span class="fw-bold text-dark fs-6">₹{{ number_format($prod->effective_price, 0) }}</span>
+                                            @if($prod->has_discount)
+                                                <small class="text-muted text-decoration-line-through" style="font-size: 0.7rem;">₹{{ number_format($prod->price, 0) }}</small>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <a href="{{ route('store.show', ['type' => $prod->type, 'slug' => $prod->slug]) }}" class="btn btn-sm btn-primary rounded-2 px-3 fw-bold shadow-sm">
+                                        <i class="fa-solid fa-cart-shopping me-1"></i> Buy
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+    @endif
+
     <!-- 6. Why Study With Us (Why Choose TECH ERA COMPUTER - 2-Column Mobile Optimized) -->
     <section class="py-5 dce-why-section border-top border-bottom">
         <div class="container">

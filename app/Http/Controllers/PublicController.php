@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Banner;
 use App\Models\Course;
+use App\Models\DigitalProduct;
 use App\Models\Enquiry;
 use App\Models\Gallery;
 use App\Models\Notice;
@@ -26,6 +27,11 @@ class PublicController extends Controller
         $notices = Notice::where('status', true)->latest()->take(5)->get();
         $banners = Banner::where('status', true)->orderBy('sort_order', 'asc')->latest('id')->get();
 
+        $digitalProducts = DigitalProduct::active()
+            ->orderBy('sort_order')
+            ->take(8)
+            ->get();
+
         $stats = [
             'franchises' => Setting::get('total_franchises_count', '12042'),
             'states' => Setting::get('total_states_count', '28'),
@@ -33,7 +39,7 @@ class PublicController extends Controller
             'courses' => Setting::get('total_courses_count', '364'),
         ];
 
-        return view('pages.home', compact('featuredCourses', 'allCourses', 'states', 'galleries', 'notices', 'stats', 'banners'));
+        return view('pages.home', compact('featuredCourses', 'allCourses', 'states', 'galleries', 'notices', 'stats', 'banners', 'digitalProducts'));
     }
 
     public function about()
