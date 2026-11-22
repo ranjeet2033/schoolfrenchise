@@ -31,7 +31,7 @@
         }
 
         section {
-            scroll-margin-top: 85px;
+            scroll-margin-top: 70px;
         }
 
         body {
@@ -84,7 +84,7 @@
         }
 
         .centre-hero-carousel .carousel-item {
-            height: 500px;
+            height: 400px;
             background-color: var(--centre-primary);
             position: relative;
         }
@@ -100,7 +100,7 @@
             background: linear-gradient(90deg, rgba(7, 21, 36, 0.88) 0%, rgba(7, 21, 36, 0.55) 55%, transparent 100%);
             display: flex;
             align-items: center;
-            padding: 40px 60px;
+            padding: 28px 45px;
         }
         .centre-hero-carousel .carousel-control-prev,
         .centre-hero-carousel .carousel-control-next {
@@ -139,20 +139,17 @@
 
         @media (max-width: 767.98px) {
             .centre-hero-carousel .carousel-item {
-                height: 320px;
+                height: 270px;
             }
             .centre-slide-overlay {
-                padding: 20px 24px;
+                padding: 16px 20px;
                 background: linear-gradient(180deg, rgba(7, 21, 36, 0.4) 0%, rgba(7, 21, 36, 0.85) 100%);
                 align-items: flex-end;
-                padding-bottom: 35px;
+                padding-bottom: 25px;
             }
             .centre-hero-carousel .carousel-control-prev,
             .centre-hero-carousel .carousel-control-next {
                 display: none;
-            }
-        }
-                height: 300px;
             }
         }
 
@@ -160,19 +157,19 @@
             background: #ffffff;
             border: 1px solid #e2e8f0;
             border-left: 4px solid var(--centre-accent);
-            border-radius: 12px;
-            padding: 14px 18px;
+            border-radius: 10px;
+            padding: 10px 16px;
             transition: transform 0.2s, box-shadow 0.2s;
         }
         .centre-facility-pill:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.06);
         }
 
         .centre-gallery-img {
-            height: 220px;
+            height: 180px;
             object-fit: cover;
-            border-radius: 12px;
+            border-radius: 10px;
             transition: transform 0.3s;
         }
         .centre-gallery-img:hover {
@@ -408,7 +405,7 @@
     </div>
 
     <!-- Main Centre Navbar -->
-    <nav class="navbar navbar-expand-lg centre-nav sticky-top py-3">
+    <nav class="navbar navbar-expand-lg centre-nav sticky-top py-2">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url()->current() }}">
                 <img src="{{ $landingPage->effective_logo_url }}" alt="{{ $landingPage->custom_centre_name ?? $centre->centre_name }}" height="48" class="rounded" onerror="this.onerror=null;this.src='{{ asset('images/tech-era-logo.png') }}';">
@@ -491,8 +488,8 @@
         </div>
     @else
         <!-- Default Hero Stage -->
-        <section class="py-5 text-white" style="background: linear-gradient(135deg, var(--centre-primary) 0%, var(--centre-dark) 100%);">
-            <div class="container py-4">
+        <section class="py-4 text-white" style="background: linear-gradient(135deg, var(--centre-primary) 0%, var(--centre-dark) 100%);">
+            <div class="container">
                 <div class="row align-items-center g-4">
                     <div class="col-lg-7">
                         <span class="badge bg-centre-accent text-white px-3 py-2 fw-bold text-uppercase mb-3 font-monospace">
@@ -548,9 +545,9 @@
     @endif
 
     <!-- About Centre Section -->
-    <section id="about" class="py-5 bg-white">
-        <div class="container py-3">
-            <div class="row align-items-center g-5">
+    <section id="about" class="py-4 bg-white">
+        <div class="container">
+            <div class="row align-items-center g-4">
                 <div class="col-lg-7">
                     <span class="badge bg-light text-centre-primary border px-3 py-2 fw-bold text-uppercase mb-2 font-monospace">Authorized Campus</span>
                     <h2 class="fw-black text-centre-primary mb-3">{{ $landingPage->about_heading ?? ('About ' . $centre->centre_name) }}</h2>
@@ -609,15 +606,15 @@
     </section>
 
     <!-- Facilities Section -->
-    <section id="facilities" class="py-5 bg-light">
+    <section id="facilities" class="py-4 bg-light">
         <div class="container">
-            <div class="text-center max-w-700 mx-auto mb-5">
-                <span class="badge bg-centre-accent text-white px-3 py-2 fw-bold text-uppercase mb-2 font-monospace">Campus Facilities</span>
-                <h2 class="fw-black text-centre-primary">Modern Lab & Training Amenities</h2>
-                <p class="text-muted">Everything you need for intensive practice, speed building, and conceptual clarity.</p>
+            <div class="text-center max-w-700 mx-auto mb-3 mb-md-4">
+                <span class="badge bg-centre-accent text-white px-3 py-1.5 fw-bold text-uppercase mb-2 font-monospace">Campus Facilities</span>
+                <h2 class="fw-black text-centre-primary mb-1">Modern Lab & Training Amenities</h2>
+                <p class="text-muted small mb-0">Everything you need for intensive practice, speed building, and conceptual clarity.</p>
             </div>
 
-            <div class="row g-3">
+            <div class="row g-2.5 g-md-3">
                 @php
                     $facilitiesList = $landingPage->facilities ?? ['High-Speed Wi-Fi', '1:1 Computer Ratio', 'Air Conditioned Lab', 'Printed Study Materials', 'Doubt Clearing Sessions', 'Job Oriented Diploma'];
                 @endphp
@@ -634,12 +631,12 @@
     </section>
 
     <!-- Courses Section -->
-    <section id="courses" class="py-5 bg-white">
-        <div class="container py-3">
-            <div class="text-center max-w-700 mx-auto mb-5">
-                <span class="badge bg-centre-primary text-white px-3 py-2 fw-bold text-uppercase mb-2 font-monospace">Academic Programs</span>
-                <h2 class="fw-black text-centre-primary">Certified Courses Offered</h2>
-                <p class="text-muted">Nationally accredited certificates and diplomas valid for private and government job selections.</p>
+    <section id="courses" class="py-4 bg-white">
+        <div class="container">
+            <div class="text-center max-w-700 mx-auto mb-3 mb-md-4">
+                <span class="badge bg-centre-primary text-white px-3 py-1.5 fw-bold text-uppercase mb-2 font-monospace">Academic Programs</span>
+                <h2 class="fw-black text-centre-primary mb-1">Certified Courses Offered</h2>
+                <p class="text-muted small mb-0">Nationally accredited certificates and diplomas valid for private and government job selections.</p>
             </div>
 
             <div class="row g-2.5 g-sm-3 g-lg-4">
@@ -705,21 +702,21 @@
 
     <!-- Photo Gallery -->
     @if($centre->galleries->isNotEmpty())
-        <section id="gallery" class="py-5 bg-light">
-            <div class="container py-3">
-                <div class="text-center max-w-700 mx-auto mb-5">
-                    <span class="badge bg-centre-accent text-white px-3 py-2 fw-bold text-uppercase mb-2 font-monospace">Campus Life</span>
-                    <h2 class="fw-black text-centre-primary">Photo Gallery</h2>
-                    <p class="text-muted">Take a look inside our computer labs, classrooms, and student events.</p>
+        <section id="gallery" class="py-4 bg-light">
+            <div class="container">
+                <div class="text-center max-w-700 mx-auto mb-3 mb-md-4">
+                    <span class="badge bg-centre-accent text-white px-3 py-1.5 fw-bold text-uppercase mb-2 font-monospace">Campus Life</span>
+                    <h2 class="fw-black text-centre-primary mb-1">Photo Gallery</h2>
+                    <p class="text-muted small mb-0">Take a look inside our computer labs, classrooms, and student events.</p>
                 </div>
 
-                <div class="row g-4">
+                <div class="row g-2.5 g-md-3">
                     @foreach($centre->galleries as $photo)
                         <div class="col-6 col-md-4 col-lg-3">
                             <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
                                 <img src="{{ $photo->image_url }}" alt="{{ $photo->caption ?? 'Gallery' }}" class="w-100 centre-gallery-img">
                                 @if(!empty($photo->caption))
-                                    <div class="card-footer bg-white border-0 py-2 px-3 small text-muted text-truncate">
+                                    <div class="card-footer bg-white border-0 py-1.5 px-3 small text-muted text-truncate">
                                         {{ $photo->caption }}
                                     </div>
                                 @endif
@@ -732,13 +729,13 @@
     @endif
 
     <!-- Contact & Map Section -->
-    <section id="contact" class="py-5 bg-white border-top">
-        <div class="container py-3">
-            <div class="row g-5 align-items-center">
+    <section id="contact" class="py-4 bg-white border-top">
+        <div class="container">
+            <div class="row g-4 align-items-center">
                 <div class="col-lg-6">
-                    <span class="badge bg-centre-accent text-white px-3 py-2 fw-bold text-uppercase mb-2 font-monospace">Connect With Us</span>
-                    <h2 class="fw-black text-centre-primary mb-3">Visit or Call Our Campus</h2>
-                    <p class="text-muted mb-4">Feel free to walk in to our centre for free career counseling, batch schedule details, and demo classes.</p>
+                    <span class="badge bg-centre-accent text-white px-3 py-1.5 fw-bold text-uppercase mb-2 font-monospace">Connect With Us</span>
+                    <h2 class="fw-black text-centre-primary mb-2">Visit or Call Our Campus</h2>
+                    <p class="text-muted small mb-3">Feel free to walk in to our centre for free career counseling, batch schedule details, and demo classes.</p>
 
                     <div class="d-flex align-items-start gap-3 mb-3">
                         <div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-centre-primary text-white" style="width: 44px; height: 44px; flex-shrink: 0;">
@@ -791,23 +788,23 @@
     </section>
 
     <!-- Fast Admission Enquiry & Counselor Helpline Section -->
-    <section id="enquiry" class="py-5 bg-light border-top border-bottom">
-        <div class="container py-3">
-            <div class="row align-items-center g-5">
+    <section id="enquiry" class="py-4 bg-light border-top border-bottom">
+        <div class="container">
+            <div class="row align-items-center g-4">
                 <div class="col-lg-6">
-                    <span class="badge bg-centre-accent text-white px-3 py-2 fw-bold text-uppercase mb-2 font-monospace">Admissions Open</span>
-                    <h2 class="fw-black text-centre-primary mb-3">Direct Admission & Course Enquiry</h2>
-                    <p class="text-muted mb-4">Interested in enrolling or have questions regarding course curriculum, fees, and batch schedules? Fill in your details below and our branch counselor will contact you immediately.</p>
+                    <span class="badge bg-centre-accent text-white px-3 py-1.5 fw-bold text-uppercase mb-2 font-monospace">Admissions Open</span>
+                    <h2 class="fw-black text-centre-primary mb-2">Direct Admission & Course Enquiry</h2>
+                    <p class="text-muted small mb-3">Interested in enrolling or have questions regarding course curriculum, fees, and batch schedules? Fill in your details below and our branch counselor will contact you immediately.</p>
 
-                    <div class="card border-0 rounded-4 shadow-sm p-4 bg-white mb-3">
+                    <div class="card border-0 rounded-4 shadow-sm p-3 bg-white mb-2">
                         <div class="d-flex align-items-center gap-3">
-                            <div class="rounded-circle bg-centre-primary text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; flex-shrink: 0;">
-                                <i class="fa-solid fa-headset fs-4"></i>
+                            <div class="rounded-circle bg-centre-primary text-white d-flex align-items-center justify-content-center" style="width: 44px; height: 44px; flex-shrink: 0;">
+                                <i class="fa-solid fa-headset fs-5"></i>
                             </div>
                             <div>
-                                <h6 class="fw-bold mb-1 text-dark">Need Immediate Help?</h6>
+                                <h6 class="fw-bold mb-0.5 text-dark">Need Immediate Help?</h6>
                                 <p class="small text-muted mb-0">Call or WhatsApp our centre counselor directly for spot counseling.</p>
-                                <a href="tel:{{ $landingPage->custom_phone ?? $centre->mobile }}" class="fw-bold text-centre-primary text-decoration-none font-monospace">
+                                <a href="tel:{{ $landingPage->custom_phone ?? $centre->mobile }}" class="fw-bold text-centre-primary text-decoration-none font-monospace small">
                                     <i class="fa-solid fa-phone me-1 text-centre-accent"></i> {{ $landingPage->custom_phone ?? $centre->mobile }}
                                 </a>
                             </div>
@@ -816,11 +813,11 @@
                 </div>
 
                 <div class="col-lg-6">
-                    <div class="card border-0 rounded-4 shadow-lg p-4 p-md-5 bg-white">
-                        <h4 class="fw-black text-centre-primary mb-1">
+                    <div class="card border-0 rounded-4 shadow-sm p-3 p-md-4 bg-white">
+                        <h5 class="fw-black text-centre-primary mb-1">
                             <i class="fa-solid fa-paper-plane text-centre-accent me-2"></i>Quick Admission Enquiry
-                        </h4>
-                        <p class="small text-muted mb-4">Please submit your contact info to get full details and fee structure.</p>
+                        </h5>
+                        <p class="small text-muted mb-3">Please submit your contact info to get full details and fee structure.</p>
 
                         @if(session('enquiry_success'))
                             <div class="alert alert-success alert-dismissible fade show rounded-3 small p-3 mb-3 shadow-sm" role="alert">
@@ -885,7 +882,7 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-centre-primary text-white py-4 border-top border-4 border-centre-accent">
+    <footer class="bg-centre-primary text-white py-3 border-top border-3 border-centre-accent">
         <div class="container text-center">
             <p class="mb-1 fw-bold">{{ $centre->centre_name }} (Centre Code: {{ $centre->centre_code }})</p>
             <p class="small text-white-50 mb-0">Affiliated with {{ $instituteSettings['institute_name'] ?? 'TECH ERA COMPUTER' }} | Verified Study Branch</p>
