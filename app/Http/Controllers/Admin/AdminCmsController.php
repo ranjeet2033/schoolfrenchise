@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\AuditLog;
 use App\Models\Banner;
+use App\Models\Centre;
 use App\Models\Enquiry;
 use App\Models\Gallery;
 use App\Models\Notice;
@@ -306,7 +307,11 @@ class AdminCmsController extends Controller
                 $q->where('name', 'like', "%{$s}%")
                     ->orWhere('mobile', 'like', "%{$s}%")
                     ->orWhere('email', 'like', "%{$s}%")
-                    ->orWhere('subject', 'like', "%{$s}%");
+                    ->orWhere('subject', 'like', "%{$s}%")
+                    ->orWhereHas('centre', function ($cq) use ($s) {
+                        $cq->where('centre_name', 'like', "%{$s}%")
+                           ->orWhere('centre_code', 'like', "%{$s}%");
+                    });
             });
         }
 
@@ -318,14 +323,31 @@ class AdminCmsController extends Controller
             $query->where('status', $request->status);
         }
 
+        if ($request->filled('centre_id')) {
+            if ($request->centre_id === 'ho') {
+                $query->whereNull('centre_id');
+            } else {
+                $query->where('centre_id', $request->centre_id);
+            }
+        }
+
         $enquiries = $query->latest('id')->paginate(15)->withQueryString();
 
-        return view('admin.cms.enquiries', compact('enquiries'));
+        $stats = [
+            'total'    => Enquiry::count(),
+            'branches' => Enquiry::whereNotNull('centre_id')->count(),
+            'ho'       => Enquiry::whereNull('centre_id')->count(),
+            'new'      => Enquiry::where('status', 'new')->count(),
+        ];
+
+        $centres = Centre::orderBy('centre_code')->get(['id', 'centre_code', 'centre_name', 'city']);
+
+        return view('admin.cms.enquiries', compact('enquiries', 'stats', 'centres'));
     }
 
     public function showEnquiry(Enquiry $enquiry)
     {
-        $enquiry->load(['state', 'district']);
+        $enquiry->load(['state', 'district', 'centre.state', 'centre.district', 'course.category']);
         return view('admin.cms.show_enquiry', compact('enquiry'));
     }
 

@@ -33,7 +33,7 @@
         </div>
     @endif
 
-    @if($errors->any())
+    @if(isset($errors) && $errors->any())
         <div class="alert alert-danger alert-dismissible fade show rounded-3 shadow-sm mb-4" role="alert">
             <div class="d-flex align-items-center mb-1">
                 <i class="fa-solid fa-triangle-exclamation fs-5 me-2"></i>

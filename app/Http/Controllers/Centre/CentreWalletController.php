@@ -33,8 +33,9 @@ class CentreWalletController extends Controller
         return $centre;
     }
 
-    public function index(Request $request)
+    public function index(?Request $request = null)
     {
+        $request = $request ?? request();
         $centre = $this->getAuthCentre();
 
         $wallet = CentreWallet::firstOrCreate(

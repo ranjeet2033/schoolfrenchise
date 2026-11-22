@@ -115,8 +115,9 @@ class StudentAcademicController extends Controller
     /**
      * Display examination schedule, admit cards, and upcoming exams.
      */
-    public function exams(Request $request)
+    public function exams(?Request $request = null)
     {
+        $request = $request ?? request();
         $student = $this->getStudent($request);
         $admission = $this->getActiveAdmission($student);
 

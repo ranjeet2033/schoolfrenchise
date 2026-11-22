@@ -67,6 +67,68 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Target Branch & Course Association Card -->
+            <div class="card border-0 shadow-sm rounded-3 bg-white mb-4">
+                <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0 fw-bold text-dark"><i class="fa-solid fa-code-branch me-2 text-warning"></i>Assigned Branch & Course Details</h6>
+                    @if($enquiry->centre)
+                        <span class="badge bg-success font-monospace"><i class="fa-solid fa-check-circle me-1"></i>Franchise Lead</span>
+                    @else
+                        <span class="badge bg-secondary font-monospace">Head Office</span>
+                    @endif
+                </div>
+                <div class="card-body p-4">
+                    <div class="row g-3">
+                        <div class="col-md-7">
+                            <label class="text-muted small fw-bold text-uppercase d-block mb-1">Target Study Centre / Branch</label>
+                            @if($enquiry->centre)
+                                <div class="p-3 bg-light rounded-3 border">
+                                    <div class="d-flex align-items-center gap-2 mb-1">
+                                        <span class="badge bg-dark font-monospace text-warning px-2 py-1">{{ $enquiry->centre->centre_code }}</span>
+                                        <h6 class="fw-bold text-dark mb-0">{{ $enquiry->centre->centre_name }}</h6>
+                                    </div>
+                                    <div class="small text-muted mb-2">
+                                        <i class="fa-solid fa-location-dot text-danger me-1"></i>{{ $enquiry->centre->address }}, {{ $enquiry->centre->city }} ({{ $enquiry->centre->district?->name ?? '' }}, {{ $enquiry->centre->state?->name ?? '' }})
+                                    </div>
+                                    <div class="small text-muted mb-2">
+                                        <i class="fa-solid fa-user-tie me-1"></i><strong>Director:</strong> {{ $enquiry->centre->director_name ?? 'N/A' }} | 
+                                        <i class="fa-solid fa-phone ms-2 me-1"></i>{{ $enquiry->centre->mobile }}
+                                    </div>
+                                    <div class="d-flex gap-2 mt-2">
+                                        <a href="{{ route('admin.centres.show', $enquiry->centre->id) }}" class="btn btn-sm btn-outline-primary rounded-2">
+                                            <i class="fa-solid fa-arrow-up-right-from-square me-1"></i> View Branch in Admin
+                                        </a>
+                                        <a href="{{ $enquiry->centre->landing_page_url }}" target="_blank" class="btn btn-sm btn-outline-secondary rounded-2">
+                                            <i class="fa-solid fa-globe me-1"></i> Open Franchise Landing Page
+                                        </a>
+                                    </div>
+                                </div>
+                            @else
+                                <div class="p-3 bg-light rounded-3 border text-muted">
+                                    <i class="fa-solid fa-building me-1"></i> General inquiry submitted directly to Central Head Office website.
+                                </div>
+                            @endif
+                        </div>
+
+                        <div class="col-md-5">
+                            <label class="text-muted small fw-bold text-uppercase d-block mb-1">Selected Course</label>
+                            @if($enquiry->course)
+                                <div class="p-3 bg-light rounded-3 border">
+                                    <span class="badge bg-primary font-monospace mb-1">{{ $enquiry->course->course_code }}</span>
+                                    <h6 class="fw-bold text-dark mb-1">{{ $enquiry->course->course_name }}</h6>
+                                    <div class="small text-muted mb-1"><i class="fa-regular fa-clock me-1 text-primary"></i><strong>Duration:</strong> {{ $enquiry->course->duration }}</div>
+                                    <div class="small text-muted"><i class="fa-solid fa-tag me-1 text-success"></i><strong>Category:</strong> {{ $enquiry->course->category->name ?? 'Accredited' }}</div>
+                                </div>
+                            @else
+                                <div class="p-3 bg-light rounded-3 border text-muted">
+                                    <i class="fa-solid fa-bookmark me-1"></i> General Admission / No specific course pre-selected.
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Contact & Status Management Sidebar -->

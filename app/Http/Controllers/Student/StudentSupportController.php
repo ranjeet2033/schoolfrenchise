@@ -17,8 +17,9 @@ class StudentSupportController extends Controller
     /**
      * List all support tickets created by the authenticated student.
      */
-    public function index(Request $request)
+    public function index(?Request $request = null)
     {
+        $request = $request ?? request();
         $student = $this->getStudent($request);
         $user = Auth::user();
 

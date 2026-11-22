@@ -155,8 +155,14 @@
 
                 <!-- OPERATIONS -->
                 <div class="sidebar-heading">Operations</div>
-                <a class="nav-link {{ request()->routeIs('admin.cms.enquiries*') ? 'active' : '' }}" href="{{ Route::has('admin.cms.enquiries') ? route('admin.cms.enquiries') : '#' }}">
-                    <i class="fa-solid fa-envelope-open-text"></i> Public Enquiries
+                <a class="nav-link {{ request()->routeIs('admin.cms.enquiries*') ? 'active' : '' }} d-flex justify-content-between align-items-center" href="{{ Route::has('admin.cms.enquiries') ? route('admin.cms.enquiries') : '#' }}">
+                    <span><i class="fa-solid fa-envelope-open-text me-2"></i> Enquiries & Branch Leads</span>
+                    @php
+                        $unreadEnquiryCount = \App\Models\Enquiry::where('status', 'new')->count();
+                    @endphp
+                    @if($unreadEnquiryCount > 0)
+                        <span class="badge bg-danger rounded-pill px-2 py-0.5" style="font-size: 0.68rem;">{{ $unreadEnquiryCount }}</span>
+                    @endif
                 </a>
                 <a class="nav-link {{ request()->routeIs('admin.support*') ? 'active' : '' }}" href="{{ Route::has('admin.support.index') ? route('admin.support.index') : '#' }}">
                     <i class="fa-solid fa-headset"></i> Help & Support
@@ -222,7 +228,7 @@
                 </div>
             @endif
 
-            @if($errors->any())
+            @if(isset($errors) && $errors->any())
                 <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm" role="alert">
                     <div class="fw-bold mb-1"><i class="fa-solid fa-triangle-exclamation me-2"></i>Please resolve the following input errors:</div>
                     <ul class="mb-0 small ps-3">

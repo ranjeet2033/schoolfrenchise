@@ -36,6 +36,10 @@ class StudentDashboardController extends Controller
             })->where('course_id', $admission->course_id)->where('status', true)->get();
         }
 
-        return view('student.dashboard', compact('student', 'admission', 'fees', 'payments', 'attendances', 'certificate', 'marksheet', 'studyMaterials'));
+        $totalFees = $admission ? (float) ($admission->net_fee ?: $admission->course_fee ?: ($admission->course?->course_fee ?? 0.00)) : 0.00;
+        $totalPaid = (float) $student->payments()->sum('amount');
+        $totalDues = max(0.00, $totalFees - $totalPaid);
+
+        return view('student.dashboard', compact('student', 'admission', 'fees', 'payments', 'attendances', 'certificate', 'marksheet', 'studyMaterials', 'totalFees', 'totalPaid', 'totalDues'));
     }
 }

@@ -479,7 +479,7 @@
             </div>
         @endif
 
-        @if($errors->any())
+        @if(isset($errors) && $errors->any())
             <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
                 <strong class="d-block mb-1"><i class="fa-solid fa-circle-exclamation me-1"></i> Please check the form errors:</strong>
                 <ul class="mb-0 ps-3">

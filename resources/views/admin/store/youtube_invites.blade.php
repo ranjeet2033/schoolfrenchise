@@ -196,7 +196,7 @@
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ route('store.youtube.manual-grant') }}" method="POST">
+            <form action="{{ route('admin.store.youtube.manual-grant') }}" method="POST">
                 @csrf
                 <div class="modal-body p-4 bg-white">
                     <div class="alert alert-info py-2 px-3 small rounded-3 mb-3">
