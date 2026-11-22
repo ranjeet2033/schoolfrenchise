@@ -71,10 +71,10 @@ class CentreLandingPageController extends Controller
         $landingPage = $centre->landingPage;
 
         $validated = $request->validate([
-            'slug'             => 'required|string|max:150|unique:centre_landing_pages,slug,' . ($landingPage->id ?? 0),
+            'slug'             => 'nullable|string|max:150|unique:centre_landing_pages,slug,' . ($landingPage->id ?? 0),
             'tagline'          => 'nullable|string|max:255',
-            'theme_color'      => 'required|string|max:20',
-            'accent_color'     => 'required|string|max:20',
+            'theme_color'      => 'nullable|string|max:20',
+            'accent_color'     => 'nullable|string|max:20',
             'custom_logo'      => 'nullable|image|max:2048',
             'about_heading'    => 'nullable|string|max:255',
             'about_content'    => 'nullable|string',
@@ -82,7 +82,7 @@ class CentreLandingPageController extends Controller
             'owner_title'      => 'nullable|string|max:191',
             'owner_message'    => 'nullable|string',
             'owner_photo'      => 'nullable|image|max:2048',
-            'facilities_text'  => 'nullable|string', // Comma or newline separated
+            'facilities_text'  => 'nullable|string',
             'custom_phone'     => 'nullable|string|max:50',
             'custom_whatsapp'  => 'nullable|string|max:50',
             'custom_email'     => 'nullable|email|max:191',
@@ -98,45 +98,78 @@ class CentreLandingPageController extends Controller
 
         if ($request->hasFile('custom_logo')) {
             $landingPage->custom_logo = $request->file('custom_logo')->store('centres/landing/logos', 'public');
+            $landingPage->save();
         }
 
         if ($request->hasFile('owner_photo')) {
             $landingPage->owner_photo = $request->file('owner_photo')->store('centres/landing/owners', 'public');
+            $landingPage->save();
         }
 
-        // Process facilities array
-        $facilities = [];
-        if (!empty($validated['facilities_text'])) {
-            $facilities = array_values(array_filter(array_map('trim', preg_split('/[\r\n,]+/', $validated['facilities_text']))));
+        $dataToUpdate = [];
+
+        if ($request->has('slug') && !empty($validated['slug'])) {
+            $dataToUpdate['slug'] = Str::slug($validated['slug']);
+        }
+        if ($request->has('tagline')) {
+            $dataToUpdate['tagline'] = $validated['tagline'] ?? null;
+        }
+        if ($request->has('theme_color') && !empty($validated['theme_color'])) {
+            $dataToUpdate['theme_color'] = $validated['theme_color'];
+        }
+        if ($request->has('accent_color') && !empty($validated['accent_color'])) {
+            $dataToUpdate['accent_color'] = $validated['accent_color'];
+        }
+        if ($request->has('about_heading')) {
+            $dataToUpdate['about_heading'] = $validated['about_heading'] ?? null;
+        }
+        if ($request->has('about_content')) {
+            $dataToUpdate['about_content'] = $validated['about_content'] ?? null;
+        }
+        if ($request->has('owner_name')) {
+            $dataToUpdate['owner_name'] = $validated['owner_name'] ?? null;
+        }
+        if ($request->has('owner_title')) {
+            $dataToUpdate['owner_title'] = $validated['owner_title'] ?? null;
+        }
+        if ($request->has('owner_message')) {
+            $dataToUpdate['owner_message'] = $validated['owner_message'] ?? null;
+        }
+        if ($request->has('facilities_text')) {
+            $dataToUpdate['facilities'] = array_values(array_filter(array_map('trim', preg_split('/[\r\n,]+/', (string) $request->input('facilities_text')))));
+        }
+        if ($request->has('custom_phone')) {
+            $dataToUpdate['custom_phone'] = $validated['custom_phone'] ?? null;
+        }
+        if ($request->has('custom_whatsapp')) {
+            $dataToUpdate['custom_whatsapp'] = $validated['custom_whatsapp'] ?? null;
+        }
+        if ($request->has('custom_email')) {
+            $dataToUpdate['custom_email'] = $validated['custom_email'] ?? null;
+        }
+        if ($request->has('address_display')) {
+            $dataToUpdate['address_display'] = $validated['address_display'] ?? null;
+        }
+        if ($request->has('google_map_embed')) {
+            $dataToUpdate['google_map_embed'] = $validated['google_map_embed'] ?? null;
+        }
+        if ($request->has('facebook') || $request->has('instagram') || $request->has('youtube') || $request->has('twitter') || $request->has('telegram')) {
+            $existingSocial = $landingPage->social_links ?? [];
+            $dataToUpdate['social_links'] = [
+                'facebook'  => $request->input('facebook', $existingSocial['facebook'] ?? null),
+                'instagram' => $request->input('instagram', $existingSocial['instagram'] ?? null),
+                'youtube'   => $request->input('youtube', $existingSocial['youtube'] ?? null),
+                'twitter'   => $request->input('twitter', $existingSocial['twitter'] ?? null),
+                'telegram'  => $request->input('telegram', $existingSocial['telegram'] ?? null),
+            ];
+        }
+        if ($request->has('is_published')) {
+            $dataToUpdate['is_published'] = $request->boolean('is_published');
         }
 
-        $socialLinks = [
-            'facebook'  => $validated['facebook'] ?? null,
-            'instagram' => $validated['instagram'] ?? null,
-            'youtube'   => $validated['youtube'] ?? null,
-            'twitter'   => $validated['twitter'] ?? null,
-            'telegram'  => $validated['telegram'] ?? null,
-        ];
-
-        $landingPage->update([
-            'slug'             => Str::slug($validated['slug']),
-            'tagline'          => $validated['tagline'],
-            'theme_color'      => $validated['theme_color'],
-            'accent_color'     => $validated['accent_color'],
-            'about_heading'    => $validated['about_heading'],
-            'about_content'    => $validated['about_content'],
-            'owner_name'       => $validated['owner_name'],
-            'owner_title'      => $validated['owner_title'],
-            'owner_message'    => $validated['owner_message'],
-            'facilities'       => $facilities,
-            'custom_phone'     => $validated['custom_phone'],
-            'custom_whatsapp'  => $validated['custom_whatsapp'],
-            'custom_email'     => $validated['custom_email'],
-            'address_display'  => $validated['address_display'],
-            'google_map_embed' => $validated['google_map_embed'],
-            'social_links'     => $socialLinks,
-            'is_published'     => $request->boolean('is_published', true),
-        ]);
+        if (!empty($dataToUpdate)) {
+            $landingPage->update($dataToUpdate);
+        }
 
         return back()->with('success', 'Your dedicated franchise landing page has been updated successfully!');
     }
