@@ -52,7 +52,7 @@ class AdminBlogController extends Controller
             'summary'        => $validated['summary'] ?? Str::limit(strip_tags($validated['content']), 160),
             'content'        => $validated['content'],
             'featured_image' => $imagePath,
-            'author_name'    => $validated['author_name'] ?: 'Tech Era Team',
+            'author_name'    => !empty($validated['author_name']) ? $validated['author_name'] : 'Tech Era Team',
             'is_published'   => $request->boolean('is_published', true),
             'published_at'   => now(),
         ]);
@@ -89,7 +89,7 @@ class AdminBlogController extends Controller
             'category'     => $validated['category'] ?? $post->category,
             'summary'      => $validated['summary'] ?? Str::limit(strip_tags($validated['content']), 160),
             'content'      => $validated['content'],
-            'author_name'  => $validated['author_name'] ?: $post->author_name,
+            'author_name'  => !empty($validated['author_name']) ? $validated['author_name'] : ($post->author_name ?? 'Tech Era Team'),
             'is_published' => $request->boolean('is_published', true),
         ]);
 
