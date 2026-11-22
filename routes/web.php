@@ -151,9 +151,16 @@ Route::post('/store/checkout/verify', [DigitalStoreController::class, 'verifyPay
 Route::get('/store/order/confirmation/{orderNumber}', [DigitalStoreController::class, 'confirmation'])->name('store.order.confirmation');
 Route::get('/store/download/pdf/{accessToken}', [DigitalStoreController::class, 'downloadPdf'])->name('store.download.pdf');
 
+// Common Portal Spelling & Root Redirects
+Route::get('/centre', fn() => redirect()->route('centre.dashboard'));
+Route::get('/center', fn() => redirect()->route('centre.dashboard'));
+Route::get('/center/dashboard', fn() => redirect()->route('centre.dashboard'));
+Route::get('/admin', fn() => redirect()->route('admin.dashboard'));
+
 // 6.2 Dedicated Franchise Landing Pages
 Route::get('/c/{code}', [FranchiseLandingController::class, 'showByCode'])->name('franchise.landing.code');
-Route::get('/centre/{slug}', [FranchiseLandingController::class, 'showBySlug'])->name('franchise.landing.slug');
+Route::get('/branch/{slug}', [FranchiseLandingController::class, 'showBySlug'])->name('franchise.landing.slug');
+Route::get('/study-centre/{slug}', [FranchiseLandingController::class, 'showBySlug']);
 Route::post('/c/{code}/enquiry', [FranchiseLandingController::class, 'submitEnquiry'])->name('franchise.landing.enquiry');
 
 // 7. Authentication & Rate-limited Access Routes

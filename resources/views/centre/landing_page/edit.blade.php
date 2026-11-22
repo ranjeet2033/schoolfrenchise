@@ -90,7 +90,7 @@
                         <div class="col-md-6">
                             <label class="form-label small fw-bold">Custom URL Slug <span class="text-danger">*</span></label>
                             <div class="input-group">
-                                <span class="input-group-text bg-light text-muted small">{{ url('/centre') }}/</span>
+                                <span class="input-group-text bg-light text-muted small">{{ url('/branch') }}/</span>
                                 <input type="text" name="slug" value="{{ old('slug', $landingPage->slug) }}" class="form-control" required placeholder="e.g. patna-centre">
                             </div>
                             <span class="form-text small text-muted">Use lowercase letters, numbers, and hyphens only.</span>
