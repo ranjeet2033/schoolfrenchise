@@ -51,8 +51,8 @@
                             </td>
                             <td class="pe-4 text-end">
                                 <a href="{{ route('blog.show', $post->slug) }}" target="_blank" class="btn btn-sm btn-outline-info rounded-2 me-1" title="View Article"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-                                <a href="{{ route('admin.blog.edit', $post) }}" class="btn btn-sm btn-outline-primary rounded-2 me-1" title="Edit"><i class="fa-solid fa-pen"></i></a>
-                                <form action="{{ route('admin.blog.destroy', $post) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this post?');">
+                                <a href="{{ route('admin.blog.edit', $post->id) }}" class="btn btn-sm btn-outline-primary rounded-2 me-1" title="Edit"><i class="fa-solid fa-pen"></i></a>
+                                <form action="{{ route('admin.blog.destroy', $post->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this post?');">
                                     @csrf
                                     @method('DELETE')
                                     <button class="btn btn-sm btn-outline-danger rounded-2" type="submit" title="Delete"><i class="fa-solid fa-trash"></i></button>

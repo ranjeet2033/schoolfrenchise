@@ -6,6 +6,12 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Admin ERP - ' . ($instituteSettings['institute_name'] ?? 'TECH ERA COMPUTER'))</title>
 
+    <!-- Browser Favicon & Touch Icons -->
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" type="image/png" href="{{ $instituteSettings['favicon_url'] ?? asset('images/tech-era-logo.png') }}">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
+    <link rel="apple-touch-icon" href="{{ $instituteSettings['favicon_url'] ?? asset('images/tech-era-logo.png') }}">
+
     <!-- Google Fonts & Font Awesome 6 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,7 +37,7 @@
                 <span class="fw-bold tracking-tight text-truncate" style="font-size: 0.95rem; max-width: 180px;">{{ $instituteSettings['institute_name'] ?? 'TECH ERA COMPUTER' }} <span class="fw-light opacity-75">ERP</span></span>
             </a>
             <span class="topbar-badge d-none d-md-inline-block">
-                {{ auth()->user()->isSuperAdmin() ? 'HEAD OFFICE' : (auth()->user()->centre?->centre_code ?? 'CENTRE PANEL') }}
+                {{ auth()->user()?->isSuperAdmin() ? 'HEAD OFFICE' : (auth()->user()?->centre?->centre_code ?? 'ADMIN PANEL') }}
             </span>
         </div>
 
@@ -44,17 +50,17 @@
             <div class="dropdown">
                 <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle gap-2" id="userMenuDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                     <div class="rounded-circle bg-white text-dark fw-bold d-flex align-items-center justify-content-center" style="width: 34px; height: 34px; font-size: 0.9rem;">
-                        {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                        {{ strtoupper(substr(auth()->user()?->name ?? 'A', 0, 1)) }}
                     </div>
                     <div class="d-none d-md-block text-start lh-1">
-                        <div class="small fw-bold">{{ auth()->user()->name }}</div>
-                        <span class="text-white-50" style="font-size: 11px;">{{ ucwords(str_replace('_', ' ', auth()->user()->role)) }}</span>
+                        <div class="small fw-bold">{{ auth()->user()?->name ?? 'Administrator' }}</div>
+                        <span class="text-white-50" style="font-size: 11px;">{{ ucwords(str_replace('_', ' ', auth()->user()?->role ?? 'Admin')) }}</span>
                     </div>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 mt-2" aria-labelledby="userMenuDropdown">
                     <li class="px-3 py-2 border-bottom">
-                        <div class="fw-bold small">{{ auth()->user()->name }}</div>
-                        <div class="text-muted small" style="font-size: 12px;">{{ auth()->user()->email }}</div>
+                        <div class="fw-bold small">{{ auth()->user()?->name ?? 'Administrator' }}</div>
+                        <div class="text-muted small" style="font-size: 12px;">{{ auth()->user()?->email ?? '' }}</div>
                     </li>
                     <li><a class="dropdown-item py-2" href="{{ Route::has('admin.settings.index') ? route('admin.settings.index') : '#' }}"><i class="fa-solid fa-gear me-2 text-secondary"></i>Settings</a></li>
                     <li><hr class="dropdown-divider my-1"></li>

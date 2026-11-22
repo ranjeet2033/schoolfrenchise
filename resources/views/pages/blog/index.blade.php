@@ -29,8 +29,10 @@
         <div class="row g-4">
             @forelse($posts as $post)
                 <div class="col-md-6 col-lg-4">
-                    <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden bg-white d-flex flex-column">
-                        <img src="{{ $post->featured_image_url }}" alt="{{ $post->title }}" class="w-100" style="height: 200px; object-fit: cover;" onerror="this.onerror=null;this.src='{{ asset('images/courses/default-course.svg') }}';">
+                    <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden bg-white d-flex flex-column hover-shadow transition-all">
+                        <a href="{{ route('blog.show', $post->slug) }}" class="d-block overflow-hidden position-relative">
+                            <img src="{{ $post->featured_image_url }}" alt="{{ $post->title }}" class="w-100 transition-all" style="height: 200px; object-fit: cover;" onerror="this.onerror=null;this.src='{{ asset('images/courses/default-course.svg') }}';">
+                        </a>
                         <div class="card-body p-4 d-flex flex-column flex-grow-1">
                             <div class="d-flex align-items-center justify-content-between mb-2">
                                 <span class="badge bg-primary-subtle text-primary rounded-pill px-3 py-1">{{ $post->category ?? 'Announcement' }}</span>

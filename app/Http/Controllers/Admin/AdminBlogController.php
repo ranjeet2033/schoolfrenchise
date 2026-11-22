@@ -60,13 +60,16 @@ class AdminBlogController extends Controller
         return redirect()->route('admin.blog.index')->with('success', 'Blog post published successfully!');
     }
 
-    public function edit(BlogPost $post)
+    public function edit($post)
     {
+        $post = $post instanceof BlogPost ? $post : BlogPost::findOrFail($post);
         return view('admin.blog.edit', compact('post'));
     }
 
-    public function update(Request $request, BlogPost $post)
+    public function update(Request $request, $post)
     {
+        $post = $post instanceof BlogPost ? $post : BlogPost::findOrFail($post);
+
         $validated = $request->validate([
             'title'          => 'required|string|max:255',
             'category'       => 'nullable|string|max:100',
@@ -93,8 +96,9 @@ class AdminBlogController extends Controller
         return redirect()->route('admin.blog.index')->with('success', 'Blog post updated successfully!');
     }
 
-    public function destroy(BlogPost $post)
+    public function destroy($post)
     {
+        $post = $post instanceof BlogPost ? $post : BlogPost::findOrFail($post);
         $post->delete();
         return redirect()->route('admin.blog.index')->with('success', 'Blog post deleted successfully.');
     }

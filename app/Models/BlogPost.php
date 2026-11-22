@@ -53,4 +53,16 @@ class BlogPost extends Model
         }
         return asset('storage/' . $this->featured_image);
     }
+
+    public function getCleanSummaryAttribute(): string
+    {
+        $raw = $this->summary ?: $this->content;
+        return Str::limit(trim(preg_replace('/\s+/', ' ', strip_tags($raw))), 160);
+    }
+
+    public function getReadingTimeAttribute(): int
+    {
+        $words = str_word_count(strip_tags($this->content ?? ''));
+        return max(1, (int) ceil($words / 180));
+    }
 }

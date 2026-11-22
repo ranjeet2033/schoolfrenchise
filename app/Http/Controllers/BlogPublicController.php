@@ -32,7 +32,11 @@ class BlogPublicController extends Controller
 
     public function show($slug)
     {
-        $post = BlogPost::where('slug', $slug)->where('is_published', true)->firstOrFail();
+        $query = BlogPost::where('slug', $slug);
+        if (!auth()->check() || (auth()->user()->role ?? null) !== 'super_admin') {
+            $query->where('is_published', true);
+        }
+        $post = $query->firstOrFail();
         $recentPosts = BlogPost::where('is_published', true)->where('id', '!=', $post->id)->orderBy('published_at', 'desc')->take(4)->get();
 
         return view('pages.blog.show', compact('post', 'recentPosts'));

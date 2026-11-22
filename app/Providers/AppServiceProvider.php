@@ -92,6 +92,8 @@ class AppServiceProvider extends ServiceProvider
                     $merged['logo_url'] = asset('images/tech-era-logo.png');
                 }
 
+                $merged['favicon_url'] = file_exists(public_path('favicon.ico')) ? asset('favicon.ico') : ($merged['logo_url'] ?? asset('images/tech-era-logo.png'));
+
                 $cachedSettings = $merged;
             }
 

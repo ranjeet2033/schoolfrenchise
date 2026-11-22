@@ -6,6 +6,12 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Student Portal - ' . ($instituteSettings['institute_name'] ?? 'TECH ERA COMPUTER'))</title>
 
+    <!-- Browser Favicon & Touch Icons -->
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" type="image/png" href="{{ $instituteSettings['favicon_url'] ?? asset('images/tech-era-logo.png') }}">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
+    <link rel="apple-touch-icon" href="{{ $instituteSettings['favicon_url'] ?? asset('images/tech-era-logo.png') }}">
+
     <!-- Google Fonts & FontAwesome -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

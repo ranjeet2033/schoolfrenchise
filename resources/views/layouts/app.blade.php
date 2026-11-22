@@ -5,15 +5,50 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', ($instituteSettings['institute_name'] ?? 'TECH ERA COMPUTER') . ' | Building Digital Skills for the Future')</title>
-    <meta name="description" content="@yield('meta_description', ($instituteSettings['institute_name'] ?? 'TECH ERA COMPUTER') . ' - Building Digital Skills for the Future. Professional computer education, programming, accounting, and typing in Sasbahana, Sheikhpura, Bihar.')">
-    <meta name="keywords" content="TECH ERA COMPUTER, Sheikhpura Computer Institute, ADCA, DCA, Typing, Tally Prime, Web Development, Certificate Verification, Bihar">
+    <meta name="description" content="@yield('meta_description', ($instituteSettings['institute_name'] ?? 'TECH ERA COMPUTER') . ' - Leading Computer Training Institute offering ADCA, DCA, Typing, Tally Prime with GST, and Programming courses in Sasbahana, Sheikhpura, Bihar.')">
+    <meta name="keywords" content="@yield('meta_keywords', 'TECH ERA COMPUTER, Sheikhpura Computer Institute, ADCA, DCA, Typing, Tally Prime, Web Development, Certificate Verification, Bihar, Sasbahana')">
+    <meta name="author" content="{{ $instituteSettings['institute_name'] ?? 'TECH ERA COMPUTER' }}">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <link rel="canonical" href="{{ url()->current() }}">
 
-    <!-- Open Graph Meta -->
+    <!-- Browser Favicon & Touch Icons -->
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" type="image/png" href="{{ $instituteSettings['favicon_url'] ?? asset('images/tech-era-logo.png') }}">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
+    <link rel="apple-touch-icon" href="{{ $instituteSettings['favicon_url'] ?? asset('images/tech-era-logo.png') }}">
+
+    <!-- Open Graph / Facebook Meta Tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="{{ $instituteSettings['institute_name'] ?? 'TECH ERA COMPUTER' }}">
     <meta property="og:title" content="@yield('title', ($instituteSettings['institute_name'] ?? 'TECH ERA COMPUTER'))">
     <meta property="og:description" content="@yield('meta_description', 'Building Digital Skills for the Future - Premier Computer Institute in Sheikhpura, Bihar.')">
-    <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:image" content="@yield('meta_image', $instituteSettings['logo_url'] ?? asset('images/tech-era-logo.png'))">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="@yield('title', ($instituteSettings['institute_name'] ?? 'TECH ERA COMPUTER'))">
+    <meta name="twitter:description" content="@yield('meta_description', 'Building Digital Skills for the Future - Premier Computer Institute in Sheikhpura, Bihar.')">
+    <meta name="twitter:image" content="@yield('meta_image', $instituteSettings['logo_url'] ?? asset('images/tech-era-logo.png'))">
+
+    <!-- Schema.org EducationalOrganization JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@@context": "https://schema.org",
+      "@type": "EducationalOrganization",
+      "name": "{{ addslashes($instituteSettings['institute_name'] ?? 'TECH ERA COMPUTER') }}",
+      "url": "{{ url('/') }}",
+      "logo": "{{ $instituteSettings['logo_url'] ?? asset('images/tech-era-logo.png') }}",
+      "telephone": "+91{{ $instituteSettings['contact_phone'] ?? '9162384660' }}",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "{{ addslashes($instituteSettings['corporate_address'] ?? 'Sasbahana, Sheikhpura, Bihar - 801105') }}",
+        "addressRegion": "Bihar",
+        "postalCode": "801105",
+        "addressCountry": "IN"
+      }
+    }
+    </script>
 
     <!-- Google Fonts: Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -550,8 +585,9 @@
     </footer>
 
     <!-- 8. Floating Quick-Contact Badges -->
-    <a href="https://api.whatsapp.com/send?phone=91{{ $instituteSettings['contact_phone'] ?? '9162384660' }}&text=Hi%20Tech%20Era%20Computer,%20I%20have%20an%20enquiry" target="_blank" class="dce-float-whatsapp" title="Chat on WhatsApp">
+    <a href="https://wa.me/91{{ $instituteSettings['whatsapp_number'] ?? ($instituteSettings['contact_phone'] ?? '9162384660') }}?text=Hello%20Tech%20Era%20Computer,%20I%20have%20an%20enquiry" target="_blank" class="dce-float-whatsapp" title="Chat on WhatsApp" aria-label="Chat on WhatsApp">
         <i class="fa-brands fa-whatsapp"></i>
+        <span class="dce-float-whatsapp-ping"></span>
     </a>
 
     <div class="dce-float-helpline d-none d-md-flex">
