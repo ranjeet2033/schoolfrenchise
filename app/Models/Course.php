@@ -117,31 +117,65 @@ class Course extends Model
 
     public function getThumbnailUrlAttribute(): string
     {
-        if (empty($this->thumbnail)) {
-            $slugCode = strtolower(\Illuminate\Support\Str::slug($this->course_code ?? ''));
-            $svgPath = 'images/courses/' . $slugCode . '.svg';
-            if (!empty($slugCode) && file_exists(public_path($svgPath))) {
-                return asset($svgPath);
+        // 1. If custom thumbnail is set and actually exists on disk or is remote URL
+        if (!empty($this->thumbnail)) {
+            if (str_starts_with($this->thumbnail, 'http://') || str_starts_with($this->thumbnail, 'https://')) {
+                return $this->thumbnail;
             }
-            return asset('images/courses/default-course.svg');
+
+            if (file_exists(public_path($this->thumbnail))) {
+                return asset($this->thumbnail);
+            }
+
+            $storageRel = 'storage/' . ltrim($this->thumbnail, '/');
+            if (file_exists(public_path($storageRel)) || file_exists(storage_path('app/public/' . ltrim($this->thumbnail, '/')))) {
+                return asset($storageRel);
+            }
         }
 
-        if (str_starts_with($this->thumbnail, 'http://') || str_starts_with($this->thumbnail, 'https://')) {
-            return $this->thumbnail;
+        // 2. Intelligent matching with curated course vector illustrations
+        $haystack = strtolower(($this->course_code ?? '') . ' ' . ($this->course_name ?? ''));
+
+        if (str_contains($haystack, 'adca')) {
+            return asset('images/courses/adca.svg');
+        }
+        if (str_contains($haystack, 'adfa') || str_contains($haystack, 'dfa') || str_contains($haystack, 'financial accounting')) {
+            return asset('images/courses/dfa.svg');
+        }
+        if (str_contains($haystack, 'tally')) {
+            return asset('images/courses/tally-gst.svg');
+        }
+        if (str_contains($haystack, 'steno')) {
+            return asset('images/courses/steno.svg');
+        }
+        if (str_contains($haystack, 'typing')) {
+            return asset('images/courses/cct-eh.svg');
+        }
+        if (str_contains($haystack, 'dca') || str_contains($haystack, 'dcaa')) {
+            return asset('images/courses/dca.svg');
+        }
+        if (str_contains($haystack, 'bcca') || str_contains($haystack, 'bcc')) {
+            return asset('images/courses/bcc.svg');
+        }
+        if (str_contains($haystack, 'ccc')) {
+            return asset('images/courses/ccc.svg');
+        }
+        if (str_contains($haystack, 'web') || str_contains($haystack, 'dwd')) {
+            return asset('images/courses/web-dev.svg');
+        }
+        if (str_contains($haystack, 'dtp')) {
+            return asset('images/courses/dtp.svg');
+        }
+        if (str_contains($haystack, 'python')) {
+            return asset('images/courses/python.svg');
+        }
+        if (str_contains($haystack, 'pgdca')) {
+            return asset('images/courses/pgdca.svg');
+        }
+        if (str_contains($haystack, 'hardware')) {
+            return asset('images/courses/hardware.svg');
         }
 
-        if (file_exists(public_path($this->thumbnail))) {
-            return asset($this->thumbnail);
-        }
-
-        if (file_exists(public_path('storage/' . ltrim($this->thumbnail, '/')))) {
-            return asset('storage/' . ltrim($this->thumbnail, '/'));
-        }
-
-        if (file_exists(storage_path('app/public/' . ltrim($this->thumbnail, '/')))) {
-            return asset('storage/' . ltrim($this->thumbnail, '/'));
-        }
-
-        return asset('storage/' . ltrim($this->thumbnail, '/'));
+        return asset('images/courses/default-course.svg');
     }
 }
