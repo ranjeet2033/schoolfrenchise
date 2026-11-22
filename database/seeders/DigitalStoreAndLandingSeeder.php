@@ -54,8 +54,43 @@ class DigitalStoreAndLandingSeeder extends Seeder
             ]
         );
 
-        // 3. Initialize Landing Pages for existing active centres
+        // 3. Initialize Landing Pages & Multiple Slider Banners for centres
         $centres = Centre::all();
+        $sampleBanners = [
+            [
+                'image_path'  => 'images/banners/banner1.jpg',
+                'title'       => 'Admissions Open For Certified Vocational Batches',
+                'subtitle'    => 'Government exam typing, DCA, ADCA, Tally Prime & Python programming diploma.',
+                'button_text' => 'Enroll in New Batch',
+                'button_link' => '#enquiry',
+                'sort_order'  => 1,
+            ],
+            [
+                'image_path'  => 'images/banners/banner2.jpg',
+                'title'       => 'High-Speed Bilingual Hindi & English Typing Lab',
+                'subtitle'    => 'Specialized Krutidev & Mangal typing software with live accuracy & speed tracking.',
+                'button_text' => 'Join Typing Lab',
+                'button_link' => '#enquiry',
+                'sort_order'  => 2,
+            ],
+            [
+                'image_path'  => 'images/banners/banner3.jpg',
+                'title'       => '100% Genuine Online Verified Certification',
+                'subtitle'    => 'Accredited certificate & marksheet with instant QR code online verification portal.',
+                'button_text' => 'Explore All Courses',
+                'button_link' => '#courses',
+                'sort_order'  => 3,
+            ],
+            [
+                'image_path'  => 'images/banners/banner4.jpg',
+                'title'       => 'Modern Air-Conditioned Computer Laboratory',
+                'subtitle'    => '1:1 computer ratio with expert certified faculty & personalized doubt sessions.',
+                'button_text' => 'Visit Our Campus',
+                'button_link' => '#contact',
+                'sort_order'  => 4,
+            ],
+        ];
+
         foreach ($centres as $centre) {
             $landingPage = CentreLandingPage::firstOrCreate(
                 ['centre_id' => $centre->id],
@@ -84,6 +119,22 @@ class DigitalStoreAndLandingSeeder extends Seeder
                     'is_published'    => true,
                 ]
             );
+
+            // Populate multiple banners if centre has fewer than 2 banners
+            if (CentreBanner::where('centre_id', $centre->id)->count() < 2) {
+                foreach ($sampleBanners as $b) {
+                    CentreBanner::create([
+                        'centre_id'   => $centre->id,
+                        'image_path'  => $b['image_path'],
+                        'title'       => $b['title'],
+                        'subtitle'    => $b['subtitle'],
+                        'button_text' => $b['button_text'],
+                        'button_link' => $b['button_link'],
+                        'sort_order'  => $b['sort_order'],
+                        'is_active'   => true,
+                    ]);
+                }
+            }
         }
     }
 }

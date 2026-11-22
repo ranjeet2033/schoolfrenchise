@@ -32,6 +32,15 @@ class CentreBanner extends Model
 
     public function getImageUrlAttribute(): string
     {
-        return asset('storage/' . $this->image_path);
+        if (empty($this->image_path)) {
+            return asset('images/banners/banner1.jpg');
+        }
+        if (str_starts_with($this->image_path, 'http://') || str_starts_with($this->image_path, 'https://')) {
+            return $this->image_path;
+        }
+        if (file_exists(public_path($this->image_path))) {
+            return asset($this->image_path);
+        }
+        return asset('storage/' . ltrim($this->image_path, '/'));
     }
 }

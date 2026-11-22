@@ -76,18 +76,74 @@
         }
 
         .centre-hero-carousel .carousel-item {
-            height: 480px;
+            height: 500px;
             background-color: var(--centre-primary);
+            position: relative;
         }
         .centre-hero-carousel .carousel-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            filter: brightness(0.65);
+            filter: brightness(0.75);
+        }
+        .centre-slide-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, rgba(7, 21, 36, 0.88) 0%, rgba(7, 21, 36, 0.55) 55%, transparent 100%);
+            display: flex;
+            align-items: center;
+            padding: 40px 60px;
+        }
+        .centre-hero-carousel .carousel-control-prev,
+        .centre-hero-carousel .carousel-control-next {
+            width: 48px;
+            height: 48px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(13, 34, 56, 0.75);
+            border-radius: 50%;
+            margin: 0 18px;
+            backdrop-filter: blur(4px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.2s ease;
+            opacity: 0.85;
+        }
+        .centre-hero-carousel .carousel-control-prev:hover,
+        .centre-hero-carousel .carousel-control-next:hover {
+            background: var(--centre-accent);
+            border-color: #ffffff;
+            opacity: 1;
+            transform: translateY(-50%) scale(1.1);
+        }
+        .centre-hero-carousel .carousel-indicators [data-bs-target] {
+            width: 32px;
+            height: 6px;
+            border-radius: 4px;
+            background-color: #ffffff;
+            opacity: 0.5;
+            transition: all 0.3s ease;
+        }
+        .centre-hero-carousel .carousel-indicators .active {
+            width: 48px;
+            background-color: var(--centre-accent);
+            opacity: 1;
         }
 
         @media (max-width: 767.98px) {
             .centre-hero-carousel .carousel-item {
+                height: 320px;
+            }
+            .centre-slide-overlay {
+                padding: 20px 24px;
+                background: linear-gradient(180deg, rgba(7, 21, 36, 0.4) 0%, rgba(7, 21, 36, 0.85) 100%);
+                align-items: flex-end;
+                padding-bottom: 35px;
+            }
+            .centre-hero-carousel .carousel-control-prev,
+            .centre-hero-carousel .carousel-control-next {
+                display: none;
+            }
+        }
                 height: 300px;
             }
         }
@@ -193,40 +249,55 @@
         </div>
     </nav>
 
-    <!-- Hero / Banner Slider -->
+    <!-- Hero / Multiple Banner Slider -->
     @if($centre->banners->isNotEmpty())
-        <div id="centreHeroCarousel" class="carousel slide centre-hero-carousel" data-bs-ride="carousel">
-            <div class="carousel-indicators">
+        <div id="centreHeroCarousel" class="carousel slide carousel-fade centre-hero-carousel" data-bs-ride="carousel" data-bs-interval="3500" data-bs-pause="hover">
+            <!-- Slide Indicators -->
+            <div class="carousel-indicators mb-3">
                 @foreach($centre->banners as $idx => $banner)
-                    <button type="button" data-bs-target="#centreHeroCarousel" data-bs-slide-to="{{ $idx }}" class="{{ $idx === 0 ? 'active' : '' }}"></button>
+                    <button type="button" data-bs-target="#centreHeroCarousel" data-bs-slide-to="{{ $idx }}" class="{{ $idx === 0 ? 'active' : '' }}" aria-current="{{ $idx === 0 ? 'true' : 'false' }}" aria-label="Slide {{ $idx + 1 }}"></button>
                 @endforeach
             </div>
-            <div class="carousel-inner">
+
+            <!-- Slide Items -->
+            <div class="carousel-inner h-100">
                 @foreach($centre->banners as $idx => $banner)
-                    <div class="carousel-item {{ $idx === 0 ? 'active' : '' }}">
-                        <img src="{{ $banner->image_url }}" alt="{{ $banner->title ?? 'Centre Slide' }}">
-                        <div class="carousel-caption text-start pb-5" style="max-width: 650px;">
-                            @if(!empty($banner->title))
-                                <h1 class="display-6 fw-black text-white mb-2">{{ $banner->title }}</h1>
-                            @endif
-                            @if(!empty($banner->subtitle))
-                                <p class="lead text-white opacity-90 mb-3">{{ $banner->subtitle }}</p>
-                            @endif
-                            @if(!empty($banner->button_text))
-                                <a href="{{ $banner->button_link ?? '#enquiry' }}" class="btn btn-centre-accent btn-lg px-4 rounded-pill fw-bold shadow">
-                                    {{ $banner->button_text }}
-                                </a>
-                            @endif
+                    <div class="carousel-item h-100 {{ $idx === 0 ? 'active' : '' }}" data-bs-interval="3500">
+                        <img src="{{ $banner->image_url }}" alt="{{ $banner->title ?? 'Centre Slide' }}" class="w-100 h-100 object-fit-cover">
+                        <div class="centre-slide-overlay">
+                            <div style="max-width: 680px;">
+                                <span class="badge bg-centre-accent text-white font-monospace px-3 py-1.5 fw-bold text-uppercase mb-2 shadow-sm">
+                                    {{ $centre->centre_name }}
+                                </span>
+                                @if(!empty($banner->title))
+                                    <h1 class="display-6 fw-black text-white mb-2" style="text-shadow: 0 2px 8px rgba(0,0,0,0.5);">{{ $banner->title }}</h1>
+                                @endif
+                                @if(!empty($banner->subtitle))
+                                    <p class="lead text-white opacity-90 mb-4" style="text-shadow: 0 1px 4px rgba(0,0,0,0.5);">{{ $banner->subtitle }}</p>
+                                @endif
+                                <div class="d-flex flex-wrap gap-2">
+                                    <a href="{{ $banner->button_link ?? '#enquiry' }}" class="btn btn-centre-accent btn-lg px-4 rounded-pill fw-bold shadow">
+                                        {{ $banner->button_text ?? 'Enroll in New Batch' }} <i class="fa-solid fa-arrow-right ms-1"></i>
+                                    </a>
+                                    <a href="#courses" class="btn btn-outline-light btn-lg px-4 rounded-pill">
+                                        View Courses
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 @endforeach
             </div>
+
+            <!-- Controls (Prev / Next) -->
             @if($centre->banners->count() > 1)
                 <button class="carousel-control-prev" type="button" data-bs-target="#centreHeroCarousel" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon"></span>
+                    <span class="visually-hidden">Previous</span>
                 </button>
                 <button class="carousel-control-next" type="button" data-bs-target="#centreHeroCarousel" data-bs-slide="next">
                     <span class="carousel-control-next-icon"></span>
+                    <span class="visually-hidden">Next</span>
                 </button>
             @endif
         </div>
@@ -390,7 +461,7 @@
                             <div class="card-body p-4 d-flex flex-column">
                                 <span class="badge bg-light text-centre-primary border mb-2 align-self-start font-monospace">{{ $course->course_code }}</span>
                                 <h6 class="fw-bold text-dark mb-2">{{ $course->course_name }}</h6>
-                                <p class="text-muted small mb-3 flex-grow-1">{{ Str::limit($course->short_description ?? $course->description, 70) }}</p>
+                                <p class="text-muted small mb-3 flex-grow-1">{{ Str::limit($course->short_description ?? $course->description ?? '', 70) }}</p>
                                 <div class="pt-3 border-top d-flex justify-content-between align-items-center small text-muted">
                                     <span><i class="fa-solid fa-clock text-centre-accent me-1"></i> {{ $course->duration }}</span>
                                     <a href="#enquiry" class="btn btn-sm btn-outline-primary rounded-pill">Apply</a>
