@@ -1200,6 +1200,10 @@
                     <i class="fa-solid fa-gear text-muted"></i>
                     <span>Settings & Account</span>
                 </div>
+                <a class="nav-link {{ request()->routeIs('centre.landing.*') ? 'active' : '' }}" href="{{ route('centre.landing.edit') }}">
+                    <i class="fa-solid fa-paintbrush text-info"></i>
+                    <span>My Landing Page</span>
+                </a>
                 <a class="nav-link {{ request()->routeIs('centre.profile.show') ? 'active' : '' }}" href="{{ route('centre.profile.show') }}">
                     <i class="fa-solid fa-building-user"></i>
                     <span>Centre Profile</span>

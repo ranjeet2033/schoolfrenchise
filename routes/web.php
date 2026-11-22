@@ -6,7 +6,12 @@ use App\Http\Controllers\Admin\AdminBannerController;
 use App\Http\Controllers\Admin\AdminBatchController;
 use App\Http\Controllers\Admin\AdminCertificateController;
 use App\Http\Controllers\Admin\AdminBlogController;
+use App\Http\Controllers\Admin\AdminDigitalProductController;
+use App\Http\Controllers\Admin\AdminDigitalOrderController;
 use App\Http\Controllers\BlogPublicController;
+use App\Http\Controllers\DigitalStoreController;
+use App\Http\Controllers\FranchiseLandingController;
+use App\Http\Controllers\Centre\CentreLandingPageController;
 use App\Http\Controllers\Admin\AdminCentreController;
 use App\Http\Controllers\Admin\AdminCmsController;
 use App\Http\Controllers\Admin\AdminCourseController;
@@ -136,6 +141,20 @@ Route::get('/search-centre', [FranchisePublicController::class, 'searchIndex']);
 
 Route::get('/frenchise-status', [FranchisePublicController::class, 'statusIndex'])->name('franchise.status');
 Route::get('/franchise-status', [FranchisePublicController::class, 'statusIndex']);
+
+// 6.1 Digital Store (PDF & Video Selling with Razorpay)
+Route::get('/store', [DigitalStoreController::class, 'index'])->name('store.index');
+Route::get('/store/my-purchases', [DigitalStoreController::class, 'myPurchases'])->name('store.purchases');
+Route::get('/store/{type}/{slug}', [DigitalStoreController::class, 'show'])->name('store.show');
+Route::post('/store/checkout/initiate', [DigitalStoreController::class, 'initiateCheckout'])->name('store.checkout.initiate');
+Route::post('/store/checkout/verify', [DigitalStoreController::class, 'verifyPayment'])->name('store.checkout.verify');
+Route::get('/store/order/confirmation/{orderNumber}', [DigitalStoreController::class, 'confirmation'])->name('store.order.confirmation');
+Route::get('/store/download/pdf/{accessToken}', [DigitalStoreController::class, 'downloadPdf'])->name('store.download.pdf');
+
+// 6.2 Dedicated Franchise Landing Pages
+Route::get('/c/{code}', [FranchiseLandingController::class, 'showByCode'])->name('franchise.landing.code');
+Route::get('/centre/{slug}', [FranchiseLandingController::class, 'showBySlug'])->name('franchise.landing.slug');
+Route::post('/c/{code}/enquiry', [FranchiseLandingController::class, 'submitEnquiry'])->name('franchise.landing.enquiry');
 
 // 7. Authentication & Rate-limited Access Routes
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -394,6 +413,15 @@ Route::middleware(['role:super_admin,admin'])->prefix('admin')->name('admin.')->
     Route::get('/audit-logs', [AdminAuditLogController::class, 'index'])->name('audit-logs.index');
     Route::get('/audit-logs/export', [AdminAuditLogController::class, 'export'])->name('audit-logs.export');
     Route::get('/audit-logs/{auditLog}', [AdminAuditLogController::class, 'show'])->name('audit-logs.show');
+
+    // Module 21: Digital Store (PDF & Video Selling, Orders, YouTube Invites)
+    Route::resource('store/products', AdminDigitalProductController::class)->names('store.products');
+    Route::get('/store/orders', [AdminDigitalOrderController::class, 'index'])->name('store.orders.index');
+    Route::get('/store/orders/{order}', [AdminDigitalOrderController::class, 'show'])->name('store.orders.show');
+    Route::get('/store/youtube-invites', [AdminDigitalOrderController::class, 'youtubeInvites'])->name('store.youtube.invites');
+    Route::post('/store/youtube-invites/{access}/mark-invited', [AdminDigitalOrderController::class, 'markInvited'])->name('store.youtube.mark-invited');
+    Route::post('/store/youtube-invites/batch-mark', [AdminDigitalOrderController::class, 'batchMarkInvited'])->name('store.youtube.batch-mark');
+    Route::post('/store/youtube-invites/{access}/revoke', [AdminDigitalOrderController::class, 'revokeAccess'])->name('store.youtube.revoke');
 });
 
 Route::middleware(['role:super_admin,centre,staff', 'centre.active'])->prefix('centre')->name('centre.')->group(function () {
@@ -472,6 +500,14 @@ Route::middleware(['role:super_admin,centre,staff', 'centre.active'])->prefix('c
     Route::get('/profile/director-id-card', [CentreProfileController::class, 'directorIdCard'])->name('profile.director-id-card');
     Route::post('/profile', [CentreProfileController::class, 'update'])->name('profile.update');
     Route::post('/profile/change-password', [CentreProfileController::class, 'changePassword'])->name('profile.change-password');
+
+    // Dedicated Landing Page Customizer
+    Route::get('/landing-page', [CentreLandingPageController::class, 'edit'])->name('landing.edit');
+    Route::post('/landing-page/update', [CentreLandingPageController::class, 'update'])->name('landing.update');
+    Route::post('/landing-page/banners', [CentreLandingPageController::class, 'storeBanner'])->name('landing.banners.store');
+    Route::delete('/landing-page/banners/{id}', [CentreLandingPageController::class, 'destroyBanner'])->name('landing.banners.destroy');
+    Route::post('/landing-page/gallery', [CentreLandingPageController::class, 'storeGallery'])->name('landing.gallery.store');
+    Route::delete('/landing-page/gallery/{id}', [CentreLandingPageController::class, 'destroyGallery'])->name('landing.gallery.destroy');
 });
 
 Route::middleware(['role:super_admin,student'])->prefix('student')->name('student.')->group(function () {

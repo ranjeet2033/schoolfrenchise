@@ -195,6 +195,29 @@ class Centre extends Model
         return asset('storage/' . ltrim($this->director_signature, '/'));
     }
 
+    public function landingPage()
+    {
+        return $this->hasOne(CentreLandingPage::class);
+    }
+
+    public function banners()
+    {
+        return $this->hasMany(CentreBanner::class)->orderBy('sort_order');
+    }
+
+    public function galleries()
+    {
+        return $this->hasMany(CentreGallery::class)->orderBy('sort_order');
+    }
+
+    public function getLandingPageUrlAttribute(): string
+    {
+        if ($this->landingPage && !empty($this->landingPage->slug)) {
+            return route('franchise.landing.slug', $this->landingPage->slug);
+        }
+        return route('franchise.landing.code', $this->centre_code);
+    }
+
     public function getQrCodeDataUriAttribute(): string
     {
         $url = route('franchise.search', ['keyword' => $this->centre_code]);

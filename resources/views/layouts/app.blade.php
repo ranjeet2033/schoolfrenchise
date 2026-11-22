@@ -195,6 +195,12 @@
                         </li>
 
                         <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('store.*') ? 'active' : '' }}" href="{{ route('store.index') }}">
+                                <i class="fa-solid fa-graduation-cap text-warning me-1"></i> Store / E-Books
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('gallery') ? 'active' : '' }}" href="{{ route('gallery') }}">Gallery</a>
                         </li>
 
@@ -316,6 +322,12 @@
                                     <a href="{{ route('login') }}" class="dce-mobile-sub-item"><i class="fa-solid fa-door-open me-2 text-primary"></i>Franchise Login</a>
                                 </div>
                             </div>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('store.index') }}" class="dce-mobile-nav-item {{ request()->routeIs('store.*') ? 'active' : '' }}">
+                                <i class="fa-solid fa-graduation-cap me-3 text-warning"></i> E-Books &amp; Video Store
+                            </a>
                         </li>
 
                         <li>

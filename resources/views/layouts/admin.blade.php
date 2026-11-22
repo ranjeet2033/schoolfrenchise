@@ -168,6 +168,18 @@
                     <i class="fa-solid fa-chart-column"></i> Reports
                 </a>
 
+                <!-- DIGITAL STORE -->
+                <div class="sidebar-heading">Digital Store &amp; Videos</div>
+                <a class="nav-link {{ request()->routeIs('admin.store.products*') ? 'active' : '' }}" href="{{ route('admin.store.products.index') }}">
+                    <i class="fa-solid fa-boxes-stacked"></i> Store Products
+                </a>
+                <a class="nav-link {{ request()->routeIs('admin.store.orders*') ? 'active' : '' }}" href="{{ route('admin.store.orders.index') }}">
+                    <i class="fa-solid fa-receipt"></i> Orders &amp; Revenue
+                </a>
+                <a class="nav-link {{ request()->routeIs('admin.store.youtube*') ? 'active' : '' }}" href="{{ route('admin.store.youtube.invites') }}">
+                    <i class="fa-brands fa-youtube text-danger"></i> YouTube Invites
+                </a>
+
                 <!-- SYSTEM -->
                 <div class="sidebar-heading">System & Config</div>
                 <a class="nav-link {{ request()->routeIs('admin.banners*') ? 'active' : '' }}" href="{{ Route::has('admin.banners.index') ? route('admin.banners.index') : '#' }}">
