@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Centre;
 use App\Models\CentreLandingPage;
 use App\Models\Course;
+use App\Models\DigitalProduct;
 use App\Models\Enquiry;
 use Illuminate\Http\Request;
 
@@ -94,8 +95,9 @@ class FranchiseLandingController extends Controller
         }
 
         $courses = Course::with('category')->where('status', true)->orderBy('course_code')->get();
+        $digitalProducts = DigitalProduct::active()->orderBy('sort_order')->take(8)->get();
 
-        return view('pages.centre-landing', compact('centre', 'landingPage', 'courses'));
+        return view('pages.centre-landing', compact('centre', 'landingPage', 'courses', 'digitalProducts'));
     }
 
     /**

@@ -421,6 +421,7 @@
                 <ul class="navbar-nav ms-auto align-items-lg-center gap-2 mt-3 mt-lg-0">
                     <li class="nav-item"><a class="nav-link fw-semibold" href="#about">About Centre</a></li>
                     <li class="nav-item"><a class="nav-link fw-semibold" href="#courses">Courses</a></li>
+                    <li class="nav-item"><a class="nav-link fw-semibold" href="#digital-store">E-Books & Videos</a></li>
                     <li class="nav-item"><a class="nav-link fw-semibold" href="#facilities">Facilities</a></li>
                     <li class="nav-item"><a class="nav-link fw-semibold" href="#gallery">Gallery</a></li>
                     <li class="nav-item"><a class="nav-link fw-semibold" href="#contact">Contact</a></li>
@@ -699,6 +700,117 @@
             </div>
         </div>
     </section>
+
+    <!-- Digital Store: E-Books, PDF Notes & Video Lectures -->
+    @if(isset($digitalProducts) && $digitalProducts->isNotEmpty())
+        <section id="digital-store" class="py-4 bg-light border-top border-bottom">
+            <div class="container">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-3 mb-md-4">
+                    <div>
+                        <span class="badge bg-centre-accent text-white px-3 py-1.5 fw-bold text-uppercase mb-2 font-monospace">E-Learning & Self-Study Hub</span>
+                        <h2 class="fw-black text-centre-primary mb-1">E-Books, Notes & Video Lectures</h2>
+                        <p class="text-muted small mb-0">Certified computer notes (PDF) and video lecture classes available for self-study.</p>
+                    </div>
+                    <div class="mt-3 mt-md-0">
+                        <a href="{{ route('store.index') }}" class="btn btn-outline-primary fw-bold rounded-pill px-4 shadow-sm" style="border-color: var(--centre-primary); color: var(--centre-primary);">
+                            <i class="fa-solid fa-store me-1"></i> View All Store Materials
+                        </a>
+                    </div>
+                </div>
+
+                <div class="row g-2.5 g-sm-3 g-lg-4">
+                    @foreach($digitalProducts as $prod)
+                        <div class="col-6 col-md-4 col-lg-3">
+                            <div class="card h-100 border-0 shadow-sm rounded-3 overflow-hidden d-flex flex-column transition-hover" style="border: 1px solid #e2e8f0 !important; background: #ffffff;">
+                                <!-- Thumbnail & Floating Badges -->
+                                <div class="position-relative" style="height: 160px; background-color: var(--centre-primary, #0d2238); overflow: hidden;">
+                                    @if($prod->thumbnail)
+                                        <img src="{{ $prod->thumbnail_url }}" alt="{{ $prod->title }}" class="w-100 h-100 object-fit-cover">
+                                    @else
+                                        <div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-white p-3 text-center">
+                                            <i class="fa-solid {{ $prod->type === 'video' ? 'fa-play-circle fa-3x' : 'fa-file-pdf fa-3x' }} mb-2 text-warning"></i>
+                                            <span class="small text-uppercase fw-bold opacity-75">{{ $prod->category ?? 'Study Material' }}</span>
+                                        </div>
+                                    @endif
+
+                                    <!-- Product Type Badge -->
+                                    <span class="position-absolute top-0 start-0 m-2 badge {{ $prod->type === 'video' ? ($prod->isPublicVideo() ? 'bg-success' : 'bg-danger') : 'bg-primary' }} text-white px-2 py-1 shadow-sm font-monospace" style="font-size: 0.65rem;">
+                                        <i class="fa-solid {{ $prod->type === 'video' ? ($prod->isPublicVideo() ? 'fa-globe' : 'fa-lock') : 'fa-file-pdf' }} me-1"></i>
+                                        @if($prod->type === 'video')
+                                            {{ $prod->isPublicVideo() ? 'Free Lecture' : 'Private Video' }}
+                                        @else
+                                            PDF E-Book
+                                        @endif
+                                    </span>
+
+                                    @if($prod->has_discount && !$prod->isPublicVideo())
+                                        <span class="position-absolute top-0 end-0 m-2 badge bg-success text-white px-2 py-1 shadow-sm font-monospace" style="font-size: 0.65rem;">
+                                            {{ $prod->discount_percentage }}% OFF
+                                        </span>
+                                    @endif
+                                </div>
+
+                                <!-- Card Body -->
+                                <div class="card-body p-3 d-flex flex-column flex-grow-1">
+                                    <span class="text-muted text-uppercase fw-bold font-monospace" style="font-size: 0.68rem;">{{ $prod->category ?? 'Study Material' }}</span>
+                                    <h6 class="fw-bold text-dark mt-1 mb-2 text-truncate" title="{{ $prod->title }}" style="font-size: 0.88rem;">
+                                        <a href="{{ route('store.show', ['type' => $prod->type, 'slug' => $prod->slug]) }}" class="text-dark text-decoration-none">
+                                            {{ $prod->title }}
+                                        </a>
+                                    </h6>
+                                    <p class="text-muted small mb-3 flex-grow-1" style="font-size: 0.78rem; min-height: 2.4em; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                                        {{ Str::limit($prod->short_description ?? strip_tags($prod->description ?? ''), 70) }}
+                                    </p>
+
+                                    <!-- Meta Strip -->
+                                    <div class="mb-2 pt-2 border-top d-flex justify-content-between align-items-center small text-muted" style="font-size: 0.72rem;">
+                                        @if($prod->type === 'pdf')
+                                            <span><i class="fa-solid fa-file-invoice text-danger me-1"></i> {{ $prod->total_pages ? $prod->total_pages . ' Pages' : 'PDF' }}</span>
+                                            <span class="text-success"><i class="fa-solid fa-download me-1"></i> Instant</span>
+                                        @else
+                                            <span><i class="fa-solid fa-clock text-info me-1"></i> {{ $prod->duration ?? 'HD Lecture' }}</span>
+                                            @if($prod->isPublicVideo())
+                                                <span class="text-success fw-bold"><i class="fa-solid fa-unlock me-1"></i> Open Free</span>
+                                            @else
+                                                <span class="text-danger fw-bold"><i class="fa-solid fa-lock me-1"></i> Invite Only</span>
+                                            @endif
+                                        @endif
+                                    </div>
+
+                                    <!-- Price & Button -->
+                                    <div class="pt-2 border-top d-flex justify-content-between align-items-center mt-auto">
+                                        <div class="d-flex flex-column">
+                                            <span class="text-muted" style="font-size: 0.62rem; text-transform: uppercase; font-weight: 700;">Price</span>
+                                            <div class="d-flex align-items-baseline gap-1">
+                                                @if($prod->isPublicVideo() || $prod->effective_price <= 0)
+                                                    <span class="fw-bold text-success fs-6">FREE</span>
+                                                @else
+                                                    <span class="fw-bold text-dark fs-6">₹{{ number_format($prod->effective_price, 0) }}</span>
+                                                    @if($prod->has_discount)
+                                                        <small class="text-muted text-decoration-line-through" style="font-size: 0.7rem;">₹{{ number_format($prod->price, 0) }}</small>
+                                                    @endif
+                                                @endif
+                                            </div>
+                                        </div>
+
+                                        @if($prod->isPublicVideo())
+                                            <a href="{{ route('store.show', ['type' => $prod->type, 'slug' => $prod->slug]) }}" class="btn btn-sm btn-success rounded-2 px-3 fw-bold shadow-sm">
+                                                <i class="fa-solid fa-circle-play me-1"></i> Watch Free
+                                            </a>
+                                        @else
+                                            <a href="{{ route('store.show', ['type' => $prod->type, 'slug' => $prod->slug]) }}" class="btn btn-sm btn-centre-primary rounded-2 px-3 fw-bold shadow-sm">
+                                                <i class="fa-solid fa-cart-shopping me-1"></i> Buy
+                                            </a>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </section>
+    @endif
 
     <!-- Photo Gallery -->
     @if($centre->galleries->isNotEmpty())
