@@ -282,6 +282,7 @@ Route::middleware(['role:super_admin,admin'])->prefix('admin')->name('admin.')->
     Route::post('/centres/applications/{application}/approve', [AdminCentreController::class, 'approveApplication'])->name('centres.applications.approve');
     Route::post('/centres/applications/{application}/reject', [AdminCentreController::class, 'rejectApplication'])->name('centres.applications.reject');
     Route::get('/centres/{centre}/certificate', [AdminCentreController::class, 'certificate'])->name('centres.certificate');
+    Route::get('/centres/{centre}/id-card', [AdminCentreController::class, 'idCard'])->name('centres.id-card');
     Route::post('/centres/{centre}/toggle-status', [AdminCentreController::class, 'toggleStatus'])->name('centres.toggle-status');
     Route::resource('centres', AdminCentreController::class);
 

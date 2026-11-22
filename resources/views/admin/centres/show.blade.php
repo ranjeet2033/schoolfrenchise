@@ -30,6 +30,9 @@
             <a href="{{ route('admin.centres.certificate', $centre) }}" target="_blank" class="btn btn-outline-warning shadow-sm">
                 <i class="fa-solid fa-certificate me-1"></i> Affiliation Certificate
             </a>
+            <a href="{{ route('admin.centres.id-card', $centre) }}" target="_blank" class="btn btn-outline-info shadow-sm">
+                <i class="fa-solid fa-id-card me-1"></i> Director ID Card
+            </a>
             <a href="{{ route('admin.centres.edit', $centre) }}" class="btn btn-outline-primary shadow-sm">
                 <i class="fa-solid fa-pen-to-square me-1"></i> Edit Particulars
             </a>

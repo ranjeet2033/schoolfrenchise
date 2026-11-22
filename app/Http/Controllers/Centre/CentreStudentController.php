@@ -262,7 +262,7 @@ class CentreStudentController extends Controller
             'fees', 'payments', 'attendances', 'certificates', 'marksheets', 'results'
         ]);
 
-        $availableCourses = Course::where('status', 'active')->orderBy('course_name')->get();
+        $availableCourses = Course::where('status', true)->orderBy('course_name')->get();
         $walletBalance = $centre->wallet ? (float) $centre->wallet->balance : 0.00;
 
         return view('centre.students.show', [
@@ -311,7 +311,7 @@ class CentreStudentController extends Controller
                     'admission_no'        => 'ADM-' . date('Y') . '-' . strtoupper(Str::random(6)),
                     'admission_date'      => now(),
                     'batch_id'            => null,
-                    'net_fee'             => $validated['net_fee'] ?? ($course->fee ?? 0),
+                    'net_fee'             => $validated['net_fee'] ?? ($course->course_fee ?? $course->default_course_fee ?? $course->fee ?? 0),
                     'total_paid'          => 0,
                     'status'              => 'active',
                     'commission_credited' => false,

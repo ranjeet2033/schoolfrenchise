@@ -6,246 +6,781 @@
     <title>Centre Director ID Card - {{ $centre->director_name }} ({{ $centre->centre_code }})</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Montserrat:wght@500;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+
     <style>
+        :root {
+            --olive-green: #8f9f1b;
+            --olive-green-dark: #7a8915;
+            --navy-blue: #0d2238;
+            --navy-dark: #071524;
+            --card-width: 334px;
+            --card-height: 528px;
+        }
+
+        * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            box-sizing: border-box;
+        }
+
         body {
             background-color: #f1f5f9;
             font-family: 'Plus Jakarta Sans', sans-serif;
-            padding: 25px;
+            margin: 0;
+            padding: 24px 12px;
             color: #1e293b;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        .id-card-wrapper {
-            width: 86mm;
-            min-height: 54mm;
-            max-width: 380px;
-            margin: 0 auto;
-            background: #ffffff;
-            border-radius: 14px;
-            overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-            border: 1px solid #cbd5e1;
+        .no-print-toolbar {
+            width: 100%;
+            max-width: 740px;
+            margin-bottom: 24px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* Dual Card Container */
+        .id-print-canvas {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 28px;
             position: relative;
         }
 
-        .id-card-header {
-            background: linear-gradient(135deg, #0b1f3a 0%, #1e3a8a 100%);
-            color: #ffffff;
-            padding: 10px 14px;
-            text-align: center;
-            border-bottom: 3px solid #f59e0b;
-        }
-
-        .id-card-header h2 {
-            font-size: 1.05rem;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-            margin: 0;
-            color: #ffffff;
-            text-transform: uppercase;
-        }
-
-        .id-card-header p {
-            font-size: 0.62rem;
-            color: #cbd5e1;
-            margin: 1px 0 0 0;
-        }
-
-        .auth-ribbon {
-            background: #f59e0b;
-            color: #000;
-            font-weight: 900;
-            font-size: 0.68rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            padding: 3px 6px;
-            text-align: center;
-        }
-
-        .id-card-body {
-            padding: 14px;
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }
-
-        .director-photo-frame {
-            width: 85px;
-            height: 105px;
-            border: 2px solid #0284c7;
-            border-radius: 8px;
+        /* Standard CR80 Card Unit: 54mm x 85.6mm aspect ratio */
+        .id-card-unit {
+            width: var(--card-width);
+            height: var(--card-height);
+            background: #ffffff;
+            border-radius: 16px;
             overflow: hidden;
-            background: #f8fafc;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+            border: 1px solid #e2e8f0;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* Top Slot Punch Cutout Indicator */
+        .slot-punch {
+            width: 44px;
+            height: 9px;
+            border-radius: 5px;
+            background: #e2e8f0;
+            margin: 10px auto 4px auto;
+            box-shadow: inset 0 1.5px 3px rgba(0, 0, 0, 0.2);
             flex-shrink: 0;
+        }
+
+        /* Front Header */
+        .front-header {
+            padding: 4px 14px 6px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .front-header-logo {
+            width: 44px;
+            height: 44px;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+
+        .front-header-info {
+            flex-grow: 1;
+            line-height: 1.15;
+        }
+
+        .franchise-title {
+            font-size: 0.84rem;
+            font-weight: 800;
+            color: var(--navy-blue);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin: 0 0 2px 0;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .franchise-address {
+            font-size: 0.56rem;
+            color: #64748b;
+            margin: 0 0 2px 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 250px;
+        }
+
+        .authorized-sub {
+            font-size: 0.60rem;
+            font-weight: 700;
+            color: var(--navy-blue);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        /* Hexagonal Photo Stage with Flanking Chevrons */
+        .photo-stage {
+            position: relative;
+            width: 100%;
+            height: 120px;
             display: flex;
             align-items: center;
             justify-content: center;
+            margin-top: 2px;
         }
 
-        .director-photo-frame img {
+        .wedge-left {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 58px;
+            height: 96px;
+            pointer-events: none;
+        }
+
+        .wedge-right {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 58px;
+            height: 96px;
+            pointer-events: none;
+        }
+
+        .hexagon-wrap {
+            position: relative;
+            width: 98px;
+            height: 112px;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.15));
+            z-index: 2;
+        }
+
+        .hexagon-outer {
+            width: 100%;
+            height: 100%;
+            background: var(--olive-green);
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3.5px;
+        }
+
+        .hexagon-inner {
+            width: 100%;
+            height: 100%;
+            background: #ffffff;
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5px;
+        }
+
+        .hexagon-photo {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
         }
 
-        .director-details {
-            flex-grow: 1;
-            font-size: 0.72rem;
-            line-height: 1.35;
+        /* Director Identity Block */
+        .director-header-block {
+            text-align: center;
+            padding: 2px 14px 0 14px;
         }
 
         .director-name {
-            font-size: 0.95rem;
+            font-size: 1.05rem;
             font-weight: 800;
             color: #0f172a;
-            margin-bottom: 2px;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 0;
+            line-height: 1.2;
         }
 
-        .designation-badge {
-            display: inline-block;
-            background: #0284c7;
-            color: #ffffff;
+        .director-role {
+            font-size: 0.72rem;
             font-weight: 700;
-            font-size: 0.65rem;
-            padding: 1px 8px;
-            border-radius: 4px;
-            margin-bottom: 6px;
+            color: #334155;
             text-transform: uppercase;
+            letter-spacing: 0.4px;
+            margin-top: 1px;
         }
 
-        .detail-line {
-            margin-bottom: 3px;
+        /* Clean Aligned Particulars Grid */
+        .info-grid-container {
+            padding: 4px 22px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
-        .detail-lbl {
-            font-weight: 600;
-            color: #64748b;
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.69rem;
+            line-height: 1.32;
         }
 
-        .detail-val {
+        .info-table td {
+            padding: 1.5px 0;
+            vertical-align: baseline;
+        }
+
+        .info-label {
+            width: 62px;
+            font-weight: 700;
+            color: #0f172a;
+            white-space: nowrap;
+        }
+
+        .info-colon {
+            width: 12px;
+            text-align: center;
             font-weight: 700;
             color: #0f172a;
         }
 
-        .id-card-footer {
-            background: #f8fafc;
-            border-top: 1px solid #e2e8f0;
-            padding: 8px 14px;
+        .info-value {
+            font-weight: 600;
+            color: #1e293b;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 175px;
+        }
+
+        /* Signatures and Official Stamp Area */
+        .signature-row {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-end;
+            padding: 0 18px 6px 18px;
+            margin-top: auto;
         }
 
-        .qr-box {
-            width: 44px;
-            height: 44px;
-            background: #fff;
-            padding: 2px;
-            border: 1px solid #e2e8f0;
-            border-radius: 4px;
+        .sig-block {
+            text-align: center;
+            width: 82px;
         }
 
-        .qr-box img {
-            width: 100%;
-            height: 100%;
+        .sig-script {
+            font-family: 'Dancing Script', cursive;
+            font-size: 0.95rem;
+            color: #0f172a;
+            line-height: 1;
+            margin-bottom: -2px;
+            min-height: 18px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
         }
 
-        .seal-sign-box {
-            text-align: right;
-            font-size: 0.6rem;
-            font-weight: 700;
-            color: #475569;
-        }
-
-        .seal-sign-box img {
-            max-height: 25px;
-            max-width: 90px;
+        .sig-img {
+            max-height: 20px;
+            max-width: 78px;
             object-fit: contain;
+            margin: 0 auto -2px auto;
             display: block;
-            margin: 0 0 2px auto;
+        }
+
+        .sig-line {
+            border-top: 1px solid #1e293b;
+            width: 100%;
+            margin: 2px auto 2px auto;
+        }
+
+        .sig-caption {
+            font-size: 0.58rem;
+            font-weight: 600;
+            color: #334155;
+            white-space: nowrap;
+        }
+
+        .stamp-center {
+            text-align: center;
+            width: 56px;
+        }
+
+        /* Front Footer Bar */
+        .front-footer-bar {
+            position: relative;
+            width: 100%;
+            height: 24px;
+            background: var(--navy-blue);
+            display: flex;
+            align-items: center;
+            padding-left: 14px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .front-footer-text {
+            color: #ffffff;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            z-index: 2;
+        }
+
+        .front-footer-accent {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 32px;
+            height: 100%;
+            background: var(--olive-green);
+            clip-path: polygon(35% 0, 100% 0, 100% 100%, 0% 100%);
+        }
+
+        /* Back Side Elements */
+        .back-top-banner {
+            width: 100%;
+            height: 38px;
+            flex-shrink: 0;
+        }
+
+        .back-terms-box {
+            padding: 4px 20px 0 20px;
+            text-align: center;
+        }
+
+        .back-terms-heading {
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: var(--navy-blue);
+            letter-spacing: 0.5px;
+            margin-bottom: 3px;
+            text-transform: uppercase;
+        }
+
+        .back-terms-text {
+            font-size: 0.56rem;
+            line-height: 1.35;
+            color: #475569;
+            margin-bottom: 0;
+            text-align: justify;
+        }
+
+        .back-info-box {
+            padding: 6px 32px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .back-ho-sig {
+            text-align: center;
+            margin: 2px auto 6px auto;
+            width: 110px;
+        }
+
+        .back-qr-seal-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 22px;
+            padding: 4px 20px;
+        }
+
+        .qr-frame {
+            background: #ffffff;
+            padding: 3px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+            display: inline-block;
+        }
+
+        .qr-frame img {
+            width: 66px;
+            height: 66px;
+            display: block;
+        }
+
+        .back-branding {
+            text-align: center;
+            padding: 4px 14px 2px 14px;
+        }
+
+        .back-franchise-name {
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: var(--navy-blue);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            margin: 0 0 1px 0;
+            line-height: 1.2;
+        }
+
+        .back-authorized-by {
+            font-size: 0.60rem;
+            font-weight: 700;
+            color: #0f172a;
+            text-transform: uppercase;
+            margin: 0 0 1px 0;
+        }
+
+        .back-address {
+            font-size: 0.55rem;
+            color: #64748b;
+            margin: 0;
+            line-height: 1.25;
+        }
+
+        .back-bottom-accent {
+            width: 100%;
+            height: 26px;
+            flex-shrink: 0;
+        }
+
+        /* Print Settings (CR80 Physical Card Exact 54mm x 85.6mm) */
+        @page {
+            size: 54mm 85.6mm portrait;
+            margin: 0;
         }
 
         @media print {
-            body {
-                background: none;
-                padding: 0;
+            html, body {
+                width: 54mm;
+                margin: 0 !important;
+                padding: 0 !important;
+                background: #ffffff !important;
             }
-            .no-print {
+
+            .no-print-toolbar, .no-print {
                 display: none !important;
             }
-            .id-card-wrapper {
-                box-shadow: none;
-                border: 1px solid #000;
-                page-break-inside: avoid;
+
+            .id-print-canvas {
+                gap: 0 !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                display: block !important;
+            }
+
+            .id-card-unit {
+                width: 54mm !important;
+                height: 85.6mm !important;
+                max-width: 54mm !important;
+                max-height: 85.6mm !important;
+                border: none !important;
+                border-radius: 0 !important;
+                box-shadow: none !important;
+                page-break-after: always !important;
+                page-break-inside: avoid !important;
+                margin: 0 !important;
             }
         }
     </style>
 </head>
 <body>
 
-    <div class="no-print text-center mb-4">
-        <button onclick="window.print()" class="btn btn-primary px-4 rounded-pill shadow-sm fw-bold">
-            <i class="fa-solid fa-print me-1"></i> Print Director ID Card
-        </button>
+    <!-- Control Bar (Hidden in Print) -->
+    <div class="no-print-toolbar no-print">
+        <div class="d-flex align-items-center gap-2">
+            <span class="badge bg-primary px-3 py-2 font-monospace">CENTRE DIRECTOR IDENTITY CARD (CR80)</span>
+            <span class="text-muted small">Centre Code: <strong>{{ $centre->centre_code }}</strong></span>
+        </div>
+        <div class="d-flex gap-2">
+            <button onclick="window.print()" class="btn btn-primary btn-sm px-4 fw-bold shadow-sm" style="background-color: #0d2238; border-color: #0d2238;">
+                <i class="fa-solid fa-print me-1"></i> Print / Save PDF
+            </button>
+            <a href="javascript:history.back()" class="btn btn-outline-secondary btn-sm px-3">
+                <i class="fa-solid fa-arrow-left me-1"></i> Back
+            </a>
+        </div>
     </div>
 
-    <div class="id-card-wrapper">
-        <!-- Header -->
-        <div class="id-card-header">
-            <h2>{{ $instituteSettings['institute_name'] ?? 'TECH ERA COMPUTER' }}</h2>
-            <p>{{ $instituteSettings['institute_tagline'] ?? 'Building Digital Skills for the Future' }}</p>
-        </div>
+    <!-- Dual-Sided ID Canvas -->
+    <div class="id-print-canvas">
 
-        <!-- Authorized by Tech era computer -->
-        <div class="auth-ribbon">
-            <i class="fa-solid fa-shield-check me-1"></i> Authorized by Tech era computer
-        </div>
+        <!-- ================= FRONT SIDE ================= -->
+        <div class="id-card-unit">
+            <!-- Top Slot Punch Cutout -->
+            <div class="slot-punch"></div>
 
-        <!-- Body -->
-        <div class="id-card-body">
-            <div class="director-photo-frame">
-                @if($centre->director_photo)
-                    <img src="{{ $centre->director_photo_url ?? asset('storage/' . $centre->director_photo) }}" alt="{{ $centre->director_name }}" onerror="this.onerror=null;this.src='https://placehold.co/100x120?text=Director';">
-                @else
-                    <i class="fa-solid fa-user-tie text-secondary fs-1"></i>
-                @endif
-            </div>
-
-            <div class="director-details">
-                <div class="director-name">{{ $centre->director_name }}</div>
-                <div class="designation-badge">Centre Director / Head</div>
-
-                <div class="detail-line">
-                    <span class="detail-lbl">Centre:</span>
-                    <span class="detail-val">{{ $centre->centre_name }}</span>
-                </div>
-                <div class="detail-line">
-                    <span class="detail-lbl">Centre Code:</span>
-                    <span class="detail-val font-monospace text-primary">{{ $centre->centre_code }}</span>
-                </div>
-                <div class="detail-line">
-                    <span class="detail-lbl">Mobile:</span>
-                    <span class="detail-val">{{ $centre->mobile ?? $centre->contact_phone }}</span>
-                </div>
-                <div class="detail-line">
-                    <span class="detail-lbl">Location:</span>
-                    <span class="detail-val">{{ $centre->city }}, {{ $centre->state?->name ?? 'Bihar' }}</span>
+            <!-- Header -->
+            <div class="front-header">
+                @php
+                    $franchiseLogo = $centre->centre_logo_url ?? ($instituteSettings['logo_url'] ?? asset('images/tech-era-logo.png'));
+                @endphp
+                <img src="{{ $franchiseLogo }}" alt="{{ $centre->centre_name }}" class="front-header-logo" onerror="this.onerror=null;this.src='{{ asset('images/tech-era-logo.png') }}';">
+                <div class="front-header-info">
+                    <h1 class="franchise-title">{{ $centre->centre_name ?? 'TECH ERA COMPUTER STUDY CENTRE' }}</h1>
+                    <div class="franchise-address">Address: {{ $centre->address ?? ($centre->city . ', ' . ($centre->district?->name ?? '') . ', ' . ($centre->state?->name ?? 'Bihar')) }}</div>
+                    <div class="authorized-sub">Authorized by: {{ $instituteSettings['institute_name'] ?? 'TECH ERA COMPUTER' }}</div>
                 </div>
             </div>
+
+            <!-- Hexagonal Photo Stage with Geometric Chevrons -->
+            <div class="photo-stage">
+                <!-- Left Geometric Chevrons (Navy wedge + Olive green chevron) -->
+                <svg class="wedge-left" viewBox="0 0 58 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <polygon points="0,0 52,48 0,96" fill="#0d2238" />
+                    <polygon points="0,14 38,48 0,82" fill="#8f9f1b" />
+                </svg>
+
+                <!-- Centered Hexagonal Photo -->
+                <div class="hexagon-wrap">
+                    <div class="hexagon-outer">
+                        <div class="hexagon-inner">
+                            @if($centre->director_photo_url)
+                                <img src="{{ $centre->director_photo_url }}" alt="{{ $centre->director_name }}" class="hexagon-photo" onerror="this.onerror=null;this.src='https://placehold.co/120x135?text=Director';">
+                            @else
+                                <div class="hexagon-photo d-flex align-items-center justify-content-center bg-light text-muted">
+                                    <i class="fa-solid fa-user-tie fa-2x opacity-50"></i>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Geometric Chevrons (Navy wedge + Olive green chevron) -->
+                <svg class="wedge-right" viewBox="0 0 58 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <polygon points="58,0 6,48 58,96" fill="#0d2238" />
+                    <polygon points="58,14 20,48 58,82" fill="#8f9f1b" />
+                </svg>
+            </div>
+
+            <!-- Director Name and Role Title -->
+            <div class="director-header-block">
+                <h2 class="director-name">{{ strtoupper($centre->director_name) }}</h2>
+                <div class="director-role">CENTRE DIRECTOR / HEAD</div>
+            </div>
+
+            <!-- Clean Aligned Particulars Grid -->
+            <div class="info-grid-container">
+                <table class="info-table">
+                    <tbody>
+                        <tr>
+                            <td class="info-label">Centre Code</td>
+                            <td class="info-colon">:</td>
+                            <td class="info-value font-monospace fw-bold text-primary">{{ $centre->centre_code }}</td>
+                        </tr>
+                        <tr>
+                            <td class="info-label">Centre</td>
+                            <td class="info-colon">:</td>
+                            <td class="info-value">{{ $centre->centre_name }}</td>
+                        </tr>
+                        <tr>
+                            <td class="info-label">Mobile</td>
+                            <td class="info-colon">:</td>
+                            <td class="info-value font-monospace">{{ $centre->mobile ?? $centre->contact_phone }}</td>
+                        </tr>
+                        <tr>
+                            <td class="info-label">Email</td>
+                            <td class="info-colon">:</td>
+                            <td class="info-value">{{ $centre->email ?? 'N/A' }}</td>
+                        </tr>
+                        <tr>
+                            <td class="info-label">Location</td>
+                            <td class="info-colon">:</td>
+                            <td class="info-value text-capitalize">{{ $centre->city }}, {{ $centre->state?->name ?? 'Bihar' }}</td>
+                        </tr>
+                        <tr>
+                            <td class="info-label">Affiliation</td>
+                            <td class="info-colon">:</td>
+                            <td class="info-value text-success fw-bold">AUTHORIZED &amp; ACTIVE</td>
+                        </tr>
+                        <tr>
+                            <td class="info-label">Issue Date</td>
+                            <td class="info-colon">:</td>
+                            <td class="info-value">{{ $centre->created_at ? $centre->created_at->format('d-m-Y') : 'Affiliated' }}</td>
+                        </tr>
+                        <tr>
+                            <td class="info-label">Validity</td>
+                            <td class="info-colon">:</td>
+                            <td class="info-value">REGULAR STUDY CENTRE</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Signatures and Official Stamp Area -->
+            <div class="signature-row">
+                <!-- Director Signature -->
+                <div class="sig-block">
+                    <div class="sig-script">
+                        @if(!empty($centre->director_signature_url))
+                            <img src="{{ $centre->director_signature_url }}" alt="Sign" class="sig-img">
+                        @else
+                            {{ ucwords(strtolower($centre->director_name)) }}
+                        @endif
+                    </div>
+                    <div class="sig-line"></div>
+                    <div class="sig-caption text-truncate">Director Signature</div>
+                </div>
+
+                <!-- Center Official Seal -->
+                <div class="stamp-center">
+                    @if(!empty($centre->seal_url))
+                        <img src="{{ $centre->seal_url }}" alt="Seal" style="width: 44px; height: 44px; object-fit: contain;">
+                    @elseif(file_exists(public_path('images/tech-era-seal.png')))
+                        <img src="{{ asset('images/tech-era-seal.png') }}" alt="Tech Era Seal" style="width: 44px; height: 44px; object-fit: contain;">
+                    @else
+                        <svg viewBox="0 0 100 100" style="width: 44px; height: 44px;">
+                            <circle cx="50" cy="50" r="47" fill="#ffffff" stroke="#0284c7" stroke-width="2.5" stroke-dasharray="2,1"/>
+                            <circle cx="50" cy="50" r="41" fill="#f0f9ff" stroke="#0369a1" stroke-width="1.5"/>
+                            <circle cx="50" cy="50" r="27" fill="#ffffff" stroke="#0284c7" stroke-width="1"/>
+                            <path id="dirSealText" d="M 18,50 A 32,32 0 1,1 82,50 A 32,32 0 1,1 18,50" fill="none"/>
+                            <text font-size="7" font-weight="bold" fill="#0369a1" letter-spacing="1">
+                                <textPath href="#dirSealText" startOffset="50%" text-anchor="middle">
+                                    {{ strtoupper(substr($instituteSettings['institute_name'] ?? 'TECH ERA COMPUTER', 0, 24)) }}
+                                </textPath>
+                            </text>
+                            <path d="M40,54 L50,48 L60,54 L50,60 Z M44,57 L44,63 C44,65 56,65 56,63 L56,57" fill="#0284c7" stroke="#0369a1" stroke-width="0.8"/>
+                        </svg>
+                    @endif
+                </div>
+
+                <!-- Issuing Authority Signatory -->
+                <div class="sig-block">
+                    <div class="sig-script">
+                        @if(file_exists(public_path('images/deepak-kumar-signature.png')))
+                            <img src="{{ asset('images/deepak-kumar-signature.png') }}" alt="H.O. Sign" class="sig-img">
+                        @else
+                            Deepak Kumar
+                        @endif
+                    </div>
+                    <div class="sig-line"></div>
+                    <div class="sig-caption">Issuing Authority</div>
+                </div>
+            </div>
+
+            <!-- Bottom Navy and Olive Green Footer -->
+            <div class="front-footer-bar">
+                <span class="front-footer-text">Centre Code: {{ $centre->centre_code }}</span>
+                <div class="front-footer-accent"></div>
+            </div>
         </div>
 
-        <!-- Footer -->
-        <div class="id-card-footer">
-            <div class="qr-box">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data={{ urlencode(route('franchise.search', ['centre_code' => $centre->centre_code])) }}" alt="QR">
+        <!-- ================= BACK SIDE ================= -->
+        <div class="id-card-unit">
+            <!-- Top Slot Punch Cutout -->
+            <div class="slot-punch"></div>
+
+            <!-- Top Curved Olive and Navy Geometric Wave -->
+            <div class="back-top-banner">
+                <svg viewBox="0 0 340 44" preserveAspectRatio="none" style="width: 100%; height: 100%;">
+                    <path d="M0,0 L340,0 L340,24 Q170,44 0,24 Z" fill="#8f9f1b" />
+                    <path d="M0,24 Q170,44 340,24 L340,29 Q170,49 0,29 Z" fill="#0d2238" />
+                </svg>
             </div>
-            <div class="seal-sign-box">
-                <img src="{{ asset('images/deepak-kumar-signature.png') }}" alt="Signature">
-                <div>Issuing Authority</div>
-                <div class="text-muted" style="font-size: 0.55rem;">TECH ERA COMPUTER</div>
+
+            <!-- TERMS AND CONDITIONS -->
+            <div class="back-terms-box">
+                <h3 class="back-terms-heading">TERMS &amp; CONDITIONS</h3>
+                <p class="back-terms-text">
+                    1. This identity credential certifies authorization to operate an official study centre affiliated with {{ $instituteSettings['institute_name'] ?? 'TECH ERA COMPUTER' }}.<br>
+                    2. The Centre Director is authorized to conduct approved computer programs, register students, and manage campus facilities per institutional standards.<br>
+                    3. This credential remains the property of the Head Office and must be produced upon official verification or academic inspection.
+                </p>
+            </div>
+
+            <!-- Centre Particulars Summary -->
+            <div class="back-info-box">
+                <table class="info-table" style="max-width: 250px;">
+                    <tbody>
+                        <tr>
+                            <td class="info-label" style="width: 75px;">Centre Code</td>
+                            <td class="info-colon">:</td>
+                            <td class="info-value font-monospace fw-bold text-primary">{{ $centre->centre_code }}</td>
+                        </tr>
+                        <tr>
+                            <td class="info-label">Standing</td>
+                            <td class="info-colon">:</td>
+                            <td class="info-value text-success fw-bold">AUTHORIZED BRANCH</td>
+                        </tr>
+                        <tr>
+                            <td class="info-label">Contact</td>
+                            <td class="info-colon">:</td>
+                            <td class="info-value font-monospace">{{ $centre->mobile ?? $centre->contact_phone }}</td>
+                        </tr>
+                        <tr>
+                            <td class="info-label">Email</td>
+                            <td class="info-colon">:</td>
+                            <td class="info-value">{{ $centre->email ?? 'N/A' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- H.O. Signature Area -->
+            <div class="back-ho-sig">
+                <div class="sig-script" style="height: 24px; display: flex; align-items: center; justify-content: center;">
+                    <img src="{{ asset('images/deepak-kumar-signature.png') }}" alt="H.O. Signature" style="max-height: 24px; max-width: 90px; object-fit: contain;">
+                </div>
+                <div class="sig-line" style="width: 90px;"></div>
+                <div class="sig-caption">Issuing Authority / Head Office</div>
+            </div>
+
+            <!-- QR Code Section & Seal Side-by-Side -->
+            <div class="back-qr-seal-row">
+                <!-- Real, Automatic, Unique Cryptographic QR Code -->
+                <div class="qr-frame">
+                    <img src="{{ $centre->qr_code_data_uri }}" alt="Verify QR" width="66" height="66">
+                </div>
+
+                <!-- Round Institute Seal -->
+                <div class="stamp-center">
+                    @if(!empty($centre->seal_url))
+                        <img src="{{ $centre->seal_url }}" alt="Seal" style="width: 58px; height: 58px; object-fit: contain;">
+                    @elseif(file_exists(public_path('images/tech-era-seal.png')))
+                        <img src="{{ asset('images/tech-era-seal.png') }}" alt="Tech Era Seal" style="width: 58px; height: 58px; object-fit: contain;">
+                    @else
+                        <svg viewBox="0 0 100 100" style="width: 58px; height: 58px;">
+                            <circle cx="50" cy="50" r="47" fill="#ffffff" stroke="#0284c7" stroke-width="2.5" stroke-dasharray="2,1"/>
+                            <circle cx="50" cy="50" r="41" fill="#f0f9ff" stroke="#0369a1" stroke-width="1.5"/>
+                            <circle cx="50" cy="50" r="27" fill="#ffffff" stroke="#0284c7" stroke-width="1"/>
+                            <path id="backDirSealText" d="M 18,50 A 32,32 0 1,1 82,50 A 32,32 0 1,1 18,50" fill="none"/>
+                            <text font-size="7" font-weight="bold" fill="#0369a1" letter-spacing="1">
+                                <textPath href="#backDirSealText" startOffset="50%" text-anchor="middle">
+                                    {{ strtoupper(substr($instituteSettings['institute_name'] ?? 'TECH ERA COMPUTER', 0, 24)) }}
+                                </textPath>
+                            </text>
+                            <path d="M40,54 L50,48 L60,54 L50,60 Z M44,57 L44,63 C44,65 56,65 56,63 L56,57" fill="#0284c7" stroke="#0369a1" stroke-width="0.8"/>
+                        </svg>
+                    @endif
+                </div>
+            </div>
+
+            <!-- Bottom Branding -->
+            <div class="back-branding">
+                <h4 class="back-franchise-name">{{ $centre->centre_name ?? 'AUTHORIZED STUDY CENTRE' }}</h4>
+                <div class="back-authorized-by">Authorized by: {{ $instituteSettings['institute_name'] ?? 'TECH ERA COMPUTER' }}</div>
+                <p class="back-address">Corporate H.Q.: {{ $instituteSettings['corporate_address'] ?? 'Sasbahana, Sheikhpura, Bihar - 801105' }}</p>
+            </div>
+
+            <!-- Bottom Curved Geometric Accent -->
+            <div class="back-bottom-accent">
+                <svg viewBox="0 0 340 32" preserveAspectRatio="none" style="width: 100%; height: 100%;">
+                    <path d="M0,9 Q170,-9 340,9 L340,5 Q170,-13 0,5 Z" fill="#0d2238" />
+                    <path d="M0,9 Q170,-9 340,9 L340,32 L0,32 Z" fill="#8f9f1b" />
+                </svg>
             </div>
         </div>
+
     </div>
 
 </body>

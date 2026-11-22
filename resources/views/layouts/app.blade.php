@@ -139,7 +139,6 @@
                                 <li><a class="dropdown-item py-2" href="{{ route('verify.certificate') }}"><i class="fa-solid fa-certificate text-warning me-2"></i>Check Certificate / Marksheet</a></li>
                                 <li><a class="dropdown-item py-2" href="{{ route('verify.admission') }}"><i class="fa-solid fa-id-badge text-primary me-2"></i>Check Admission Status</a></li>
                                 <li><a class="dropdown-item py-2" href="{{ route('verify.student.search') }}"><i class="fa-solid fa-id-card text-purple me-2"></i>Check Student ID Card</a></li>
-                                <li><a class="dropdown-item py-2" href="{{ route('franchise.search') }}"><i class="fa-solid fa-address-card text-success me-2"></i>Check Center ID Card</a></li>
                                 <li><a class="dropdown-item py-2" href="{{ route('payment.index') }}"><i class="fa-solid fa-credit-card text-success me-2"></i>Online Fee Payment</a></li>
                                 <li><a class="dropdown-item py-2" href="{{ route('student.login') }}"><i class="fa-solid fa-graduation-cap text-info me-2"></i>Student Login</a></li>
                                 <li><a class="dropdown-item py-2" href="{{ route('enquiry.admission') }}"><i class="fa-solid fa-clipboard-question text-danger me-2"></i>Admission Enquiry</a></li>
@@ -153,9 +152,10 @@
                             </a>
                             <ul class="dropdown-menu shadow-sm border-0 mt-2">
                                 <li><a class="dropdown-item py-2" href="{{ route('franchise.apply') }}"><i class="fa-solid fa-file-signature text-primary me-2"></i>Apply for New Franchise</a></li>
-                                <li><a class="dropdown-item py-2" href="{{ route('franchise.search') }}"><i class="fa-solid fa-magnifying-glass-location text-success me-2"></i>Search Franchise Centre</a></li>
+                                <li><a class="dropdown-item py-2" href="{{ route('franchise.search') }}"><i class="fa-solid fa-address-card text-success me-2"></i>Check Center ID Card</a></li>
+                                <li><a class="dropdown-item py-2" href="{{ route('franchise.search') }}"><i class="fa-solid fa-magnifying-glass-location text-info me-2"></i>Search Franchise Centre</a></li>
                                 <li><a class="dropdown-item py-2" href="{{ route('franchise.status') }}"><i class="fa-solid fa-hourglass-half text-warning me-2"></i>Franchise Application Status</a></li>
-                                <li><a class="dropdown-item py-2" href="{{ route('login') }}"><i class="fa-solid fa-door-open text-info me-2"></i>Franchise Login</a></li>
+                                <li><a class="dropdown-item py-2" href="{{ route('login') }}"><i class="fa-solid fa-door-open text-primary me-2"></i>Franchise Login</a></li>
                             </ul>
                         </li>
 
@@ -259,7 +259,6 @@
                                     <a href="{{ route('verify.certificate') }}" class="dce-mobile-sub-item"><i class="fa-solid fa-certificate me-2 text-warning"></i>Check Certificate / Marksheet</a>
                                     <a href="{{ route('verify.admission') }}" class="dce-mobile-sub-item"><i class="fa-solid fa-id-badge me-2 text-primary"></i>Check Admission Status</a>
                                     <a href="{{ route('verify.student.search') }}" class="dce-mobile-sub-item"><i class="fa-solid fa-id-card me-2 text-purple"></i>Check Student ID Card</a>
-                                    <a href="{{ route('franchise.search') }}" class="dce-mobile-sub-item"><i class="fa-solid fa-address-card me-2 text-success"></i>Check Center ID Card</a>
                                     <a href="{{ route('payment.index') }}" class="dce-mobile-sub-item"><i class="fa-solid fa-credit-card me-2 text-success"></i>Online Fee Payment</a>
                                     <a href="{{ route('student.login') }}" class="dce-mobile-sub-item"><i class="fa-solid fa-graduation-cap me-2 text-info"></i>Student Login</a>
                                     <a href="{{ route('enquiry.admission') }}" class="dce-mobile-sub-item"><i class="fa-solid fa-clipboard-question me-2 text-danger"></i>Admission Enquiry</a>
@@ -276,9 +275,10 @@
                             <div class="collapse {{ request()->is('franchise*') || request()->is('frenchise*') || request()->is('search_centre*') ? 'show' : '' }}" id="mobileFranchiseCollapse">
                                 <div class="ps-4 bg-light py-1 border-start border-3 border-primary ms-3">
                                     <a href="{{ route('franchise.apply') }}" class="dce-mobile-sub-item"><i class="fa-solid fa-file-signature me-2 text-primary"></i>Apply for Franchise</a>
-                                    <a href="{{ route('franchise.search') }}" class="dce-mobile-sub-item"><i class="fa-solid fa-magnifying-glass-location me-2 text-success"></i>Search Study Centre</a>
+                                    <a href="{{ route('franchise.search') }}" class="dce-mobile-sub-item"><i class="fa-solid fa-address-card me-2 text-success"></i>Check Center ID Card</a>
+                                    <a href="{{ route('franchise.search') }}" class="dce-mobile-sub-item"><i class="fa-solid fa-magnifying-glass-location me-2 text-info"></i>Search Study Centre</a>
                                     <a href="{{ route('franchise.status') }}" class="dce-mobile-sub-item"><i class="fa-solid fa-hourglass-half me-2 text-warning"></i>Franchise Status</a>
-                                    <a href="{{ route('login') }}" class="dce-mobile-sub-item"><i class="fa-solid fa-door-open me-2 text-info"></i>Franchise Login</a>
+                                    <a href="{{ route('login') }}" class="dce-mobile-sub-item"><i class="fa-solid fa-door-open me-2 text-primary"></i>Franchise Login</a>
                                 </div>
                             </div>
                         </li>

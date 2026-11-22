@@ -449,6 +449,13 @@ class AdminCentreController extends Controller
         return view('admin.centres.certificate', compact('centre'));
     }
 
+    public function idCard(Centre $centre)
+    {
+        $centre->load(['state', 'district', 'user']);
+
+        return view('centre.director_id_card', compact('centre'));
+    }
+
     public function destroy(Centre $centre)
     {
         $oldData = $centre->toArray();

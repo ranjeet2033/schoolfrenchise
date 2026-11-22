@@ -903,7 +903,7 @@
 <body>
     @php
         $authUser = Auth::user();
-        $authCentre = $authUser->centre ?? ($authUser->isSuperAdmin() ? \App\Models\Centre::first() : null);
+        $authCentre = $authUser?->centre ?? ($authUser?->isSuperAdmin() ? \App\Models\Centre::first() : null);
         $walletBalance = $authCentre?->wallet?->balance ?? 0.00;
     @endphp
 
@@ -958,12 +958,12 @@
                 <div class="dropdown">
                     <button class="btn btn-sm btn-outline-light rounded-2 px-2 px-sm-3 dropdown-toggle d-flex align-items-center gap-1 gap-sm-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fa-solid fa-user-tie text-warning"></i>
-                        <span class="d-none d-md-inline fw-semibold">{{ $authCentre->director_name ?? $authUser->name }}</span>
+                        <span class="d-none d-md-inline fw-semibold">{{ $authCentre->director_name ?? ($authUser?->name ?? 'Centre Director') }}</span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end shadow border-0 py-2 mt-2" style="min-width: 240px;">
                         <li class="px-3 py-2 border-bottom bg-light">
                             <div class="fw-bold text-dark">{{ $authCentre->centre_name ?? 'Study Centre' }}</div>
-                            <div class="small text-muted">{{ $authUser->email }}</div>
+                            <div class="small text-muted">{{ $authUser?->email ?? '' }}</div>
                             @if($authCentre)
                             <span class="badge bg-primary-subtle text-primary font-monospace mt-1">{{ $authCentre->centre_code }}</span>
                             @endif

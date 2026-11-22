@@ -48,400 +48,6 @@
         </section>
     @endif
 
-    <!-- 1. Hero Banner Slider Section (Original Section - Preserved) -->
-    <section class="dce-slider-section position-relative">
-        <div id="dceHeroSlider" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5000">
-            <!-- Slider Indicators (Bottom Center Dots/Pill) -->
-            <div class="carousel-indicators dce-slider-indicators">
-                <button type="button" data-bs-target="#dceHeroSlider" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                <button type="button" data-bs-target="#dceHeroSlider" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                <button type="button" data-bs-target="#dceHeroSlider" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                <button type="button" data-bs-target="#dceHeroSlider" data-bs-slide-to="3" aria-label="Slide 4"></button>
-            </div>
-
-            <div class="carousel-inner">
-                <!-- Slide 1: General Skill & Career Education -->
-                <div class="carousel-item active dce-slider-item" style="background-image: url('{{ asset('images/banners/banner1.jpg') }}');">
-                    <div class="dce-slider-overlay"></div>
-                    <div class="container dce-slider-content">
-                        <div class="row align-items-center g-4">
-                            <!-- Left Slide Content / Floating Card on Mobile -->
-                            <div class="col-lg-8">
-                                <div class="dce-slider-card">
-                                    <div class="dce-slider-badge mb-2">
-                                        <span class="badge bg-warning text-dark fw-bold px-2 py-0.5 d-none d-lg-inline-block">SKILL EDUCATION</span>
-                                        <span class="dce-mobile-badge-text">SKILL EDUCATION • PRACTICAL TRAINING • BETTER CAREERS</span>
-                                    </div>
-                                    <h1 class="dce-slider-title">
-                                        Skill Education for <br><span class="dce-slider-highlight">A Brighter Tomorrow</span>
-                                    </h1>
-                                    <div class="dce-slider-tagline mb-2">
-                                        <span>Learn</span> <span class="opacity-40">|</span>
-                                        <span>Build Skills</span> <span class="opacity-40">|</span>
-                                        <span>Get Certified</span> <span class="opacity-40">|</span>
-                                        <span>Grow Your Career</span>
-                                    </div>
-                                    <p class="dce-slider-desc mb-3 mb-lg-4">
-                                        Skill-based education for a better future. Build confidence, practical ability and career-ready knowledge with supportive training and digital student services in Sasbahana, Sheikhpura.
-                                    </p>
-                                    <div class="dce-slider-actions d-flex flex-wrap align-items-center gap-2 mb-3 mb-lg-4">
-                                        <a href="{{ route('admission.apply') }}" class="btn btn-dce-accent btn-apply fw-bold px-4 py-2 rounded-2 shadow-sm d-inline-flex align-items-center justify-content-center gap-1.5">
-                                            <span>Apply Now</span> <i class="fa-solid fa-arrow-right small ms-1"></i>
-                                        </a>
-                                        <a href="{{ route('courses.index') }}" class="btn btn-outline-light btn-explore fw-bold px-4 py-2 rounded-2 shadow-sm d-inline-flex align-items-center justify-content-center gap-1.5">
-                                            <i class="fa-solid fa-book-open text-warning d-none d-lg-inline-block"></i> <span>Explore Courses</span>
-                                        </a>
-                                    </div>
-                                    <!-- Micro Trust Badges Row (Desktop Only) -->
-                                    <div class="dce-slider-micro-row d-none d-lg-flex flex-wrap align-items-center gap-2.5 pt-2 border-top border-white border-opacity-10">
-                                        <div class="dce-slider-micro-pill">
-                                            <div class="dce-slider-micro-icon"><i class="fa-solid fa-award"></i></div>
-                                            <div>
-                                                <div class="text-white small fw-bold lh-1">Recognized</div>
-                                                <div class="text-white-50" style="font-size: 0.68rem;">Trusted & Certified</div>
-                                            </div>
-                                        </div>
-                                        <div class="dce-slider-micro-pill">
-                                            <div class="dce-slider-micro-icon" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8;"><i class="fa-solid fa-briefcase"></i></div>
-                                            <div>
-                                                <div class="text-white small fw-bold lh-1">Job Oriented</div>
-                                                <div class="text-white-50" style="font-size: 0.68rem;">Practical Training</div>
-                                            </div>
-                                        </div>
-                                        <div class="dce-slider-micro-pill">
-                                            <div class="dce-slider-micro-icon" style="background: rgba(34, 197, 94, 0.2); color: #4ade80;"><i class="fa-solid fa-users"></i></div>
-                                            <div>
-                                                <div class="text-white small fw-bold lh-1">Better Career</div>
-                                                <div class="text-white-50" style="font-size: 0.68rem;">Brighter Future</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Right Side Course Shortcuts (Desktop Glass Box) -->
-                            <div class="col-lg-4 d-none d-lg-block">
-                                <div class="dce-slider-side-box">
-                                    <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom border-white border-opacity-10">
-                                        <span class="text-white small fw-bold text-uppercase" style="letter-spacing: 0.8px;">
-                                            <i class="fa-solid fa-bolt text-warning me-1"></i> Fast Track Programs
-                                        </span>
-                                        <span class="badge bg-success-subtle text-success small px-2 py-0.5 rounded-pill">Open</span>
-                                    </div>
-                                    <div class="d-flex flex-column gap-2">
-                                        <a href="{{ route('courses.index') }}" class="dce-slider-side-card">
-                                            <div class="dce-slider-side-icon"><i class="fa-solid fa-graduation-cap"></i></div>
-                                            <span>Long Term Courses</span>
-                                        </a>
-                                        <a href="{{ route('courses.index') }}" class="dce-slider-side-card">
-                                            <div class="dce-slider-side-icon"><i class="fa-solid fa-laptop-code"></i></div>
-                                            <span>Short Term Courses</span>
-                                        </a>
-                                        <a href="{{ route('courses.index') }}" class="dce-slider-side-card">
-                                            <div class="dce-slider-side-icon"><i class="fa-solid fa-award"></i></div>
-                                            <span>NIELIT-Courses (Preparation)</span>
-                                        </a>
-                                        <a href="{{ route('admission.apply') }}" class="dce-slider-side-card">
-                                            <div class="dce-slider-side-icon"><i class="fa-solid fa-file-signature"></i></div>
-                                            <span>APPLY FOR ONLINE COURSE</span>
-                                        </a>
-                                        <a href="{{ route('courses.index') }}" class="dce-slider-side-card">
-                                            <div class="dce-slider-side-icon"><i class="fa-solid fa-microchip"></i></div>
-                                            <span>HARDWARE COURSE</span>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Slide 2: ADCA & DCA Advanced Computing -->
-                <div class="carousel-item dce-slider-item" style="background-image: url('{{ asset('images/banners/banner2.jpg') }}');">
-                    <div class="dce-slider-overlay"></div>
-                    <div class="container dce-slider-content">
-                        <div class="row align-items-center g-4">
-                            <div class="col-lg-8">
-                                <div class="dce-slider-card">
-                                    <div class="dce-slider-badge mb-2">
-                                        <span class="badge bg-info text-white fw-bold px-2 py-0.5 d-none d-lg-inline-block">ADVANCED IT DIPLOMA</span>
-                                        <span class="dce-mobile-badge-text">ADVANCED IT DIPLOMA • ADCA & DCA • PRACTICAL LAB</span>
-                                    </div>
-                                    <h1 class="dce-slider-title">
-                                        Master Advanced Computing & <br><span class="dce-slider-highlight">Career Diploma (ADCA)</span>
-                                    </h1>
-                                    <div class="dce-slider-tagline mb-2">
-                                        <span>MS Office</span> <span class="opacity-40">|</span>
-                                        <span>Web Design</span> <span class="opacity-40">|</span>
-                                        <span>C/C++</span> <span class="opacity-40">|</span>
-                                        <span>Tally Prime</span>
-                                    </div>
-                                    <p class="dce-slider-desc mb-3 mb-lg-4">
-                                        Comprehensive 12-month master diploma covering computer fundamentals, office automation, database management, and programming with individual workstation access.
-                                    </p>
-                                    <div class="dce-slider-actions d-flex flex-wrap align-items-center gap-2 mb-3 mb-lg-4">
-                                        <a href="{{ route('admission.apply') }}" class="btn btn-dce-accent btn-apply fw-bold px-4 py-2 rounded-2 shadow-sm d-inline-flex align-items-center justify-content-center gap-1.5">
-                                            <span>Enroll Now</span> <i class="fa-solid fa-arrow-right small ms-1"></i>
-                                        </a>
-                                        <a href="{{ route('courses.index') }}" class="btn btn-outline-light btn-explore fw-bold px-4 py-2 rounded-2 shadow-sm d-inline-flex align-items-center justify-content-center gap-1.5">
-                                            <i class="fa-solid fa-list-check text-warning d-none d-lg-inline-block"></i> <span>View Syllabus</span>
-                                        </a>
-                                    </div>
-                                    <div class="dce-slider-micro-row d-none d-lg-flex flex-wrap align-items-center gap-2.5 pt-2 border-top border-white border-opacity-10">
-                                        <div class="dce-slider-micro-pill">
-                                            <div class="dce-slider-micro-icon"><i class="fa-solid fa-certificate"></i></div>
-                                            <div>
-                                                <div class="text-white small fw-bold lh-1">ISO Certified</div>
-                                                <div class="text-white-50" style="font-size: 0.68rem;">Govt Recognized</div>
-                                            </div>
-                                        </div>
-                                        <div class="dce-slider-micro-pill">
-                                            <div class="dce-slider-micro-icon" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8;"><i class="fa-solid fa-desktop"></i></div>
-                                            <div>
-                                                <div class="text-white small fw-bold lh-1">1:1 Practical</div>
-                                                <div class="text-white-50" style="font-size: 0.68rem;">Dedicated Workstation</div>
-                                            </div>
-                                        </div>
-                                        <div class="dce-slider-micro-pill">
-                                            <div class="dce-slider-micro-icon" style="background: rgba(34, 197, 94, 0.2); color: #4ade80;"><i class="fa-solid fa-qrcode"></i></div>
-                                            <div>
-                                                <div class="text-white small fw-bold lh-1">Online Verified</div>
-                                                <div class="text-white-50" style="font-size: 0.68rem;">QR Marksheet</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 d-none d-lg-block">
-                                <div class="dce-slider-side-box">
-                                    <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom border-white border-opacity-10">
-                                        <span class="text-white small fw-bold text-uppercase" style="letter-spacing: 0.8px;">
-                                            <i class="fa-solid fa-bolt text-warning me-1"></i> Fast Track Programs
-                                        </span>
-                                        <span class="badge bg-success-subtle text-success small px-2 py-0.5 rounded-pill">Open</span>
-                                    </div>
-                                    <div class="d-flex flex-column gap-2">
-                                        <a href="{{ route('courses.index') }}" class="dce-slider-side-card">
-                                            <div class="dce-slider-side-icon"><i class="fa-solid fa-graduation-cap"></i></div>
-                                            <span>Long Term Courses</span>
-                                        </a>
-                                        <a href="{{ route('courses.index') }}" class="dce-slider-side-card">
-                                            <div class="dce-slider-side-icon"><i class="fa-solid fa-laptop-code"></i></div>
-                                            <span>Short Term Courses</span>
-                                        </a>
-                                        <a href="{{ route('courses.index') }}" class="dce-slider-side-card">
-                                            <div class="dce-slider-side-icon"><i class="fa-solid fa-award"></i></div>
-                                            <span>NIELIT-Courses (Preparation)</span>
-                                        </a>
-                                        <a href="{{ route('admission.apply') }}" class="dce-slider-side-card">
-                                            <div class="dce-slider-side-icon"><i class="fa-solid fa-file-signature"></i></div>
-                                            <span>APPLY FOR ONLINE COURSE</span>
-                                        </a>
-                                        <a href="{{ route('courses.index') }}" class="dce-slider-side-card">
-                                            <div class="dce-slider-side-icon"><i class="fa-solid fa-microchip"></i></div>
-                                            <span>HARDWARE COURSE</span>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Slide 3: Bilingual Typing Lab -->
-                <div class="carousel-item dce-slider-item" style="background-image: url('{{ asset('images/banners/banner3.jpg') }}');">
-                    <div class="dce-slider-overlay"></div>
-                    <div class="container dce-slider-content">
-                        <div class="row align-items-center g-4">
-                            <div class="col-lg-8">
-                                <div class="dce-slider-card">
-                                    <div class="dce-slider-badge mb-2">
-                                        <span class="badge bg-success text-white fw-bold px-2 py-0.5 d-none d-lg-inline-block">TYPING LAB & SPEED</span>
-                                        <span class="dce-mobile-badge-text">BILINGUAL TYPING LAB • SPEED & ACCURACY • GOVT EXAMS</span>
-                                    </div>
-                                    <h1 class="dce-slider-title">
-                                        High-Speed Bilingual <br><span class="dce-slider-highlight">Hindi & English Typing Lab</span>
-                                    </h1>
-                                    <div class="dce-slider-tagline mb-2">
-                                        <span>Krutidev</span> <span class="opacity-40">|</span>
-                                        <span>Mangal</span> <span class="opacity-40">|</span>
-                                        <span>Live Speed Tracking</span> <span class="opacity-40">|</span>
-                                        <span>Beltron & SSC</span>
-                                    </div>
-                                    <p class="dce-slider-desc mb-3 mb-lg-4">
-                                        Specialized typing lab with dedicated software for real-time WPM speed and accuracy evaluation for state exams, court clerk, Beltron, and central govt job selections.
-                                    </p>
-                                    <div class="dce-slider-actions d-flex flex-wrap align-items-center gap-2 mb-3 mb-lg-4">
-                                        <a href="{{ route('admission.apply') }}" class="btn btn-dce-accent btn-apply fw-bold px-4 py-2 rounded-2 shadow-sm d-inline-flex align-items-center justify-content-center gap-1.5">
-                                            <span>Join Typing Lab</span> <i class="fa-solid fa-arrow-right small ms-1"></i>
-                                        </a>
-                                        <a href="{{ route('courses.index') }}" class="btn btn-outline-light btn-explore fw-bold px-4 py-2 rounded-2 shadow-sm d-inline-flex align-items-center justify-content-center gap-1.5">
-                                            <i class="fa-solid fa-keyboard text-warning d-none d-lg-inline-block"></i> <span>Check Typing Batches</span>
-                                        </a>
-                                    </div>
-                                    <div class="dce-slider-micro-row d-none d-lg-flex flex-wrap align-items-center gap-2.5 pt-2 border-top border-white border-opacity-10">
-                                        <div class="dce-slider-micro-pill">
-                                            <div class="dce-slider-micro-icon"><i class="fa-solid fa-gauge-high"></i></div>
-                                            <div>
-                                                <div class="text-white small fw-bold lh-1">45+ WPM</div>
-                                                <div class="text-white-50" style="font-size: 0.68rem;">Target Speed</div>
-                                            </div>
-                                        </div>
-                                        <div class="dce-slider-micro-pill">
-                                            <div class="dce-slider-micro-icon" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8;"><i class="fa-solid fa-chalkboard-user"></i></div>
-                                            <div>
-                                                <div class="text-white small fw-bold lh-1">Expert Mentor</div>
-                                                <div class="text-white-50" style="font-size: 0.68rem;">Personal Attention</div>
-                                            </div>
-                                        </div>
-                                        <div class="dce-slider-micro-pill">
-                                            <div class="dce-slider-micro-icon" style="background: rgba(34, 197, 94, 0.2); color: #4ade80;"><i class="fa-solid fa-file-circle-check"></i></div>
-                                            <div>
-                                                <div class="text-white small fw-bold lh-1">Speed Certificate</div>
-                                                <div class="text-white-50" style="font-size: 0.68rem;">Govt Validated</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 d-none d-lg-block">
-                                <div class="dce-slider-side-box">
-                                    <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom border-white border-opacity-10">
-                                        <span class="text-white small fw-bold text-uppercase" style="letter-spacing: 0.8px;">
-                                            <i class="fa-solid fa-bolt text-warning me-1"></i> Fast Track Programs
-                                        </span>
-                                        <span class="badge bg-success-subtle text-success small px-2 py-0.5 rounded-pill">Open</span>
-                                    </div>
-                                    <div class="d-flex flex-column gap-2">
-                                        <a href="{{ route('courses.index') }}" class="dce-slider-side-card">
-                                            <div class="dce-slider-side-icon"><i class="fa-solid fa-graduation-cap"></i></div>
-                                            <span>Long Term Courses</span>
-                                        </a>
-                                        <a href="{{ route('courses.index') }}" class="dce-slider-side-card">
-                                            <div class="dce-slider-side-icon"><i class="fa-solid fa-laptop-code"></i></div>
-                                            <span>Short Term Courses</span>
-                                        </a>
-                                        <a href="{{ route('courses.index') }}" class="dce-slider-side-card">
-                                            <div class="dce-slider-side-icon"><i class="fa-solid fa-award"></i></div>
-                                            <span>NIELIT-Courses (Preparation)</span>
-                                        </a>
-                                        <a href="{{ route('admission.apply') }}" class="dce-slider-side-card">
-                                            <div class="dce-slider-side-icon"><i class="fa-solid fa-file-signature"></i></div>
-                                            <span>APPLY FOR ONLINE COURSE</span>
-                                        </a>
-                                        <a href="{{ route('courses.index') }}" class="dce-slider-side-card">
-                                            <div class="dce-slider-side-icon"><i class="fa-solid fa-microchip"></i></div>
-                                            <span>HARDWARE COURSE</span>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Slide 4: Tally Prime & Accounting -->
-                <div class="carousel-item dce-slider-item" style="background-image: url('{{ asset('images/banners/banner4.jpg') }}');">
-                    <div class="dce-slider-overlay"></div>
-                    <div class="container dce-slider-content">
-                        <div class="row align-items-center g-4">
-                            <div class="col-lg-8">
-                                <div class="dce-slider-card">
-                                    <div class="dce-slider-badge mb-2">
-                                        <span class="badge bg-danger text-white fw-bold px-2 py-0.5 d-none d-lg-inline-block">FINANCIAL ACCOUNTING</span>
-                                        <span class="dce-mobile-badge-text">FINANCIAL ACCOUNTING • TALLY PRIME • GST BILLING</span>
-                                    </div>
-                                    <h1 class="dce-slider-title">
-                                        Professional Accounting with <br><span class="dce-slider-highlight">Tally Prime & GST Billing</span>
-                                    </h1>
-                                    <div class="dce-slider-tagline mb-2">
-                                        <span>GST Invoicing</span> <span class="opacity-40">|</span>
-                                        <span>TDS & Payroll</span> <span class="opacity-40">|</span>
-                                        <span>Balance Sheet</span> <span class="opacity-40">|</span>
-                                        <span>Bank Recon</span>
-                                    </div>
-                                    <p class="dce-slider-desc mb-3 mb-lg-4">
-                                        Master computerized accounting on the latest Tally Prime software. Learn real voucher entry, inventory management, and tax filing with hands-on practice.
-                                    </p>
-                                    <div class="dce-slider-actions d-flex flex-wrap align-items-center gap-2 mb-3 mb-lg-4">
-                                        <a href="{{ route('admission.apply') }}" class="btn btn-dce-accent btn-apply fw-bold px-4 py-2 rounded-2 shadow-sm d-inline-flex align-items-center justify-content-center gap-1.5">
-                                            <span>Enroll in Tally</span> <i class="fa-solid fa-arrow-right small ms-1"></i>
-                                        </a>
-                                        <a href="{{ route('courses.index') }}" class="btn btn-outline-light btn-explore fw-bold px-4 py-2 rounded-2 shadow-sm d-inline-flex align-items-center justify-content-center gap-1.5">
-                                            <i class="fa-solid fa-calculator text-warning d-none d-lg-inline-block"></i> <span>Accounting Courses</span>
-                                        </a>
-                                    </div>
-                                    <div class="dce-slider-micro-row d-none d-lg-flex flex-wrap align-items-center gap-2.5 pt-2 border-top border-white border-opacity-10">
-                                        <div class="dce-slider-micro-pill">
-                                            <div class="dce-slider-micro-icon"><i class="fa-solid fa-file-invoice-dollar"></i></div>
-                                            <div>
-                                                <div class="text-white small fw-bold lh-1">GST Ready</div>
-                                                <div class="text-white-50" style="font-size: 0.68rem;">Real Billing Cases</div>
-                                            </div>
-                                        </div>
-                                        <div class="dce-slider-micro-pill">
-                                            <div class="dce-slider-micro-icon" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8;"><i class="fa-solid fa-building-user"></i></div>
-                                            <div>
-                                                <div class="text-white small fw-bold lh-1">Job Ready</div>
-                                                <div class="text-white-50" style="font-size: 0.68rem;">Accountant Placements</div>
-                                            </div>
-                                        </div>
-                                        <div class="dce-slider-micro-pill">
-                                            <div class="dce-slider-micro-icon" style="background: rgba(34, 197, 94, 0.2); color: #4ade80;"><i class="fa-solid fa-stamp"></i></div>
-                                            <div>
-                                                <div class="text-white small fw-bold lh-1">Authorized Cert</div>
-                                                <div class="text-white-50" style="font-size: 0.68rem;">Nationwide Valid</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 d-none d-lg-block">
-                                <div class="dce-slider-side-box">
-                                    <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom border-white border-opacity-10">
-                                        <span class="text-white small fw-bold text-uppercase" style="letter-spacing: 0.8px;">
-                                            <i class="fa-solid fa-bolt text-warning me-1"></i> Fast Track Programs
-                                        </span>
-                                        <span class="badge bg-success-subtle text-success small px-2 py-0.5 rounded-pill">Open</span>
-                                    </div>
-                                    <div class="d-flex flex-column gap-2">
-                                        <a href="{{ route('courses.index') }}" class="dce-slider-side-card">
-                                            <div class="dce-slider-side-icon"><i class="fa-solid fa-graduation-cap"></i></div>
-                                            <span>Long Term Courses</span>
-                                        </a>
-                                        <a href="{{ route('courses.index') }}" class="dce-slider-side-card">
-                                            <div class="dce-slider-side-icon"><i class="fa-solid fa-laptop-code"></i></div>
-                                            <span>Short Term Courses</span>
-                                        </a>
-                                        <a href="{{ route('courses.index') }}" class="dce-slider-side-card">
-                                            <div class="dce-slider-side-icon"><i class="fa-solid fa-award"></i></div>
-                                            <span>NIELIT-Courses (Preparation)</span>
-                                        </a>
-                                        <a href="{{ route('admission.apply') }}" class="dce-slider-side-card">
-                                            <div class="dce-slider-side-icon"><i class="fa-solid fa-file-signature"></i></div>
-                                            <span>APPLY FOR ONLINE COURSE</span>
-                                        </a>
-                                        <a href="{{ route('courses.index') }}" class="dce-slider-side-card">
-                                            <div class="dce-slider-side-icon"><i class="fa-solid fa-microchip"></i></div>
-                                            <span>HARDWARE COURSE</span>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Carousel Navigation Arrows (Desktop Only) -->
-            <button class="dce-slider-btn prev border-0 d-none d-lg-flex" type="button" data-bs-target="#dceHeroSlider" data-bs-slide="prev" aria-label="Previous Slide">
-                <i class="fa-solid fa-chevron-left"></i>
-            </button>
-            <button class="dce-slider-btn next border-0 d-none d-lg-flex" type="button" data-bs-target="#dceHeroSlider" data-bs-slide="next" aria-label="Next Slide">
-                <i class="fa-solid fa-chevron-right"></i>
-            </button>
-        </div>
-    </section>
-
     <!-- 2. Six Quick Service Cards Strip (Direct Match to Reference Screenshot) -->
     <section class="dce-quick-strip">
         <div class="container">
@@ -1011,6 +617,401 @@
         </div>
     </div>
     @endif
+
+    <!-- Hero Key Highlights & Programs Slider (Moved below Gallery) -->
+<section class="dce-slider-section position-relative">
+        <div id="dceHeroSlider" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5000">
+            <!-- Slider Indicators (Bottom Center Dots/Pill) -->
+            <div class="carousel-indicators dce-slider-indicators">
+                <button type="button" data-bs-target="#dceHeroSlider" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#dceHeroSlider" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#dceHeroSlider" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                <button type="button" data-bs-target="#dceHeroSlider" data-bs-slide-to="3" aria-label="Slide 4"></button>
+            </div>
+
+            <div class="carousel-inner">
+                <!-- Slide 1: General Skill & Career Education -->
+                <div class="carousel-item active dce-slider-item" style="background-image: url('{{ asset('images/banners/banner1.jpg') }}');">
+                    <div class="dce-slider-overlay"></div>
+                    <div class="container dce-slider-content">
+                        <div class="row align-items-center g-4">
+                            <!-- Left Slide Content / Floating Card on Mobile -->
+                            <div class="col-lg-8">
+                                <div class="dce-slider-card">
+                                    <div class="dce-slider-badge mb-2">
+                                        <span class="badge bg-warning text-dark fw-bold px-2 py-0.5 d-none d-lg-inline-block">SKILL EDUCATION</span>
+                                        <span class="dce-mobile-badge-text">SKILL EDUCATION • PRACTICAL TRAINING • BETTER CAREERS</span>
+                                    </div>
+                                    <h1 class="dce-slider-title">
+                                        Skill Education for <br><span class="dce-slider-highlight">A Brighter Tomorrow</span>
+                                    </h1>
+                                    <div class="dce-slider-tagline mb-2">
+                                        <span>Learn</span> <span class="opacity-40">|</span>
+                                        <span>Build Skills</span> <span class="opacity-40">|</span>
+                                        <span>Get Certified</span> <span class="opacity-40">|</span>
+                                        <span>Grow Your Career</span>
+                                    </div>
+                                    <p class="dce-slider-desc mb-3 mb-lg-4">
+                                        Skill-based education for a better future. Build confidence, practical ability and career-ready knowledge with supportive training and digital student services in Sasbahana, Sheikhpura.
+                                    </p>
+                                    <div class="dce-slider-actions d-flex flex-wrap align-items-center gap-2 mb-3 mb-lg-4">
+                                        <a href="{{ route('admission.apply') }}" class="btn btn-dce-accent btn-apply fw-bold px-4 py-2 rounded-2 shadow-sm d-inline-flex align-items-center justify-content-center gap-1.5">
+                                            <span>Apply Now</span> <i class="fa-solid fa-arrow-right small ms-1"></i>
+                                        </a>
+                                        <a href="{{ route('courses.index') }}" class="btn btn-outline-light btn-explore fw-bold px-4 py-2 rounded-2 shadow-sm d-inline-flex align-items-center justify-content-center gap-1.5">
+                                            <i class="fa-solid fa-book-open text-warning d-none d-lg-inline-block"></i> <span>Explore Courses</span>
+                                        </a>
+                                    </div>
+                                    <!-- Micro Trust Badges Row (Desktop Only) -->
+                                    <div class="dce-slider-micro-row d-none d-lg-flex flex-wrap align-items-center gap-2.5 pt-2 border-top border-white border-opacity-10">
+                                        <div class="dce-slider-micro-pill">
+                                            <div class="dce-slider-micro-icon"><i class="fa-solid fa-award"></i></div>
+                                            <div>
+                                                <div class="text-white small fw-bold lh-1">Recognized</div>
+                                                <div class="text-white-50" style="font-size: 0.68rem;">Trusted & Certified</div>
+                                            </div>
+                                        </div>
+                                        <div class="dce-slider-micro-pill">
+                                            <div class="dce-slider-micro-icon" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8;"><i class="fa-solid fa-briefcase"></i></div>
+                                            <div>
+                                                <div class="text-white small fw-bold lh-1">Job Oriented</div>
+                                                <div class="text-white-50" style="font-size: 0.68rem;">Practical Training</div>
+                                            </div>
+                                        </div>
+                                        <div class="dce-slider-micro-pill">
+                                            <div class="dce-slider-micro-icon" style="background: rgba(34, 197, 94, 0.2); color: #4ade80;"><i class="fa-solid fa-users"></i></div>
+                                            <div>
+                                                <div class="text-white small fw-bold lh-1">Better Career</div>
+                                                <div class="text-white-50" style="font-size: 0.68rem;">Brighter Future</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Right Side Course Shortcuts (Desktop Glass Box) -->
+                            <div class="col-lg-4 d-none d-lg-block">
+                                <div class="dce-slider-side-box">
+                                    <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom border-white border-opacity-10">
+                                        <span class="text-white small fw-bold text-uppercase" style="letter-spacing: 0.8px;">
+                                            <i class="fa-solid fa-bolt text-warning me-1"></i> Fast Track Programs
+                                        </span>
+                                        <span class="badge bg-success-subtle text-success small px-2 py-0.5 rounded-pill">Open</span>
+                                    </div>
+                                    <div class="d-flex flex-column gap-2">
+                                        <a href="{{ route('courses.index') }}" class="dce-slider-side-card">
+                                            <div class="dce-slider-side-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+                                            <span>Long Term Courses</span>
+                                        </a>
+                                        <a href="{{ route('courses.index') }}" class="dce-slider-side-card">
+                                            <div class="dce-slider-side-icon"><i class="fa-solid fa-laptop-code"></i></div>
+                                            <span>Short Term Courses</span>
+                                        </a>
+                                        <a href="{{ route('courses.index') }}" class="dce-slider-side-card">
+                                            <div class="dce-slider-side-icon"><i class="fa-solid fa-award"></i></div>
+                                            <span>NIELIT-Courses (Preparation)</span>
+                                        </a>
+                                        <a href="{{ route('admission.apply') }}" class="dce-slider-side-card">
+                                            <div class="dce-slider-side-icon"><i class="fa-solid fa-file-signature"></i></div>
+                                            <span>APPLY FOR ONLINE COURSE</span>
+                                        </a>
+                                        <a href="{{ route('courses.index') }}" class="dce-slider-side-card">
+                                            <div class="dce-slider-side-icon"><i class="fa-solid fa-microchip"></i></div>
+                                            <span>HARDWARE COURSE</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 2: ADCA & DCA Advanced Computing -->
+                <div class="carousel-item dce-slider-item" style="background-image: url('{{ asset('images/banners/banner2.jpg') }}');">
+                    <div class="dce-slider-overlay"></div>
+                    <div class="container dce-slider-content">
+                        <div class="row align-items-center g-4">
+                            <div class="col-lg-8">
+                                <div class="dce-slider-card">
+                                    <div class="dce-slider-badge mb-2">
+                                        <span class="badge bg-info text-white fw-bold px-2 py-0.5 d-none d-lg-inline-block">ADVANCED IT DIPLOMA</span>
+                                        <span class="dce-mobile-badge-text">ADVANCED IT DIPLOMA • ADCA & DCA • PRACTICAL LAB</span>
+                                    </div>
+                                    <h1 class="dce-slider-title">
+                                        Master Advanced Computing & <br><span class="dce-slider-highlight">Career Diploma (ADCA)</span>
+                                    </h1>
+                                    <div class="dce-slider-tagline mb-2">
+                                        <span>MS Office</span> <span class="opacity-40">|</span>
+                                        <span>Web Design</span> <span class="opacity-40">|</span>
+                                        <span>C/C++</span> <span class="opacity-40">|</span>
+                                        <span>Tally Prime</span>
+                                    </div>
+                                    <p class="dce-slider-desc mb-3 mb-lg-4">
+                                        Comprehensive 12-month master diploma covering computer fundamentals, office automation, database management, and programming with individual workstation access.
+                                    </p>
+                                    <div class="dce-slider-actions d-flex flex-wrap align-items-center gap-2 mb-3 mb-lg-4">
+                                        <a href="{{ route('admission.apply') }}" class="btn btn-dce-accent btn-apply fw-bold px-4 py-2 rounded-2 shadow-sm d-inline-flex align-items-center justify-content-center gap-1.5">
+                                            <span>Enroll Now</span> <i class="fa-solid fa-arrow-right small ms-1"></i>
+                                        </a>
+                                        <a href="{{ route('courses.index') }}" class="btn btn-outline-light btn-explore fw-bold px-4 py-2 rounded-2 shadow-sm d-inline-flex align-items-center justify-content-center gap-1.5">
+                                            <i class="fa-solid fa-list-check text-warning d-none d-lg-inline-block"></i> <span>View Syllabus</span>
+                                        </a>
+                                    </div>
+                                    <div class="dce-slider-micro-row d-none d-lg-flex flex-wrap align-items-center gap-2.5 pt-2 border-top border-white border-opacity-10">
+                                        <div class="dce-slider-micro-pill">
+                                            <div class="dce-slider-micro-icon"><i class="fa-solid fa-certificate"></i></div>
+                                            <div>
+                                                <div class="text-white small fw-bold lh-1">ISO Certified</div>
+                                                <div class="text-white-50" style="font-size: 0.68rem;">Govt Recognized</div>
+                                            </div>
+                                        </div>
+                                        <div class="dce-slider-micro-pill">
+                                            <div class="dce-slider-micro-icon" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8;"><i class="fa-solid fa-desktop"></i></div>
+                                            <div>
+                                                <div class="text-white small fw-bold lh-1">1:1 Practical</div>
+                                                <div class="text-white-50" style="font-size: 0.68rem;">Dedicated Workstation</div>
+                                            </div>
+                                        </div>
+                                        <div class="dce-slider-micro-pill">
+                                            <div class="dce-slider-micro-icon" style="background: rgba(34, 197, 94, 0.2); color: #4ade80;"><i class="fa-solid fa-qrcode"></i></div>
+                                            <div>
+                                                <div class="text-white small fw-bold lh-1">Online Verified</div>
+                                                <div class="text-white-50" style="font-size: 0.68rem;">QR Marksheet</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 d-none d-lg-block">
+                                <div class="dce-slider-side-box">
+                                    <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom border-white border-opacity-10">
+                                        <span class="text-white small fw-bold text-uppercase" style="letter-spacing: 0.8px;">
+                                            <i class="fa-solid fa-bolt text-warning me-1"></i> Fast Track Programs
+                                        </span>
+                                        <span class="badge bg-success-subtle text-success small px-2 py-0.5 rounded-pill">Open</span>
+                                    </div>
+                                    <div class="d-flex flex-column gap-2">
+                                        <a href="{{ route('courses.index') }}" class="dce-slider-side-card">
+                                            <div class="dce-slider-side-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+                                            <span>Long Term Courses</span>
+                                        </a>
+                                        <a href="{{ route('courses.index') }}" class="dce-slider-side-card">
+                                            <div class="dce-slider-side-icon"><i class="fa-solid fa-laptop-code"></i></div>
+                                            <span>Short Term Courses</span>
+                                        </a>
+                                        <a href="{{ route('courses.index') }}" class="dce-slider-side-card">
+                                            <div class="dce-slider-side-icon"><i class="fa-solid fa-award"></i></div>
+                                            <span>NIELIT-Courses (Preparation)</span>
+                                        </a>
+                                        <a href="{{ route('admission.apply') }}" class="dce-slider-side-card">
+                                            <div class="dce-slider-side-icon"><i class="fa-solid fa-file-signature"></i></div>
+                                            <span>APPLY FOR ONLINE COURSE</span>
+                                        </a>
+                                        <a href="{{ route('courses.index') }}" class="dce-slider-side-card">
+                                            <div class="dce-slider-side-icon"><i class="fa-solid fa-microchip"></i></div>
+                                            <span>HARDWARE COURSE</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 3: Bilingual Typing Lab -->
+                <div class="carousel-item dce-slider-item" style="background-image: url('{{ asset('images/banners/banner3.jpg') }}');">
+                    <div class="dce-slider-overlay"></div>
+                    <div class="container dce-slider-content">
+                        <div class="row align-items-center g-4">
+                            <div class="col-lg-8">
+                                <div class="dce-slider-card">
+                                    <div class="dce-slider-badge mb-2">
+                                        <span class="badge bg-success text-white fw-bold px-2 py-0.5 d-none d-lg-inline-block">TYPING LAB & SPEED</span>
+                                        <span class="dce-mobile-badge-text">BILINGUAL TYPING LAB • SPEED & ACCURACY • GOVT EXAMS</span>
+                                    </div>
+                                    <h1 class="dce-slider-title">
+                                        High-Speed Bilingual <br><span class="dce-slider-highlight">Hindi & English Typing Lab</span>
+                                    </h1>
+                                    <div class="dce-slider-tagline mb-2">
+                                        <span>Krutidev</span> <span class="opacity-40">|</span>
+                                        <span>Mangal</span> <span class="opacity-40">|</span>
+                                        <span>Live Speed Tracking</span> <span class="opacity-40">|</span>
+                                        <span>Beltron & SSC</span>
+                                    </div>
+                                    <p class="dce-slider-desc mb-3 mb-lg-4">
+                                        Specialized typing lab with dedicated software for real-time WPM speed and accuracy evaluation for state exams, court clerk, Beltron, and central govt job selections.
+                                    </p>
+                                    <div class="dce-slider-actions d-flex flex-wrap align-items-center gap-2 mb-3 mb-lg-4">
+                                        <a href="{{ route('admission.apply') }}" class="btn btn-dce-accent btn-apply fw-bold px-4 py-2 rounded-2 shadow-sm d-inline-flex align-items-center justify-content-center gap-1.5">
+                                            <span>Join Typing Lab</span> <i class="fa-solid fa-arrow-right small ms-1"></i>
+                                        </a>
+                                        <a href="{{ route('courses.index') }}" class="btn btn-outline-light btn-explore fw-bold px-4 py-2 rounded-2 shadow-sm d-inline-flex align-items-center justify-content-center gap-1.5">
+                                            <i class="fa-solid fa-keyboard text-warning d-none d-lg-inline-block"></i> <span>Check Typing Batches</span>
+                                        </a>
+                                    </div>
+                                    <div class="dce-slider-micro-row d-none d-lg-flex flex-wrap align-items-center gap-2.5 pt-2 border-top border-white border-opacity-10">
+                                        <div class="dce-slider-micro-pill">
+                                            <div class="dce-slider-micro-icon"><i class="fa-solid fa-gauge-high"></i></div>
+                                            <div>
+                                                <div class="text-white small fw-bold lh-1">45+ WPM</div>
+                                                <div class="text-white-50" style="font-size: 0.68rem;">Target Speed</div>
+                                            </div>
+                                        </div>
+                                        <div class="dce-slider-micro-pill">
+                                            <div class="dce-slider-micro-icon" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8;"><i class="fa-solid fa-chalkboard-user"></i></div>
+                                            <div>
+                                                <div class="text-white small fw-bold lh-1">Expert Mentor</div>
+                                                <div class="text-white-50" style="font-size: 0.68rem;">Personal Attention</div>
+                                            </div>
+                                        </div>
+                                        <div class="dce-slider-micro-pill">
+                                            <div class="dce-slider-micro-icon" style="background: rgba(34, 197, 94, 0.2); color: #4ade80;"><i class="fa-solid fa-file-circle-check"></i></div>
+                                            <div>
+                                                <div class="text-white small fw-bold lh-1">Speed Certificate</div>
+                                                <div class="text-white-50" style="font-size: 0.68rem;">Govt Validated</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 d-none d-lg-block">
+                                <div class="dce-slider-side-box">
+                                    <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom border-white border-opacity-10">
+                                        <span class="text-white small fw-bold text-uppercase" style="letter-spacing: 0.8px;">
+                                            <i class="fa-solid fa-bolt text-warning me-1"></i> Fast Track Programs
+                                        </span>
+                                        <span class="badge bg-success-subtle text-success small px-2 py-0.5 rounded-pill">Open</span>
+                                    </div>
+                                    <div class="d-flex flex-column gap-2">
+                                        <a href="{{ route('courses.index') }}" class="dce-slider-side-card">
+                                            <div class="dce-slider-side-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+                                            <span>Long Term Courses</span>
+                                        </a>
+                                        <a href="{{ route('courses.index') }}" class="dce-slider-side-card">
+                                            <div class="dce-slider-side-icon"><i class="fa-solid fa-laptop-code"></i></div>
+                                            <span>Short Term Courses</span>
+                                        </a>
+                                        <a href="{{ route('courses.index') }}" class="dce-slider-side-card">
+                                            <div class="dce-slider-side-icon"><i class="fa-solid fa-award"></i></div>
+                                            <span>NIELIT-Courses (Preparation)</span>
+                                        </a>
+                                        <a href="{{ route('admission.apply') }}" class="dce-slider-side-card">
+                                            <div class="dce-slider-side-icon"><i class="fa-solid fa-file-signature"></i></div>
+                                            <span>APPLY FOR ONLINE COURSE</span>
+                                        </a>
+                                        <a href="{{ route('courses.index') }}" class="dce-slider-side-card">
+                                            <div class="dce-slider-side-icon"><i class="fa-solid fa-microchip"></i></div>
+                                            <span>HARDWARE COURSE</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 4: Tally Prime & Accounting -->
+                <div class="carousel-item dce-slider-item" style="background-image: url('{{ asset('images/banners/banner4.jpg') }}');">
+                    <div class="dce-slider-overlay"></div>
+                    <div class="container dce-slider-content">
+                        <div class="row align-items-center g-4">
+                            <div class="col-lg-8">
+                                <div class="dce-slider-card">
+                                    <div class="dce-slider-badge mb-2">
+                                        <span class="badge bg-danger text-white fw-bold px-2 py-0.5 d-none d-lg-inline-block">FINANCIAL ACCOUNTING</span>
+                                        <span class="dce-mobile-badge-text">FINANCIAL ACCOUNTING • TALLY PRIME • GST BILLING</span>
+                                    </div>
+                                    <h1 class="dce-slider-title">
+                                        Professional Accounting with <br><span class="dce-slider-highlight">Tally Prime & GST Billing</span>
+                                    </h1>
+                                    <div class="dce-slider-tagline mb-2">
+                                        <span>GST Invoicing</span> <span class="opacity-40">|</span>
+                                        <span>TDS & Payroll</span> <span class="opacity-40">|</span>
+                                        <span>Balance Sheet</span> <span class="opacity-40">|</span>
+                                        <span>Bank Recon</span>
+                                    </div>
+                                    <p class="dce-slider-desc mb-3 mb-lg-4">
+                                        Master computerized accounting on the latest Tally Prime software. Learn real voucher entry, inventory management, and tax filing with hands-on practice.
+                                    </p>
+                                    <div class="dce-slider-actions d-flex flex-wrap align-items-center gap-2 mb-3 mb-lg-4">
+                                        <a href="{{ route('admission.apply') }}" class="btn btn-dce-accent btn-apply fw-bold px-4 py-2 rounded-2 shadow-sm d-inline-flex align-items-center justify-content-center gap-1.5">
+                                            <span>Enroll in Tally</span> <i class="fa-solid fa-arrow-right small ms-1"></i>
+                                        </a>
+                                        <a href="{{ route('courses.index') }}" class="btn btn-outline-light btn-explore fw-bold px-4 py-2 rounded-2 shadow-sm d-inline-flex align-items-center justify-content-center gap-1.5">
+                                            <i class="fa-solid fa-calculator text-warning d-none d-lg-inline-block"></i> <span>Accounting Courses</span>
+                                        </a>
+                                    </div>
+                                    <div class="dce-slider-micro-row d-none d-lg-flex flex-wrap align-items-center gap-2.5 pt-2 border-top border-white border-opacity-10">
+                                        <div class="dce-slider-micro-pill">
+                                            <div class="dce-slider-micro-icon"><i class="fa-solid fa-file-invoice-dollar"></i></div>
+                                            <div>
+                                                <div class="text-white small fw-bold lh-1">GST Ready</div>
+                                                <div class="text-white-50" style="font-size: 0.68rem;">Real Billing Cases</div>
+                                            </div>
+                                        </div>
+                                        <div class="dce-slider-micro-pill">
+                                            <div class="dce-slider-micro-icon" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8;"><i class="fa-solid fa-building-user"></i></div>
+                                            <div>
+                                                <div class="text-white small fw-bold lh-1">Job Ready</div>
+                                                <div class="text-white-50" style="font-size: 0.68rem;">Accountant Placements</div>
+                                            </div>
+                                        </div>
+                                        <div class="dce-slider-micro-pill">
+                                            <div class="dce-slider-micro-icon" style="background: rgba(34, 197, 94, 0.2); color: #4ade80;"><i class="fa-solid fa-stamp"></i></div>
+                                            <div>
+                                                <div class="text-white small fw-bold lh-1">Authorized Cert</div>
+                                                <div class="text-white-50" style="font-size: 0.68rem;">Nationwide Valid</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 d-none d-lg-block">
+                                <div class="dce-slider-side-box">
+                                    <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom border-white border-opacity-10">
+                                        <span class="text-white small fw-bold text-uppercase" style="letter-spacing: 0.8px;">
+                                            <i class="fa-solid fa-bolt text-warning me-1"></i> Fast Track Programs
+                                        </span>
+                                        <span class="badge bg-success-subtle text-success small px-2 py-0.5 rounded-pill">Open</span>
+                                    </div>
+                                    <div class="d-flex flex-column gap-2">
+                                        <a href="{{ route('courses.index') }}" class="dce-slider-side-card">
+                                            <div class="dce-slider-side-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+                                            <span>Long Term Courses</span>
+                                        </a>
+                                        <a href="{{ route('courses.index') }}" class="dce-slider-side-card">
+                                            <div class="dce-slider-side-icon"><i class="fa-solid fa-laptop-code"></i></div>
+                                            <span>Short Term Courses</span>
+                                        </a>
+                                        <a href="{{ route('courses.index') }}" class="dce-slider-side-card">
+                                            <div class="dce-slider-side-icon"><i class="fa-solid fa-award"></i></div>
+                                            <span>NIELIT-Courses (Preparation)</span>
+                                        </a>
+                                        <a href="{{ route('admission.apply') }}" class="dce-slider-side-card">
+                                            <div class="dce-slider-side-icon"><i class="fa-solid fa-file-signature"></i></div>
+                                            <span>APPLY FOR ONLINE COURSE</span>
+                                        </a>
+                                        <a href="{{ route('courses.index') }}" class="dce-slider-side-card">
+                                            <div class="dce-slider-side-icon"><i class="fa-solid fa-microchip"></i></div>
+                                            <span>HARDWARE COURSE</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Carousel Navigation Arrows (Desktop Only) -->
+            <button class="dce-slider-btn prev border-0 d-none d-lg-flex" type="button" data-bs-target="#dceHeroSlider" data-bs-slide="prev" aria-label="Previous Slide">
+                <i class="fa-solid fa-chevron-left"></i>
+            </button>
+            <button class="dce-slider-btn next border-0 d-none d-lg-flex" type="button" data-bs-target="#dceHeroSlider" data-bs-slide="next" aria-label="Next Slide">
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+        </div>
+    </section>
+
 
     {{-- [COMMENTED: Campus Facilities Section - redundant with 'Why Choose Us'. Uncomment if a dedicated lab infrastructure section is needed]
     <section class="py-5 bg-light">

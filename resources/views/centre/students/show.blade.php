@@ -167,7 +167,7 @@
                                 <select name="course_id" class="form-select" required>
                                     <option value="">-- Choose Course --</option>
                                     @foreach($availableCourses ?? [] as $crs)
-                                        <option value="{{ $crs->id }}">{{ $crs->course_name }} ({{ $crs->course_code }}) - ₹{{ number_format($crs->fee ?? 0, 2) }}</option>
+                                        <option value="{{ $crs->id }}">{{ $crs->course_name }} ({{ $crs->course_code }}) - ₹{{ number_format($crs->course_fee ?? $crs->default_course_fee ?? $crs->fee ?? 0, 2) }}</option>
                                     @endforeach
                                 </select>
                             </div>

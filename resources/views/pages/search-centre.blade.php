@@ -1,17 +1,17 @@
 @extends('layouts.app')
 
-@section('title', 'Search Authorized Centres | ' . ($instituteSettings['institute_name'] ?? 'TECH ERA COMPUTER'))
-@section('meta_description', 'Search and locate authorized study centres of ' . ($instituteSettings['institute_name'] ?? 'TECH ERA COMPUTER') . '.')
+@section('title', 'Search Authorized Centres & Check Center ID Card | ' . ($instituteSettings['institute_name'] ?? 'TECH ERA COMPUTER'))
+@section('meta_description', 'Search, locate and verify authorized study centres and center credentials of ' . ($instituteSettings['institute_name'] ?? 'TECH ERA COMPUTER') . '.')
 
 @section('content')
     <div class="dce-page-banner">
         <div class="container text-center text-md-start">
-            <h1>Authorized Centre Locator</h1>
+            <h1>Authorized Centre Locator & ID Card Verification</h1>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb dce-breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
                     <li class="breadcrumb-item"><a href="#">Franchise</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Search Centre</li>
+                    <li class="breadcrumb-item active" aria-current="page">Check Centre & ID Card</li>
                 </ol>
             </nav>
         </div>

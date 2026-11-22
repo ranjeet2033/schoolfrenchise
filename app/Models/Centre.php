@@ -194,4 +194,14 @@ class Centre extends Model
 
         return asset('storage/' . ltrim($this->director_signature, '/'));
     }
+
+    public function getQrCodeDataUriAttribute(): string
+    {
+        $url = route('franchise.search', ['keyword' => $this->centre_code]);
+        try {
+            return \App\Services\QrCodeService::generateDataUri($url, 140);
+        } catch (\Throwable $e) {
+            return 'https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=' . urlencode($url);
+        }
+    }
 }
