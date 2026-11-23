@@ -56,16 +56,28 @@
                                             <h6 class="fw-bold mb-1 text-dark">{{ $prod->title }}</h6>
                                             <span class="small text-muted">Amount: ₹{{ number_format($ord->total_amount, 2) }}</span>
                                         </div>
-                                        <div>
+                                        <div class="d-flex flex-column align-items-sm-end gap-1">
                                             @if($prod->type === 'pdf')
-                                                <a href="{{ route('store.download.pdf', $acc->access_token) }}" class="btn btn-sm btn-success rounded-pill px-3 fw-bold">
+                                                <a href="{{ route('store.download.pdf', $acc->access_token) }}" class="btn btn-sm btn-success rounded-pill px-3 fw-bold shadow-sm">
                                                     <i class="fa-solid fa-download me-1"></i> Download PDF
                                                 </a>
+                                                @if(!empty($prod->normalized_resource_links))
+                                                    <div class="d-flex flex-wrap gap-1 mt-1 justify-content-sm-end">
+                                                        @foreach($prod->normalized_resource_links as $rLink)
+                                                            <a href="{{ $rLink['url'] }}" target="_blank" class="btn btn-xs btn-outline-primary rounded-pill px-2 py-0.5" style="font-size: 0.72rem;">
+                                                                <i class="fa-brands fa-google-drive text-warning me-1"></i> {{ $rLink['title'] }}
+                                                            </a>
+                                                        @endforeach
+                                                    </div>
+                                                @endif
                                             @else
+                                                <a href="{{ route('store.video.watch', $acc->access_token) }}" class="btn btn-sm btn-danger rounded-pill px-3 fw-bold shadow-sm">
+                                                    <i class="fa-solid fa-circle-play me-1"></i> See Video
+                                                </a>
                                                 @if($acc->youtube_invite_status === 'invited')
-                                                    <span class="badge bg-success p-2"><i class="fa-solid fa-check me-1"></i> YouTube Access Active</span>
+                                                    <span class="badge bg-success-subtle text-success p-1" style="font-size: 0.72rem;"><i class="fa-solid fa-check me-1"></i> YouTube Access Active</span>
                                                 @else
-                                                    <span class="badge bg-warning text-dark p-2"><i class="fa-solid fa-clock me-1"></i> Invite Queued ({{ $acc->customer_gmail }})</span>
+                                                    <span class="badge bg-warning-subtle text-dark p-1" style="font-size: 0.72rem;"><i class="fa-solid fa-clock me-1"></i> Invite Queued ({{ $acc->customer_gmail }})</span>
                                                 @endif
                                             @endif
                                         </div>

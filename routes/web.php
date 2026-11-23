@@ -151,6 +151,7 @@ Route::post('/store/checkout/initiate', [DigitalStoreController::class, 'initiat
 Route::post('/store/checkout/verify', [DigitalStoreController::class, 'verifyPayment'])->name('store.checkout.verify');
 Route::get('/store/order/confirmation/{orderNumber}', [DigitalStoreController::class, 'confirmation'])->name('store.order.confirmation');
 Route::get('/store/download/pdf/{accessToken}', [DigitalStoreController::class, 'downloadPdf'])->name('store.download.pdf');
+Route::get('/store/watch/video/{accessToken}', [DigitalStoreController::class, 'watchVideo'])->name('store.video.watch');
 
 // Common Portal Spelling & Root Redirects
 Route::get('/centre', fn() => redirect()->route('centre.dashboard'));

@@ -79,18 +79,24 @@
                                 </a>
                             @elseif($product->type === 'video')
                                 <div class="alert alert-info py-2 px-3 small border-0 mb-3 rounded-3">
-                                    <i class="fa-brands fa-youtube text-danger me-1"></i> <strong>YouTube Private Access:</strong> Only invited Gmail accounts can watch. (Available seats: <strong>{{ $product->available_invites }}/{{ $product->max_invites }}</strong>)
+                                    <i class="fa-brands fa-youtube text-danger me-1"></i> <strong>YouTube &amp; Drive Course:</strong> Access all video modules immediately after purchase through the "See Video" hub.
                                 </div>
                                 <button type="button" class="btn btn-primary btn-lg w-100 py-3 rounded-pill fw-bold shadow-lg" data-bs-toggle="modal" data-bs-target="#checkoutModal">
                                     <i class="fa-solid fa-cart-shopping me-2"></i> Buy Now — ₹{{ number_format($product->effective_price, 2) }}
                                 </button>
                             @else
                                 <div class="alert alert-success py-2 px-3 small border-0 mb-3 rounded-3">
-                                    <i class="fa-solid fa-cloud-arrow-down me-1"></i> <strong>Instant PDF Download:</strong> High-resolution printable PDF available immediately after checkout.
+                                    <i class="fa-solid fa-cloud-arrow-down me-1"></i> <strong>Instant PDF Download:</strong> High-resolution printable PDF &amp; Google Drive files available immediately after checkout.
                                 </div>
                                 <button type="button" class="btn btn-primary btn-lg w-100 py-3 rounded-pill fw-bold shadow-lg" data-bs-toggle="modal" data-bs-target="#checkoutModal">
                                     <i class="fa-solid fa-cart-shopping me-2"></i> Buy Now — ₹{{ number_format($product->effective_price, 2) }}
                                 </button>
+                            @endif
+
+                            @if($product->has_demo)
+                                <a href="{{ $product->effective_demo_url }}" target="_blank" class="btn btn-outline-warning btn-lg w-100 py-2.5 rounded-pill fw-bold shadow-sm mt-2.5">
+                                    <i class="fa-solid fa-circle-play me-2"></i> View Demo {{ $product->type === 'video' ? 'Video' : 'Sample' }}
+                                </a>
                             @endif
 
                             <div class="mt-3 text-center">
@@ -139,6 +145,20 @@
                     @endif
                 </div>
 
+                @if($product->intro_video_id)
+                    <!-- Course Introduction Video Section -->
+                    <div class="card border-0 rounded-4 shadow-sm p-4 mb-4 bg-light border-start border-4 border-info">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h5 class="fw-bold text-dark mb-0"><i class="fa-brands fa-youtube text-danger me-2"></i> Course Introduction Video</h5>
+                            <span class="badge bg-info text-dark font-monospace"><i class="fa-solid fa-play me-1"></i> Free Overview</span>
+                        </div>
+                        <p class="small text-muted mb-3">Watch this quick course overview to learn about chapters, topics covered, and practical lab projects.</p>
+                        <div class="ratio ratio-16x9 rounded-3 overflow-hidden shadow-sm bg-black">
+                            <iframe src="https://www.youtube.com/embed/{{ $product->intro_video_id }}?rel=0" title="Course Introduction" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+                        </div>
+                    </div>
+                @endif
+
                 @if($product->isPublicVideo() && $product->youtube_video_id)
                     <!-- Free Embedded YouTube Player -->
                     <div id="freeVideoPlayer" class="mb-4">
@@ -164,6 +184,58 @@
                         {!! $product->description ? nl2br(e($product->description)) : '<p>Comprehensive study material prepared by experienced computer educators.</p>' !!}
                     </div>
                 </div>
+
+                <!-- Video Lectures / Curriculum Breakdown (Requirement 9) -->
+                @if(!empty($product->normalized_video_links))
+                    <div class="card border-0 rounded-4 shadow-sm p-4 mb-4 bg-white border">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="fw-bold text-dark mb-0"><i class="fa-solid fa-list-check text-danger me-2"></i>Included Video Modules &amp; Lectures ({{ 1 + count($product->normalized_video_links) }})</h5>
+                            <span class="badge bg-danger-subtle text-danger font-monospace">Full Curriculum</span>
+                        </div>
+                        <div class="list-group list-group-flush border rounded-3 overflow-hidden">
+                            <div class="list-group-item d-flex align-items-center gap-3 p-3 bg-light">
+                                <span class="badge bg-danger rounded-circle p-2"><i class="fa-solid fa-play"></i></span>
+                                <div>
+                                    <strong class="d-block text-dark">1. {{ $product->title }} (Main Lecture)</strong>
+                                    <small class="text-muted">{{ $product->duration ?? 'Core Video' }} &bull; YouTube/Drive HD</small>
+                                </div>
+                            </div>
+                            @foreach($product->normalized_video_links as $vIdx => $vItem)
+                                <div class="list-group-item d-flex align-items-center gap-3 p-3">
+                                    <span class="badge bg-secondary rounded-circle p-2"><i class="fa-solid {{ ($vItem['platform'] ?? 'youtube') === 'drive' ? 'fa-film' : 'fa-play' }}"></i></span>
+                                    <div>
+                                        <strong class="d-block text-dark">{{ $vIdx + 2 }}. {{ $vItem['title'] }}</strong>
+                                        <small class="text-muted text-capitalize">{{ $vItem['platform'] ?? 'Video Module' }} &bull; Available after purchase via "See Video"</small>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+
+                <!-- Multiple Drive / PDF Resources (Requirement 6) -->
+                @if(!empty($product->normalized_resource_links))
+                    <div class="card border-0 rounded-4 shadow-sm p-4 mb-4 bg-white border">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="fw-bold text-dark mb-0"><i class="fa-brands fa-google-drive text-warning me-2"></i>Included Google Drive &amp; PDF Resources ({{ count($product->normalized_resource_links) }})</h5>
+                            <span class="badge bg-warning-subtle text-dark font-monospace">Instant Access</span>
+                        </div>
+                        <div class="list-group list-group-flush border rounded-3 overflow-hidden">
+                            @foreach($product->normalized_resource_links as $rIdx => $rItem)
+                                <div class="list-group-item d-flex align-items-center justify-content-between p-3">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <span class="badge bg-warning text-dark rounded-circle p-2"><i class="fa-brands fa-google-drive"></i></span>
+                                        <div>
+                                            <strong class="d-block text-dark">{{ $rItem['title'] }}</strong>
+                                            <small class="text-muted">Cloud Resource Link &bull; Included with this product</small>
+                                        </div>
+                                    </div>
+                                    <span class="badge bg-light text-muted border">Protected</span>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
 
                 <!-- How it works -->
                 @if($product->isPublicVideo())

@@ -33,6 +33,25 @@ class AdminDigitalProductController extends Controller
         return view('admin.store.products.create');
     }
 
+    protected function cleanLinksArray($links): array
+    {
+        if (!is_array($links)) {
+            return [];
+        }
+        $cleaned = [];
+        foreach ($links as $item) {
+            $url = trim($item['url'] ?? '');
+            if (!empty($url)) {
+                $cleaned[] = [
+                    'title'    => trim($item['title'] ?? '') ?: 'Resource Link',
+                    'url'      => $url,
+                    'platform' => trim($item['platform'] ?? (str_contains($url, 'drive.google.com') ? 'drive' : 'youtube')),
+                ];
+            }
+        }
+        return $cleaned;
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -48,10 +67,19 @@ class AdminDigitalProductController extends Controller
             // PDF fields
             'pdf_file'          => 'nullable|file|mimes:pdf|max:51200', // max 50MB
             'total_pages'       => 'nullable|integer|min:1',
+            'demo_url'          => 'nullable|string|max:500',
+            'resource_links'    => 'nullable|array',
+            'resource_links.*.title' => 'nullable|string|max:191',
+            'resource_links.*.url'   => 'nullable|string|max:500',
             // Video fields
             'youtube_video_id'  => 'nullable|string|max:100',
             'youtube_video_url' => 'nullable|string|max:255',
+            'intro_video_url'   => 'nullable|string|max:500',
             'duration'          => 'nullable|string|max:50',
+            'video_links'       => 'nullable|array',
+            'video_links.*.title'    => 'nullable|string|max:191',
+            'video_links.*.url'      => 'nullable|string|max:500',
+            'video_links.*.platform' => 'nullable|string|max:50',
             'max_invites'       => 'nullable|integer|min:1|max:50',
             'status'            => 'required|in:active,inactive',
             'is_featured'       => 'nullable|boolean',
@@ -74,10 +102,7 @@ class AdminDigitalProductController extends Controller
         // Clean YouTube ID if full URL provided
         $ytId = $validated['youtube_video_id'] ?? null;
         if (!empty($validated['youtube_video_url']) && empty($ytId)) {
-            preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $validated['youtube_video_url'], $match);
-            if (isset($match[1])) {
-                $ytId = $match[1];
-            }
+            $ytId = DigitalProduct::extractYoutubeId($validated['youtube_video_url']);
         }
 
         $slug = Str::slug($validated['title']);
@@ -98,10 +123,14 @@ class AdminDigitalProductController extends Controller
             'sale_price'        => $videoAccessType === 'public' ? null : ($validated['sale_price'] ?? null),
             'thumbnail'         => $thumbnailPath,
             'pdf_file_path'     => $pdfPath,
+            'resource_links'    => $this->cleanLinksArray($request->input('resource_links')),
             'total_pages'       => $validated['total_pages'] ?? null,
+            'demo_url'          => $validated['demo_url'] ?? null,
             'youtube_video_id'  => $ytId,
             'youtube_video_url' => $validated['youtube_video_url'] ?? null,
+            'intro_video_url'   => $validated['intro_video_url'] ?? null,
             'duration'          => $validated['duration'] ?? null,
+            'video_links'       => $this->cleanLinksArray($request->input('video_links')),
             'max_invites'       => $validated['max_invites'] ?? 50,
             'status'            => $validated['status'],
             'is_featured'       => $request->boolean('is_featured'),
@@ -127,11 +156,22 @@ class AdminDigitalProductController extends Controller
             'price'             => 'nullable|numeric|min:0',
             'sale_price'        => 'nullable|numeric|min:0',
             'thumbnail'         => 'nullable|image|max:3072',
+            // PDF fields
             'pdf_file'          => 'nullable|file|mimes:pdf|max:51200',
             'total_pages'       => 'nullable|integer|min:1',
+            'demo_url'          => 'nullable|string|max:500',
+            'resource_links'    => 'nullable|array',
+            'resource_links.*.title' => 'nullable|string|max:191',
+            'resource_links.*.url'   => 'nullable|string|max:500',
+            // Video fields
             'youtube_video_id'  => 'nullable|string|max:100',
             'youtube_video_url' => 'nullable|string|max:255',
+            'intro_video_url'   => 'nullable|string|max:500',
             'duration'          => 'nullable|string|max:50',
+            'video_links'       => 'nullable|array',
+            'video_links.*.title'    => 'nullable|string|max:191',
+            'video_links.*.url'      => 'nullable|string|max:500',
+            'video_links.*.platform' => 'nullable|string|max:50',
             'max_invites'       => 'nullable|integer|min:1|max:50',
             'status'            => 'required|in:active,inactive',
             'is_featured'       => 'nullable|boolean',
@@ -150,9 +190,9 @@ class AdminDigitalProductController extends Controller
 
         $ytId = $validated['youtube_video_id'] ?? $product->youtube_video_id;
         if (!empty($validated['youtube_video_url'])) {
-            preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $validated['youtube_video_url'], $match);
-            if (isset($match[1])) {
-                $ytId = $match[1];
+            $parsedYtId = DigitalProduct::extractYoutubeId($validated['youtube_video_url']);
+            if ($parsedYtId) {
+                $ytId = $parsedYtId;
             }
         }
 
@@ -166,9 +206,13 @@ class AdminDigitalProductController extends Controller
             'price'             => $price,
             'sale_price'        => $videoAccessType === 'public' ? null : ($validated['sale_price'] ?? null),
             'total_pages'       => $validated['total_pages'] ?? $product->total_pages,
+            'demo_url'          => $validated['demo_url'] ?? null,
+            'resource_links'    => $this->cleanLinksArray($request->input('resource_links')),
             'youtube_video_id'  => $ytId,
             'youtube_video_url' => $validated['youtube_video_url'] ?? $product->youtube_video_url,
+            'intro_video_url'   => $validated['intro_video_url'] ?? null,
             'duration'          => $validated['duration'] ?? $product->duration,
+            'video_links'       => $this->cleanLinksArray($request->input('video_links')),
             'max_invites'       => $validated['max_invites'] ?? $product->max_invites,
             'status'            => $validated['status'],
             'is_featured'       => $request->boolean('is_featured'),

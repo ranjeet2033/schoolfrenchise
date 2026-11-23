@@ -71,19 +71,21 @@
                 @foreach($products as $prod)
                     <div class="col-md-6 col-lg-4 col-xl-3">
                         <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden d-flex flex-column transition-hover" style="transition: transform 0.2s, box-shadow 0.2s;">
-                            <!-- Thumbnail & Badges -->
+                            <!-- Thumbnail & Badges (Clickable to details page) -->
                             <div class="position-relative" style="height: 190px; background-color: #0d2238; overflow: hidden;">
-                                @if($prod->thumbnail)
-                                    <img src="{{ $prod->thumbnail_url }}" alt="{{ $prod->title }}" class="w-100 h-100 object-fit-cover">
-                                @else
-                                    <div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-white p-3 text-center">
-                                        <i class="fa-solid {{ $prod->type === 'video' ? 'fa-play-circle fa-3x' : 'fa-file-pdf fa-3x' }} mb-2 text-warning"></i>
-                                        <span class="small text-uppercase fw-bold opacity-75">{{ $prod->category ?? 'Study Material' }}</span>
-                                    </div>
-                                @endif
+                                <a href="{{ route('store.show', ['type' => $prod->type, 'slug' => $prod->slug]) }}" class="d-block w-100 h-100 text-decoration-none position-relative" title="View details of {{ $prod->title }}">
+                                    @if($prod->thumbnail)
+                                        <img src="{{ $prod->thumbnail_url }}" alt="{{ $prod->title }}" class="w-100 h-100 object-fit-cover">
+                                    @else
+                                        <div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-white p-3 text-center">
+                                            <i class="fa-solid {{ $prod->type === 'video' ? 'fa-play-circle fa-3x' : 'fa-file-pdf fa-3x' }} mb-2 text-warning"></i>
+                                            <span class="small text-uppercase fw-bold opacity-75">{{ $prod->category ?? 'Study Material' }}</span>
+                                        </div>
+                                    @endif
+                                </a>
 
                                 <!-- Product Type Badge -->
-                                <span class="position-absolute top-0 start-0 m-2 badge {{ $prod->type === 'video' ? ($prod->isPublicVideo() ? 'bg-success' : 'bg-danger') : 'bg-primary' }} text-white px-2 py-1 shadow-sm font-monospace">
+                                <span class="position-absolute top-0 start-0 m-2 badge {{ $prod->type === 'video' ? ($prod->isPublicVideo() ? 'bg-success' : 'bg-danger') : 'bg-primary' }} text-white px-2 py-1 shadow-sm font-monospace pointer-events-none">
                                     <i class="fa-solid {{ $prod->type === 'video' ? ($prod->isPublicVideo() ? 'fa-globe' : 'fa-lock') : 'fa-file-lines' }} me-1"></i>
                                     @if($prod->type === 'video')
                                         {{ $prod->isPublicVideo() ? 'Free Lecture' : 'Private Video' }}
@@ -93,7 +95,7 @@
                                 </span>
 
                                 @if($prod->has_discount && !$prod->isPublicVideo())
-                                    <span class="position-absolute top-0 end-0 m-2 badge bg-success text-white px-2 py-1 shadow-sm">
+                                    <span class="position-absolute top-0 end-0 m-2 badge bg-success text-white px-2 py-1 shadow-sm pointer-events-none">
                                         {{ $prod->discount_percentage }}% OFF
                                     </span>
                                 @endif
@@ -127,7 +129,7 @@
                                 </div>
 
                                 <!-- Price & Action -->
-                                <div class="d-flex align-items-center justify-content-between mt-auto">
+                                <div class="d-flex align-items-center justify-content-between mt-auto flex-wrap gap-2">
                                     <div>
                                         @if($prod->isPublicVideo() || $prod->effective_price <= 0)
                                             <span class="fs-5 fw-black text-success">FREE</span>
@@ -138,15 +140,22 @@
                                             @endif
                                         @endif
                                     </div>
-                                    @if($prod->isPublicVideo())
-                                        <a href="{{ route('store.show', ['type' => $prod->type, 'slug' => $prod->slug]) }}" class="btn btn-sm btn-success px-3 rounded-pill fw-bold shadow-sm">
-                                            Watch Free <i class="fa-solid fa-circle-play ms-1"></i>
-                                        </a>
-                                    @else
-                                        <a href="{{ route('store.show', ['type' => $prod->type, 'slug' => $prod->slug]) }}" class="btn btn-sm btn-primary px-3 rounded-pill fw-bold shadow-sm">
-                                            Buy Now <i class="fa-solid fa-arrow-right ms-1"></i>
-                                        </a>
-                                    @endif
+                                    <div class="d-flex align-items-center gap-1">
+                                        @if($prod->has_demo)
+                                            <a href="{{ $prod->effective_demo_url }}" target="_blank" class="btn btn-sm btn-outline-warning px-2.5 rounded-pill fw-bold" title="Open Demo">
+                                                <i class="fa-solid fa-circle-play me-1"></i> Demo
+                                            </a>
+                                        @endif
+                                        @if($prod->isPublicVideo())
+                                            <a href="{{ route('store.show', ['type' => $prod->type, 'slug' => $prod->slug]) }}" class="btn btn-sm btn-success px-3 rounded-pill fw-bold shadow-sm">
+                                                Watch Free <i class="fa-solid fa-circle-play ms-1"></i>
+                                            </a>
+                                        @else
+                                            <a href="{{ route('store.show', ['type' => $prod->type, 'slug' => $prod->slug]) }}" class="btn btn-sm btn-primary px-3 rounded-pill fw-bold shadow-sm">
+                                                Buy Now <i class="fa-solid fa-arrow-right ms-1"></i>
+                                            </a>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -15,6 +15,7 @@ class Admission extends Model
         'student_id',
         'centre_id',
         'course_id',
+        'admission_no',
         'batch_id',
         'admission_date',
         'course_fee',
@@ -36,6 +37,16 @@ class Admission extends Model
         'commission_credited' => 'boolean',
         'commission_amount' => 'decimal:2',
     ];
+
+    public function getAdmissionNoAttribute($value): string
+    {
+        if (!empty($value)) {
+            return $value;
+        }
+
+        $year = $this->created_at ? $this->created_at->format('Y') : date('Y');
+        return 'ADM/' . $year . '/' . str_pad($this->id ?? 0, 5, '0', STR_PAD_LEFT);
+    }
 
     public function student()
     {

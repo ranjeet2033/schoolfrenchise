@@ -9,7 +9,7 @@
     .note-editor.note-frame {
         border: 1px solid #dee2e6 !important;
         border-radius: 10px !important;
-        overflow: hidden;
+        overflow: visible !important;
         box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
     .note-toolbar {
@@ -17,7 +17,8 @@
         border-bottom: 1px solid #e2e8f0 !important;
         padding: 8px 10px !important;
     }
-    .note-btn {
+    /* Only style toolbar buttons that are NOT color palette swatches */
+    .note-toolbar .note-btn:not(.note-color-btn):not(.note-color-reset) {
         background: #ffffff !important;
         border: 1px solid #e2e8f0 !important;
         border-radius: 6px !important;
@@ -25,7 +26,7 @@
         font-size: 13px !important;
         padding: 5px 9px !important;
     }
-    .note-btn:hover {
+    .note-toolbar .note-btn:not(.note-color-btn):not(.note-color-reset):hover {
         background: #f1f5f9 !important;
         color: #0f172a !important;
     }
@@ -33,8 +34,78 @@
         font-family: 'Plus Jakarta Sans', sans-serif !important;
         font-size: 15px !important;
         line-height: 1.7 !important;
-        color: #1e293b !important;
+        color: #1e293b;
+        background-color: #ffffff;
+    }
+
+    /* Fixed & Visible Summernote Color Picker & Swatches */
+    .note-dropdown-menu {
+        padding: 12px 14px !important;
+        border-radius: 10px !important;
+        border: 1px solid #cbd5e1 !important;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
+        z-index: 1060 !important;
         background: #ffffff !important;
+        min-width: 230px !important;
+    }
+    .note-palette-title {
+        font-weight: 700 !important;
+        font-size: 11px !important;
+        color: #475569 !important;
+        margin: 6px 0 6px !important;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-bottom: 1px solid #f1f5f9;
+        padding-bottom: 3px;
+    }
+    .note-color-palette {
+        line-height: 1 !important;
+        margin-bottom: 8px !important;
+    }
+    .note-color-palette .note-color-row {
+        height: 20px !important;
+        display: flex !important;
+        gap: 3px !important;
+        margin-bottom: 3px !important;
+    }
+    .note-color-palette .note-color-btn {
+        width: 20px !important;
+        height: 20px !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        border: 1px solid rgba(0, 0, 0, 0.22) !important;
+        border-radius: 4px !important;
+        cursor: pointer !important;
+        display: inline-block !important;
+        box-shadow: inset 0 0 1px rgba(0,0,0,0.2) !important;
+        transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+    .note-color-palette .note-color-btn:hover {
+        transform: scale(1.3) !important;
+        border-color: #0f172a !important;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.3) !important;
+        z-index: 10 !important;
+        position: relative !important;
+    }
+    .note-color-reset {
+        font-size: 11px !important;
+        padding: 4px 8px !important;
+        margin-bottom: 6px !important;
+        border-radius: 5px !important;
+        border: 1px solid #cbd5e1 !important;
+        background: #f8fafc !important;
+        color: #334155 !important;
+        cursor: pointer !important;
+        width: 100% !important;
+        text-align: center !important;
+        font-weight: 600 !important;
+    }
+    .note-color-reset:hover {
+        background: #e2e8f0 !important;
+        color: #0f172a !important;
+    }
+    .note-current-color-button {
+        padding: 5px 8px !important;
     }
 </style>
 @endpush

@@ -87,18 +87,39 @@
                 <!-- PDF Specific Fields -->
                 <div id="pdfFields" class="col-12">
                     <div class="p-3 bg-light rounded-3 border">
-                        <h6 class="fw-bold text-dark mb-3"><i class="fa-solid fa-file-pdf text-danger me-1"></i> PDF File Details</h6>
+                        <h6 class="fw-bold text-dark mb-3"><i class="fa-solid fa-file-pdf text-danger me-1"></i> PDF File & Drive Resources</h6>
                         <div class="row g-3">
-                            <div class="col-md-8">
-                                <label class="form-label small fw-bold">Replace PDF File</label>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Replace Primary PDF File</label>
                                 <input type="file" name="pdf_file" class="form-control" accept="application/pdf">
                                 @if($product->pdf_file_path)
                                     <span class="small text-success d-block mt-1"><i class="fa-solid fa-circle-check me-1"></i> Existing PDF is safely stored.</span>
                                 @endif
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <label class="form-label small fw-bold">Total Pages Count</label>
                                 <input type="number" name="total_pages" value="{{ old('total_pages', $product->total_pages) }}" class="form-control">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label small fw-bold"><i class="fa-solid fa-eye text-primary me-1"></i> Demo / Sample PDF Link</label>
+                                <input type="url" name="demo_url" value="{{ old('demo_url', $product->demo_url) }}" class="form-control" placeholder="Google Drive or sample PDF URL">
+                                <span class="form-text small text-muted">Demo button shown on product page (Free).</span>
+                            </div>
+
+                            <!-- Multiple PDF / Google Drive Resource Links -->
+                            <div class="col-12 mt-3">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <label class="form-label small fw-bold text-dark mb-0">
+                                        <i class="fa-brands fa-google-drive text-warning me-1"></i> Additional Google Drive / PDF Download Links (Multiple Links)
+                                    </label>
+                                    <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3" onclick="addPdfResourceLink()">
+                                        <i class="fa-solid fa-plus me-1"></i> Add Drive / PDF Link
+                                    </button>
+                                </div>
+                                <div id="pdfResourceLinksContainer" class="d-flex flex-column gap-2">
+                                    <!-- Render existing links -->
+                                </div>
+                                <span class="form-text small text-muted">Paid customers will be able to access all these Google Drive folders/files and PDFs.</span>
                             </div>
                         </div>
                     </div>
@@ -108,8 +129,8 @@
                 <div id="videoFields" class="col-12 d-none">
                     <div class="p-3 bg-light rounded-3 border">
                         <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-                            <h6 class="fw-bold text-dark mb-0"><i class="fa-brands fa-youtube text-danger me-1"></i> YouTube Video Configuration</h6>
-                            <span class="badge bg-secondary font-monospace">Public or Private Mode</span>
+                            <h6 class="fw-bold text-dark mb-0"><i class="fa-brands fa-youtube text-danger me-1"></i> Video Course & Lectures Configuration</h6>
+                            <span class="badge bg-secondary font-monospace">YouTube &amp; Google Drive Supported</span>
                         </div>
 
                         <!-- Video Access Type Selector (Public vs Private) -->
@@ -120,10 +141,10 @@
                                     <div class="form-check p-3 border rounded-3 h-100 bg-light-subtle">
                                         <input class="form-check-input ms-0 me-2" type="radio" name="video_access_type" id="accessPrivate" value="private" {{ old('video_access_type', $product->video_access_type ?? 'private') === 'private' ? 'checked' : '' }} onchange="toggleVideoAccessMode()">
                                         <label class="form-check-label fw-bold text-dark" for="accessPrivate">
-                                            <i class="fa-solid fa-lock text-danger me-1"></i> Private Video (Access / Invite Required)
+                                            <i class="fa-solid fa-lock text-danger me-1"></i> Private / Paid Video (Purchase or Access Required)
                                         </label>
                                         <p class="text-muted small mb-0 mt-1" style="font-size: 0.78rem;">
-                                            Video locked rahegi. Student/customer ko admin panel se access dena hoga ya wo purchase karke Gmail invite receive karenge.
+                                            Video locked rahegi. Student/customer payment ke baad ya admin dwara access diye jane par "See Video" button se videos access kar sakenge.
                                         </p>
                                     </div>
                                 </div>
@@ -143,8 +164,8 @@
 
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <label class="form-label small fw-bold">YouTube Video URL</label>
-                                <input type="url" name="youtube_video_url" value="{{ old('youtube_video_url', $product->youtube_video_url) }}" class="form-control">
+                                <label class="form-label small fw-bold">Primary Video URL</label>
+                                <input type="url" name="youtube_video_url" value="{{ old('youtube_video_url', $product->youtube_video_url) }}" class="form-control" placeholder="https://www.youtube.com/watch?v=... or Google Drive URL">
                             </div>
                             <div class="col-md-3">
                                 <label class="form-label small fw-bold">Class Duration</label>
@@ -154,6 +175,36 @@
                                 <label class="form-label small fw-bold">Max Gmail Invites (Quota)</label>
                                 <input type="number" name="max_invites" value="{{ old('max_invites', $product->max_invites) }}" max="50" min="1" class="form-control">
                                 <span class="small text-muted d-block mt-1">Current Invites: <strong>{{ $product->current_invites }}/{{ $product->max_invites }}</strong></span>
+                            </div>
+
+                            <!-- Introduction Video URL -->
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold"><i class="fa-solid fa-play text-info me-1"></i> Introduction Video (YouTube Link)</label>
+                                <input type="url" name="intro_video_url" value="{{ old('intro_video_url', $product->intro_video_url) }}" class="form-control" placeholder="https://www.youtube.com/watch?v=...">
+                                <span class="form-text small text-muted">Shown in video details overview so prospective students can preview the course.</span>
+                            </div>
+
+                            <!-- Demo Video URL -->
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold"><i class="fa-solid fa-circle-play text-success me-1"></i> Demo Video Link (YouTube or Drive)</label>
+                                <input type="url" name="demo_url" value="{{ old('demo_url', $product->demo_url) }}" class="form-control" placeholder="YouTube or Drive Demo link">
+                                <span class="form-text small text-muted">Triggers the "Demo" button on the video card and details page.</span>
+                            </div>
+
+                            <!-- Multiple Video Links Repeater -->
+                            <div class="col-12 mt-3">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <label class="form-label small fw-bold text-dark mb-0">
+                                        <i class="fa-solid fa-film text-danger me-1"></i> Multiple Video Lectures &amp; Drive Links (Course Playlist / Modules)
+                                    </label>
+                                    <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3" onclick="addVideoLectureLink()">
+                                        <i class="fa-solid fa-plus me-1"></i> Add Video / Lecture Link
+                                    </button>
+                                </div>
+                                <div id="videoLectureLinksContainer" class="d-flex flex-column gap-2">
+                                    <!-- Render dynamic rows here -->
+                                </div>
+                                <span class="form-text small text-muted">Add multiple videos (YouTube or Google Drive). Paid users can watch all of them using the "See Video" portal.</span>
                             </div>
                         </div>
                     </div>
@@ -229,9 +280,64 @@ function toggleVideoAccessMode() {
     }
 }
 
+let pdfLinkIndex = 0;
+function addPdfResourceLink(title = '', url = '') {
+    const container = document.getElementById('pdfResourceLinksContainer');
+    if (!container) return;
+    const rowId = `pdf_link_row_${pdfLinkIndex}`;
+    const html = `
+        <div class="d-flex align-items-center gap-2 p-2 bg-white rounded-3 border shadow-sm" id="${rowId}">
+            <span class="badge bg-warning text-dark"><i class="fa-brands fa-google-drive"></i></span>
+            <input type="text" name="resource_links[${pdfLinkIndex}][title]" value="${title.replace(/"/g, '&quot;')}" class="form-control form-control-sm" placeholder="Link Title e.g. Chapter 1-5 Drive Link" style="max-width: 260px;" required>
+            <input type="url" name="resource_links[${pdfLinkIndex}][url]" value="${url.replace(/"/g, '&quot;')}" class="form-control form-control-sm" placeholder="https://drive.google.com/... or PDF URL" required>
+            <button type="button" class="btn btn-sm btn-outline-danger" onclick="document.getElementById('${rowId}').remove()" title="Remove link">
+                <i class="fa-solid fa-trash"></i>
+            </button>
+        </div>
+    `;
+    container.insertAdjacentHTML('beforeend', html);
+    pdfLinkIndex++;
+}
+
+let videoLinkIndex = 0;
+function addVideoLectureLink(title = '', url = '', platform = 'youtube') {
+    const container = document.getElementById('videoLectureLinksContainer');
+    if (!container) return;
+    const rowId = `video_link_row_${videoLinkIndex}`;
+    const html = `
+        <div class="d-flex align-items-center gap-2 p-2 bg-white rounded-3 border shadow-sm" id="${rowId}">
+            <select name="video_links[${videoLinkIndex}][platform]" class="form-select form-select-sm" style="max-width: 130px;">
+                <option value="youtube" ${platform === 'youtube' ? 'selected' : ''}>YouTube</option>
+                <option value="drive" ${platform === 'drive' ? 'selected' : ''}>Google Drive</option>
+            </select>
+            <input type="text" name="video_links[${videoLinkIndex}][title]" value="${title.replace(/"/g, '&quot;')}" class="form-control form-control-sm" placeholder="Lecture Title e.g. Lesson 2: Windows 11" style="max-width: 250px;" required>
+            <input type="url" name="video_links[${videoLinkIndex}][url]" value="${url.replace(/"/g, '&quot;')}" class="form-control form-control-sm" placeholder="https://www.youtube.com/watch?v=... or Google Drive URL" required>
+            <button type="button" class="btn btn-sm btn-outline-danger" onclick="document.getElementById('${rowId}').remove()" title="Remove video">
+                <i class="fa-solid fa-trash"></i>
+            </button>
+        </div>
+    `;
+    container.insertAdjacentHTML('beforeend', html);
+    videoLinkIndex++;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     toggleTypeFields();
     toggleVideoAccessMode();
+
+    // Hydrate existing resource links
+    @if(!empty($product->normalized_resource_links))
+        @foreach($product->normalized_resource_links as $rLink)
+            addPdfResourceLink({!! json_encode($rLink['title'] ?? '') !!}, {!! json_encode($rLink['url'] ?? '') !!});
+        @endforeach
+    @endif
+
+    // Hydrate existing video links
+    @if(!empty($product->normalized_video_links))
+        @foreach($product->normalized_video_links as $vLink)
+            addVideoLectureLink({!! json_encode($vLink['title'] ?? '') !!}, {!! json_encode($vLink['url'] ?? '') !!}, {!! json_encode($vLink['platform'] ?? 'youtube') !!});
+        @endforeach
+    @endif
 });
 </script>
 @endpush

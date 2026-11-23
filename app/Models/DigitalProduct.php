@@ -22,11 +22,15 @@ class DigitalProduct extends Model
         'sale_price',
         'thumbnail',
         'pdf_file_path',
+        'resource_links',
         'total_pages',
         'sample_pdf_path',
+        'demo_url',
         'youtube_video_id',
         'youtube_video_url',
+        'intro_video_url',
         'duration',
+        'video_links',
         'max_invites',
         'current_invites',
         'status',
@@ -42,6 +46,8 @@ class DigitalProduct extends Model
         'max_invites' => 'integer',
         'current_invites' => 'integer',
         'sort_order' => 'integer',
+        'resource_links' => 'array',
+        'video_links' => 'array',
     ];
 
     public function orderItems()
@@ -118,5 +124,52 @@ class DigitalProduct extends Model
     public function getAvailableInvitesAttribute(): int
     {
         return max(0, $this->max_invites - $this->current_invites);
+    }
+
+    public static function extractYoutubeId(?string $url): ?string
+    {
+        if (empty($url)) {
+            return null;
+        }
+        if (preg_match('/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/))([\w-]{11})/', $url, $matches)) {
+            return $matches[1];
+        }
+        if (strlen($url) === 11 && preg_match('/^[\w-]{11}$/', $url)) {
+            return $url;
+        }
+        return null;
+    }
+
+    public function getIntroVideoIdAttribute(): ?string
+    {
+        return self::extractYoutubeId($this->intro_video_url);
+    }
+
+    public function getHasDemoAttribute(): bool
+    {
+        return !empty($this->demo_url) || !empty($this->sample_pdf_path);
+    }
+
+    public function getEffectiveDemoUrlAttribute(): ?string
+    {
+        if (!empty($this->demo_url)) {
+            return $this->demo_url;
+        }
+        if (!empty($this->sample_pdf_path)) {
+            return asset('storage/' . $this->sample_pdf_path);
+        }
+        return null;
+    }
+
+    public function getNormalizedResourceLinksAttribute(): array
+    {
+        $links = is_array($this->resource_links) ? $this->resource_links : [];
+        return array_values(array_filter($links, fn($item) => !empty($item['url'] ?? null)));
+    }
+
+    public function getNormalizedVideoLinksAttribute(): array
+    {
+        $links = is_array($this->video_links) ? $this->video_links : [];
+        return array_values(array_filter($links, fn($item) => !empty($item['url'] ?? null)));
     }
 }

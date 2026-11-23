@@ -45,25 +45,38 @@
                                     </div>
                                 </div>
 
-                                <div class="text-md-end flex-shrink-0">
+                                <div class="text-md-end flex-shrink-0 d-flex flex-column align-items-md-end gap-2">
                                     @if($prod->type === 'pdf')
                                         <!-- Instant Download Button -->
                                         <a href="{{ route('store.download.pdf', $access->access_token) }}" class="btn btn-success btn-lg px-4 rounded-pill fw-bold shadow-sm">
                                             <i class="fa-solid fa-download me-2"></i> Download PDF
                                         </a>
-                                        <span class="d-block small text-muted mt-1">Downloads: {{ $access->pdf_download_count }} times</span>
+                                        <span class="d-block small text-muted">Downloads: {{ $access->pdf_download_count }} times</span>
+
+                                        @if(!empty($prod->normalized_resource_links))
+                                            <div class="mt-2 d-flex flex-wrap gap-1 justify-content-md-end">
+                                                @foreach($prod->normalized_resource_links as $rLink)
+                                                    <a href="{{ $rLink['url'] }}" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill px-2.5 py-1">
+                                                        <i class="fa-brands fa-google-drive text-warning me-1"></i> {{ $rLink['title'] }}
+                                                    </a>
+                                                @endforeach
+                                            </div>
+                                        @endif
                                     @else
+                                        <!-- Watch Video / Access Lectures -->
+                                        <a href="{{ route('store.video.watch', $access->access_token) }}" class="btn btn-danger btn-lg px-4 rounded-pill fw-bold shadow-sm">
+                                            <i class="fa-solid fa-circle-play me-2"></i> See Video / Watch Now
+                                        </a>
+
                                         <!-- YouTube Invitation Status -->
                                         @if($access->youtube_invite_status === 'invited')
-                                            <div class="badge bg-success px-3 py-2 fs-6">
-                                                <i class="fa-solid fa-envelope-circle-check me-1"></i> Invitation Sent!
+                                            <div class="badge bg-success px-3 py-1.5 fs-6">
+                                                <i class="fa-solid fa-envelope-circle-check me-1"></i> YouTube Invite Sent!
                                             </div>
-                                            <span class="d-block small text-muted mt-1">Check your inbox at <strong>{{ $access->customer_gmail }}</strong></span>
                                         @else
-                                            <div class="badge bg-warning text-dark px-3 py-2 fs-6">
-                                                <i class="fa-solid fa-hourglass-half me-1"></i> Invitation Pending
+                                            <div class="badge bg-warning text-dark px-3 py-1.5 fs-6">
+                                                <i class="fa-solid fa-hourglass-half me-1"></i> YouTube Invite Queued
                                             </div>
-                                            <span class="d-block small text-muted mt-1">Will be delivered to <strong>{{ $access->customer_gmail }}</strong></span>
                                         @endif
                                     @endif
                                 </div>

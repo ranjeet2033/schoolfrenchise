@@ -7,6 +7,7 @@ use App\Models\Admission;
 use App\Models\AuditLog;
 use App\Models\Batch;
 use App\Models\Centre;
+use App\Models\CentreWallet;
 use App\Models\Course;
 use App\Models\District;
 use App\Models\FeeStructure;
@@ -22,6 +23,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class CentreStudentController extends Controller
@@ -302,16 +304,22 @@ class CentreStudentController extends Controller
             return back()->with('error', "Insufficient wallet balance (₹" . number_format($centreWallet->balance, 2) . "). ₹" . number_format($admissionFee, 2) . " is required to enroll into a new course.");
         }
 
+        $courseFee = (float) ($course->default_course_fee ?? $course->course_fee ?? $course->fee ?? 0);
+        $netFee = isset($validated['net_fee']) && $validated['net_fee'] !== '' ? (float) $validated['net_fee'] : $courseFee;
+        $discountAmount = max(0, $courseFee - $netFee);
+
         try {
-            DB::transaction(function () use ($studentModel, $centre, $course, $validated, $admissionFee) {
+            DB::transaction(function () use ($studentModel, $centre, $course, $courseFee, $netFee, $discountAmount, $admissionFee) {
                 $admission = Admission::create([
                     'student_id'          => $studentModel->id,
                     'centre_id'           => $centre->id,
                     'course_id'           => $course->id,
-                    'admission_no'        => 'ADM-' . date('Y') . '-' . strtoupper(Str::random(6)),
+                    'admission_no'        => 'ADM/' . date('Y') . '/' . strtoupper(Str::random(6)),
                     'admission_date'      => now(),
                     'batch_id'            => null,
-                    'net_fee'             => $validated['net_fee'] ?? ($course->course_fee ?? $course->default_course_fee ?? $course->fee ?? 0),
+                    'course_fee'          => $courseFee,
+                    'discount_amount'     => $discountAmount,
+                    'net_fee'             => $netFee,
                     'total_paid'          => 0,
                     'status'              => 'active',
                     'commission_credited' => false,

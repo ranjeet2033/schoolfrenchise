@@ -299,6 +299,36 @@ class DigitalStoreController extends Controller
     }
 
     /**
+     * Authorized Video Access & Player Hub for paid customers.
+     */
+    public function watchVideo($accessToken)
+    {
+        $access = DigitalProductAccess::with(['product', 'order'])
+            ->where('access_token', $accessToken)
+            ->where('status', 'active')
+            ->firstOrFail();
+
+        $product = $access->product;
+
+        if (!$product || $product->type !== 'video') {
+            abort(404, 'The requested video course was not found.');
+        }
+
+        // Verify order payment status (unless granted manually by admin)
+        if ($access->order && $access->order->payment_status !== 'paid') {
+            abort(403, 'Payment authorization required to watch this video course.');
+        }
+
+        // Primary video info
+        $primaryYtId = $product->youtube_video_id ?: DigitalProduct::extractYoutubeId($product->youtube_video_url);
+
+        // Normalized video playlist / modules
+        $videoLinks = $product->normalized_video_links;
+
+        return view('pages.store.watch_video', compact('access', 'product', 'primaryYtId', 'videoLinks'));
+    }
+
+    /**
      * Customer Purchase History & PDF Re-download Portal.
      */
     public function myPurchases(Request $request)

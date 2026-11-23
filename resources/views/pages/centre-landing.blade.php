@@ -199,6 +199,51 @@
             color: #ffffff;
         }
 
+        @media (max-width: 991.98px) {
+            body {
+                padding-bottom: 74px; /* Ensure mobile footer menu doesn't block content */
+            }
+            .floating-whatsapp {
+                bottom: 84px !important; /* Move upward above mobile footer menu */
+                right: 18px !important;
+                width: 52px;
+                height: 52px;
+                font-size: 26px;
+            }
+        }
+
+        /* Mobile Sticky Bottom Menu */
+        .centre-mobile-bottom-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 1080;
+            background: #ffffff;
+            border-top: 1px solid #e2e8f0;
+            box-shadow: 0 -4px 16px rgba(0,0,0,0.08);
+            padding: 6px 12px 8px;
+        }
+        .centre-mob-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #64748b;
+            font-size: 0.68rem;
+            font-weight: 700;
+            line-height: 1.2;
+            padding: 2px 4px;
+        }
+        .centre-mob-btn i {
+            font-size: 1.15rem;
+            margin-bottom: 2px;
+        }
+        .centre-mob-btn.active, .centre-mob-btn:hover {
+            color: var(--centre-primary);
+        }
+
         /* Public-Aligned Academic Course Card Styling */
         .dce-course-grid-card {
             background: #ffffff;
@@ -363,6 +408,13 @@
                 text-overflow: ellipsis;
                 max-width: 200px;
             }
+            .centre-nav .navbar-brand .text-centre-accent {
+                font-size: 0.60rem !important;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 220px;
+            }
             .centre-nav .navbar-brand span {
                 font-size: 0.66rem !important;
             }
@@ -443,6 +495,9 @@
             <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url()->current() }}">
                 <img src="{{ $landingPage->effective_logo_url }}" alt="{{ $landingPage->custom_centre_name ?? $centre->centre_name }}" height="48" class="rounded" onerror="this.onerror=null;this.src='{{ asset('images/tech-era-logo.png') }}';">
                 <div>
+                    <div class="text-centre-accent fw-bold text-uppercase d-block" style="font-size: 0.68rem; letter-spacing: 0.4px;">
+                        <i class="fa-solid fa-shield-halved me-1"></i> Authorized Study Center of Tech Era Computer
+                    </div>
                     <h5 class="fw-bold mb-0 text-centre-primary" style="letter-spacing: -0.3px;">{{ $landingPage->custom_centre_name ?? $centre->centre_name }}</h5>
                     <span class="small text-muted d-block font-monospace" style="font-size: 0.75rem;">{{ $landingPage->header_subtext ?? ('Code: ' . $centre->centre_code . ' | ' . $centre->city) }}</span>
                 </div>
@@ -678,7 +733,7 @@
                     @php
                         $courseImg = $course->thumbnail_url;
                     @endphp
-                    <div class="col-6 col-md-4 col-lg-3">
+                    <div class="col-6 col-md-4 col-lg-3 {{ $loop->index >= 12 ? 'dce-extra-course d-none' : '' }}">
                         <div class="dce-course-grid-card">
                             <!-- Course Thumbnail Image with Floating Badges -->
                             <div class="dce-course-img-wrap">
@@ -731,6 +786,14 @@
                     </div>
                 @endforelse
             </div>
+
+            @if($courses->count() > 12)
+                <div class="text-center mt-4 pt-2">
+                    <button type="button" id="btnToggleAllCourses" class="btn btn-outline-primary fw-bold rounded-pill px-4 py-2 shadow-sm" style="border-color: var(--centre-primary); color: var(--centre-primary);" onclick="toggleAllCourses()">
+                        <i class="fa-solid fa-list-check me-1"></i> <span id="textToggleAllCourses">View All Courses ({{ $courses->count() }})</span>
+                    </button>
+                </div>
+            @endif
         </div>
     </section>
 
@@ -753,10 +816,10 @@
 
                 <div class="row g-2.5 g-sm-3 g-lg-4">
                     @foreach($digitalProducts as $prod)
-                        <div class="col-6 col-md-4 col-lg-3">
+                        <div class="col-6 col-md-4 col-lg-3 {{ $loop->index >= 12 ? 'dce-extra-store d-none' : '' }}">
                             <div class="card h-100 border-0 shadow-sm rounded-3 overflow-hidden d-flex flex-column transition-hover dce-store-card" style="border: 1px solid #e2e8f0 !important; background: #ffffff;">
-                                <!-- Thumbnail & Floating Badges -->
-                                <div class="position-relative dce-store-thumb" style="height: 160px; background-color: var(--centre-primary, #0d2238); overflow: hidden;">
+                                <!-- Thumbnail & Floating Badges (Clickable to Details) -->
+                                <a href="{{ route('store.show', ['type' => $prod->type, 'slug' => $prod->slug]) }}" class="d-block position-relative dce-store-thumb text-decoration-none" style="height: 160px; background-color: var(--centre-primary, #0d2238); overflow: hidden;">
                                     @if($prod->thumbnail)
                                         <img src="{{ $prod->thumbnail_url }}" alt="{{ $prod->title }}" class="w-100 h-100 object-fit-cover">
                                     @else
@@ -781,7 +844,7 @@
                                             {{ $prod->discount_percentage }}% OFF
                                         </span>
                                     @endif
-                                </div>
+                                </a>
 
                                 <!-- Card Body -->
                                 <div class="card-body p-3 d-flex flex-column flex-grow-1">
@@ -811,7 +874,7 @@
                                     </div>
 
                                     <!-- Price & Button -->
-                                    <div class="pt-2 border-top d-flex justify-content-between align-items-center mt-auto">
+                                    <div class="pt-2 border-top d-flex justify-content-between align-items-center mt-auto flex-wrap gap-2">
                                         <div class="d-flex flex-column">
                                             <span class="text-muted" style="font-size: 0.62rem; text-transform: uppercase; font-weight: 700;">Price</span>
                                             <div class="d-flex align-items-baseline gap-1">
@@ -826,21 +889,36 @@
                                             </div>
                                         </div>
 
-                                        @if($prod->isPublicVideo())
-                                            <a href="{{ route('store.show', ['type' => $prod->type, 'slug' => $prod->slug]) }}" class="btn btn-sm btn-success rounded-2 px-3 fw-bold shadow-sm">
-                                                <i class="fa-solid fa-circle-play me-1"></i> Watch Free
-                                            </a>
-                                        @else
-                                            <a href="{{ route('store.show', ['type' => $prod->type, 'slug' => $prod->slug]) }}" class="btn btn-sm btn-centre-primary rounded-2 px-3 fw-bold shadow-sm">
-                                                <i class="fa-solid fa-cart-shopping me-1"></i> Buy
-                                            </a>
-                                        @endif
+                                        <div class="d-flex align-items-center gap-1.5 flex-wrap">
+                                            @if($prod->has_demo)
+                                                <a href="{{ $prod->effective_demo_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-secondary rounded-2 px-2.5 fw-semibold shadow-sm" style="font-size: 0.72rem;" title="View Demo">
+                                                    <i class="fa-solid fa-eye me-1 text-primary"></i>Demo
+                                                </a>
+                                            @endif
+                                            @if($prod->isPublicVideo())
+                                                <a href="{{ route('store.show', ['type' => $prod->type, 'slug' => $prod->slug]) }}" class="btn btn-sm btn-success rounded-2 px-3 fw-bold shadow-sm" style="font-size: 0.75rem;">
+                                                    <i class="fa-solid fa-circle-play me-1"></i> Watch Free
+                                                </a>
+                                            @else
+                                                <a href="{{ route('store.show', ['type' => $prod->type, 'slug' => $prod->slug]) }}" class="btn btn-sm btn-centre-primary rounded-2 px-3 fw-bold shadow-sm" style="font-size: 0.75rem;">
+                                                    <i class="fa-solid fa-cart-shopping me-1"></i> Buy
+                                                </a>
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     @endforeach
                 </div>
+
+                @if($digitalProducts->count() > 12)
+                    <div class="text-center mt-4 pt-2">
+                        <button type="button" id="btnToggleAllStore" class="btn btn-outline-primary fw-bold rounded-pill px-4 py-2 shadow-sm" style="border-color: var(--centre-primary); color: var(--centre-primary);" onclick="toggleAllStore()">
+                            <i class="fa-solid fa-store me-1"></i> <span id="textToggleAllStore">View All Products ({{ $digitalProducts->count() }})</span>
+                        </button>
+                    </div>
+                @endif
             </div>
         </section>
     @endif
@@ -1041,6 +1119,36 @@
         </a>
     @endif
 
+    <!-- Mobile Sticky Footer Navigation Bar -->
+    <div class="centre-mobile-bottom-bar d-lg-none">
+        <div class="d-flex justify-content-around align-items-center">
+            <a href="#about" class="centre-mob-btn">
+                <i class="fa-solid fa-school"></i>
+                <span>About</span>
+            </a>
+            <a href="#courses" class="centre-mob-btn">
+                <i class="fa-solid fa-graduation-cap"></i>
+                <span>Courses</span>
+            </a>
+            @if(isset($digitalProducts) && $digitalProducts->isNotEmpty())
+                <a href="#digital-store" class="centre-mob-btn">
+                    <i class="fa-solid fa-book-open-reader"></i>
+                    <span>Store</span>
+                </a>
+            @endif
+            @if(!empty($landingPage->custom_phone ?? $centre->mobile))
+                <a href="tel:{{ $landingPage->custom_phone ?? $centre->mobile }}" class="centre-mob-btn text-success">
+                    <i class="fa-solid fa-phone"></i>
+                    <span>Call</span>
+                </a>
+            @endif
+            <button type="button" class="centre-mob-btn border-0 bg-transparent text-primary" data-bs-toggle="modal" data-bs-target="#enquiryModal">
+                <i class="fa-solid fa-file-pen text-centre-accent"></i>
+                <span>Apply</span>
+            </button>
+        </div>
+    </div>
+
     <!-- Interactive Apply / Admission Enquiry Modal -->
     <div class="modal fade" id="enquiryModal" tabindex="-1" aria-labelledby="enquiryModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -1147,6 +1255,44 @@
                 }
             @endif
         });
+
+        function toggleAllCourses() {
+            const extraCourses = document.querySelectorAll('.dce-extra-course');
+            const textSpan = document.getElementById('textToggleAllCourses');
+            if (!extraCourses.length) return;
+            
+            const isHidden = extraCourses[0].classList.contains('d-none');
+            extraCourses.forEach(function(el) {
+                if (isHidden) {
+                    el.classList.remove('d-none');
+                } else {
+                    el.classList.add('d-none');
+                }
+            });
+
+            if (textSpan) {
+                textSpan.textContent = isHidden ? 'Show Less Courses' : 'View All Courses ({{ $courses->count() }})';
+            }
+        }
+
+        function toggleAllStore() {
+            const extraStore = document.querySelectorAll('.dce-extra-store');
+            const textSpan = document.getElementById('textToggleAllStore');
+            if (!extraStore.length) return;
+
+            const isHidden = extraStore[0].classList.contains('d-none');
+            extraStore.forEach(function(el) {
+                if (isHidden) {
+                    el.classList.remove('d-none');
+                } else {
+                    el.classList.add('d-none');
+                }
+            });
+
+            if (textSpan) {
+                textSpan.textContent = isHidden ? 'Show Less Products' : 'View All Products ({{ isset($digitalProducts) ? $digitalProducts->count() : 0 }})';
+            }
+        }
     </script>
 </body>
 </html>
