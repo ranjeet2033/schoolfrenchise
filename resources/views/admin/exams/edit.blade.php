@@ -77,8 +77,8 @@
                             </div>
 
                             <div class="col-md-6">
-                                <label for="exam_date" class="form-label fw-semibold">Examination Date <span class="text-danger">*</span></label>
-                                <input type="date" class="form-control @error('exam_date') is-invalid @enderror" id="exam_date" name="exam_date" value="{{ old('exam_date', $exam->exam_date ? $exam->exam_date->format('Y-m-d') : '') }}" required>
+                                <label for="exam_date" class="form-label fw-semibold">Examination Date <small class="text-muted">(Optional)</small></label>
+                                <input type="date" class="form-control @error('exam_date') is-invalid @enderror" id="exam_date" name="exam_date" value="{{ old('exam_date', $exam->exam_date ? $exam->exam_date->format('Y-m-d') : '') }}">
                                 @error('exam_date')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror

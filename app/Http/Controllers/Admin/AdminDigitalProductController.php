@@ -66,8 +66,10 @@ class AdminDigitalProductController extends Controller
             'thumbnail'         => 'nullable|image|max:3072',
             // PDF fields
             'pdf_file'          => 'nullable|file|mimes:pdf|max:51200', // max 50MB
+            'pdf_drive_link'    => 'nullable|string|max:500',
             'total_pages'       => 'nullable|integer|min:1',
             'demo_url'          => 'nullable|string|max:500',
+            'pdf_demo_url'      => 'nullable|string|max:500',
             'resource_links'    => 'nullable|array',
             'resource_links.*.title' => 'nullable|string|max:191',
             'resource_links.*.url'   => 'nullable|string|max:500',
@@ -75,6 +77,7 @@ class AdminDigitalProductController extends Controller
             'youtube_video_id'  => 'nullable|string|max:100',
             'youtube_video_url' => 'nullable|string|max:255',
             'intro_video_url'   => 'nullable|string|max:500',
+            'video_demo_url'    => 'nullable|string|max:500',
             'duration'          => 'nullable|string|max:50',
             'video_links'       => 'nullable|array',
             'video_links.*.title'    => 'nullable|string|max:191',
@@ -111,6 +114,10 @@ class AdminDigitalProductController extends Controller
             $slug .= '-' . ($count + 1);
         }
 
+        $demoUrl = ($validated['type'] === 'video')
+            ? ($request->input('video_demo_url') ?: $request->input('demo_url'))
+            : ($request->input('pdf_demo_url') ?: $request->input('demo_url'));
+
         DigitalProduct::create([
             'title'             => $validated['title'],
             'slug'              => $slug,
@@ -123,9 +130,10 @@ class AdminDigitalProductController extends Controller
             'sale_price'        => $videoAccessType === 'public' ? null : ($validated['sale_price'] ?? null),
             'thumbnail'         => $thumbnailPath,
             'pdf_file_path'     => $pdfPath,
+            'pdf_drive_link'    => $validated['pdf_drive_link'] ?? null,
             'resource_links'    => $this->cleanLinksArray($request->input('resource_links')),
             'total_pages'       => $validated['total_pages'] ?? null,
-            'demo_url'          => $validated['demo_url'] ?? null,
+            'demo_url'          => !empty($demoUrl) ? trim($demoUrl) : null,
             'youtube_video_id'  => $ytId,
             'youtube_video_url' => $validated['youtube_video_url'] ?? null,
             'intro_video_url'   => $validated['intro_video_url'] ?? null,
@@ -158,8 +166,10 @@ class AdminDigitalProductController extends Controller
             'thumbnail'         => 'nullable|image|max:3072',
             // PDF fields
             'pdf_file'          => 'nullable|file|mimes:pdf|max:51200',
+            'pdf_drive_link'    => 'nullable|string|max:500',
             'total_pages'       => 'nullable|integer|min:1',
             'demo_url'          => 'nullable|string|max:500',
+            'pdf_demo_url'      => 'nullable|string|max:500',
             'resource_links'    => 'nullable|array',
             'resource_links.*.title' => 'nullable|string|max:191',
             'resource_links.*.url'   => 'nullable|string|max:500',
@@ -167,6 +177,7 @@ class AdminDigitalProductController extends Controller
             'youtube_video_id'  => 'nullable|string|max:100',
             'youtube_video_url' => 'nullable|string|max:255',
             'intro_video_url'   => 'nullable|string|max:500',
+            'video_demo_url'    => 'nullable|string|max:500',
             'duration'          => 'nullable|string|max:50',
             'video_links'       => 'nullable|array',
             'video_links.*.title'    => 'nullable|string|max:191',
@@ -196,6 +207,10 @@ class AdminDigitalProductController extends Controller
             }
         }
 
+        $demoUrl = ($validated['type'] === 'video')
+            ? ($request->input('video_demo_url') ?: $request->input('demo_url'))
+            : ($request->input('pdf_demo_url') ?: $request->input('demo_url'));
+
         $product->update([
             'title'             => $validated['title'],
             'type'              => $validated['type'],
@@ -205,8 +220,9 @@ class AdminDigitalProductController extends Controller
             'description'       => $validated['description'],
             'price'             => $price,
             'sale_price'        => $videoAccessType === 'public' ? null : ($validated['sale_price'] ?? null),
+            'pdf_drive_link'    => $validated['pdf_drive_link'] ?? null,
             'total_pages'       => $validated['total_pages'] ?? $product->total_pages,
-            'demo_url'          => $validated['demo_url'] ?? null,
+            'demo_url'          => !empty($demoUrl) ? trim($demoUrl) : null,
             'resource_links'    => $this->cleanLinksArray($request->input('resource_links')),
             'youtube_video_id'  => $ytId,
             'youtube_video_url' => $validated['youtube_video_url'] ?? $product->youtube_video_url,

@@ -92,7 +92,20 @@ class AppServiceProvider extends ServiceProvider
                     $merged['logo_url'] = asset('images/tech-era-logo.png');
                 }
 
-                $merged['favicon_url'] = file_exists(public_path('favicon.ico')) ? asset('favicon.ico') : ($merged['logo_url'] ?? asset('images/tech-era-logo.png'));
+                $favPath = $merged['institute_favicon'] ?? null;
+                if (!empty($favPath)) {
+                    if (file_exists(public_path($favPath))) {
+                        $merged['favicon_url'] = asset($favPath);
+                    } elseif (file_exists(public_path('storage/' . $favPath))) {
+                        $merged['favicon_url'] = asset('storage/' . $favPath);
+                    } elseif (file_exists(storage_path('app/public/' . $favPath))) {
+                        $merged['favicon_url'] = asset('storage/' . $favPath);
+                    }
+                }
+
+                if (empty($merged['favicon_url'])) {
+                    $merged['favicon_url'] = file_exists(public_path('favicon.ico')) ? asset('favicon.ico') : ($merged['logo_url'] ?? asset('images/tech-era-logo.png'));
+                }
 
                 $cachedSettings = $merged;
             }

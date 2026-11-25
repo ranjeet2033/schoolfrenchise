@@ -94,8 +94,9 @@
                             @endif
 
                             @if($product->has_demo)
-                                <a href="{{ $product->effective_demo_url }}" target="_blank" class="btn btn-outline-warning btn-lg w-100 py-2.5 rounded-pill fw-bold shadow-sm mt-2.5">
-                                    <i class="fa-solid fa-circle-play me-2"></i> View Demo {{ $product->type === 'video' ? 'Video' : 'Sample' }}
+                                <a href="{{ $product->effective_demo_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-warning btn-lg w-100 py-3 rounded-pill fw-bold text-dark shadow mt-3 d-flex align-items-center justify-content-center gap-2" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); border: 1px solid #b45309; color: #ffffff !important; font-size: 1.05rem;">
+                                    <i class="fa-solid {{ $product->type === 'video' ? 'fa-circle-play' : 'fa-eye' }} fs-5"></i>
+                                    <span>Watch / View Free Demo</span>
                                 </a>
                             @endif
 

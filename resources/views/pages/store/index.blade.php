@@ -142,8 +142,8 @@
                                     </div>
                                     <div class="d-flex align-items-center gap-1">
                                         @if($prod->has_demo)
-                                            <a href="{{ $prod->effective_demo_url }}" target="_blank" class="btn btn-sm btn-outline-warning px-2.5 rounded-pill fw-bold" title="Open Demo">
-                                                <i class="fa-solid fa-circle-play me-1"></i> Demo
+                                            <a href="{{ $prod->effective_demo_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-warning text-dark px-2.5 rounded-pill fw-bold shadow-sm" style="background: #f59e0b; border: 1px solid #d97706; color: #1e293b !important;" title="Open Free Demo">
+                                                <i class="fa-solid {{ $prod->type === 'video' ? 'fa-circle-play' : 'fa-eye' }} me-1 text-dark"></i> Demo
                                             </a>
                                         @endif
                                         @if($prod->isPublicVideo())

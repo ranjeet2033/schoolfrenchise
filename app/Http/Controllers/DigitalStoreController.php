@@ -271,8 +271,17 @@ class DigitalStoreController extends Controller
 
         $product = $access->product;
 
-        if (!$product || $product->type !== 'pdf' || empty($product->pdf_file_path)) {
+        if (!$product || $product->type !== 'pdf' || (empty($product->pdf_file_path) && empty($product->pdf_drive_link))) {
             abort(404, 'The requested PDF file is not available.');
+        }
+
+        // Increment download counter
+        $access->increment('pdf_download_count');
+        $access->update(['last_downloaded_at' => now()]);
+
+        // If primary PDF is hosted on Google Drive, redirect directly
+        if (!empty($product->pdf_drive_link) && empty($product->pdf_file_path)) {
+            return redirect()->away($product->pdf_drive_link);
         }
 
         // Check if file exists in private storage or public storage
@@ -284,12 +293,11 @@ class DigitalStoreController extends Controller
         }
 
         if (!file_exists($fullPath)) {
+            if (!empty($product->pdf_drive_link)) {
+                return redirect()->away($product->pdf_drive_link);
+            }
             abort(404, 'PDF file not found on server. Please contact support.');
         }
-
-        // Increment download counter
-        $access->increment('pdf_download_count');
-        $access->update(['last_downloaded_at' => now()]);
 
         $fileName = Str::slug($product->title) . '.pdf';
 

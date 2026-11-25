@@ -105,8 +105,16 @@
             <div class="card-body p-4">
                 @forelse($student->admissions as $admIdx => $admission)
                     <div class="{{ !$loop->first ? 'border-top pt-4 mt-4' : '' }}">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="badge bg-secondary-subtle text-secondary font-monospace">{{ $admission->admission_no }}</span>
+                        <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+                            <div class="d-flex align-items-center gap-2 flex-wrap">
+                                <span class="badge bg-secondary-subtle text-secondary font-monospace">{{ $admission->admission_no }}</span>
+                                <span class="badge bg-light text-dark border">
+                                    <i class="fa-regular fa-calendar me-1 text-primary"></i> Adm Date: <strong>{{ $admission->admission_date ? \Carbon\Carbon::parse($admission->admission_date)->format('d M, Y') : 'N/A' }}</strong>
+                                </span>
+                                <button type="button" class="btn btn-sm btn-outline-secondary py-0.5 px-2 rounded-2" data-bs-toggle="modal" data-bs-target="#editAdmDateModal{{ $admission->id }}" title="Change Admission Date for this course">
+                                    <i class="fa-solid fa-pen-to-square me-1"></i>Change Date
+                                </button>
+                            </div>
                             <span class="badge bg-primary-subtle text-primary rounded-2">{{ ucfirst($admission->status) }}</span>
                         </div>
                         <div class="row g-3">
@@ -135,6 +143,66 @@
                             <div class="col-md-4">
                                 <div class="small text-muted">Remaining Balance:</div>
                                 <div class="fw-bold text-danger fs-5">₹{{ number_format(max(0, $admission->net_fee - $admission->total_paid), 2) }}</div>
+                            </div>
+                        </div>
+
+                        <!-- Direct Academic Workflow Action Buttons for this Course -->
+                        <div class="mt-3 pt-3 border-top d-flex flex-wrap gap-2 align-items-center">
+                            <span class="small fw-bold text-muted me-1"><i class="fa-solid fa-diagram-project text-primary me-1"></i>Workflow:</span>
+                            <a href="{{ route('centre.students.id-card', [$student->id, 'admission_id' => $admission->id]) }}" target="_blank" class="btn btn-sm btn-outline-primary rounded-2" title="Print Course ID Card">
+                                <i class="fa-solid fa-id-card me-1"></i>ID Card
+                            </a>
+                            <a href="{{ route('centre.students.admission-form', [$student->id, 'admission_id' => $admission->id]) }}" target="_blank" class="btn btn-sm btn-outline-dark rounded-2" title="Print Admission Form">
+                                <i class="fa-solid fa-file-invoice me-1"></i>Admission Form
+                            </a>
+                            <a href="{{ route('centre.students.marks', [$student->id, 'course_id' => $admission->course_id, 'admission_id' => $admission->id]) }}" class="btn btn-sm btn-outline-success rounded-2" title="Enter Marks for this Course">
+                                <i class="fa-solid fa-marker me-1"></i>Enter Marks
+                            </a>
+                            @php
+                                $courseExam = \App\Models\Exam::where('course_id', $admission->course_id)->latest()->first();
+                                $studentResult = \App\Models\ExamResult::where('student_id', $student->id)->where('course_id', $admission->course_id)->latest()->first();
+                                $studentCertificate = \App\Models\Certificate::where('student_id', $student->id)->where('course_id', $admission->course_id)->latest()->first();
+                            @endphp
+                            @if($courseExam)
+                                <a href="{{ route('centre.exams.hall-tickets.single', ['exam' => $courseExam->id, 'student' => $student->id]) }}" target="_blank" class="btn btn-sm btn-outline-info rounded-2" title="Print Admit Card">
+                                    <i class="fa-solid fa-ticket me-1"></i>Admit Card
+                                </a>
+                            @endif
+                            @if($studentResult)
+                                <a href="{{ route('centre.exams.results.marksheet', $studentResult->id) }}" target="_blank" class="btn btn-sm btn-outline-warning text-dark rounded-2 fw-semibold" title="View & Print Marksheet">
+                                    <i class="fa-solid fa-award me-1"></i>Marksheet
+                                </a>
+                            @endif
+                            @if($studentCertificate)
+                                <a href="{{ route('verify.certificate') }}?search={{ $studentCertificate->certificate_no }}" target="_blank" class="btn btn-sm btn-success rounded-2 text-white" title="View Official Certificate">
+                                    <i class="fa-solid fa-certificate me-1"></i>Certificate
+                                </a>
+                            @endif
+                        </div>
+
+                        <!-- Modal: Edit Admission Date for this Admission -->
+                        <div class="modal fade" id="editAdmDateModal{{ $admission->id }}" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-sm">
+                                <div class="modal-content rounded-4 border-0 shadow">
+                                    <form action="{{ route('centre.students.admissions.date', [$student->id, $admission->id]) }}" method="POST">
+                                        @csrf
+                                        <div class="modal-header border-bottom py-2.5">
+                                            <h6 class="modal-title fw-bold text-dark">
+                                                <i class="fa-solid fa-calendar-day text-primary me-1"></i>Change Admission Date
+                                            </h6>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body p-3">
+                                            <div class="small text-muted mb-2">Course: <strong>{{ $admission->course?->course_name }}</strong></div>
+                                            <label class="form-label small fw-semibold">New Admission Date <span class="text-danger">*</span></label>
+                                            <input type="date" name="admission_date" class="form-control" value="{{ $admission->admission_date ? \Carbon\Carbon::parse($admission->admission_date)->toDateString() : date('Y-m-d') }}" required>
+                                        </div>
+                                        <div class="modal-footer border-top py-2">
+                                            <button type="button" class="btn btn-sm btn-light" data-bs-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="btn btn-sm btn-primary fw-bold">Update Date</button>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -170,6 +238,12 @@
                                         <option value="{{ $crs->id }}">{{ $crs->course_name }} ({{ $crs->course_code }}) - ₹{{ number_format($crs->course_fee ?? $crs->default_course_fee ?? $crs->fee ?? 0, 2) }}</option>
                                     @endforeach
                                 </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Course Admission Date <span class="text-danger">*</span></label>
+                                <input type="date" name="admission_date" class="form-control" value="{{ date('Y-m-d') }}" required>
+                                <div class="form-text">Admission date for this additional course enrollment.</div>
                             </div>
 
                             <div class="mb-3">

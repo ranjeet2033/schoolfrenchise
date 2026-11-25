@@ -169,7 +169,12 @@ class AdminStudentController extends Controller
     {
         $student->load(['centre.state', 'centre.district', 'state', 'district', 'admissions.course', 'admissions.batch']);
         $centre = $student->centre ?? Centre::where('status', 'active')->first();
-        $admission = $student->admissions->first();
+        $targetAdmissionId = request('admission_id');
+        $targetCourseId = request('course_id');
+        $admission = $student->admissions
+            ->when($targetAdmissionId, fn($c) => $c->where('id', $targetAdmissionId))
+            ->when($targetCourseId, fn($c) => $c->where('course_id', $targetCourseId))
+            ->first() ?? $student->admissions->first();
 
         return view('centre.students.id_card', compact('student', 'centre', 'admission'));
     }

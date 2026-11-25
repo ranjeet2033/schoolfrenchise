@@ -81,16 +81,21 @@
                             <div class="col-md-6">
                                 <label class="form-label small fw-bold">Upload Primary PDF File</label>
                                 <input type="file" name="pdf_file" class="form-control" accept="application/pdf">
-                                <span class="form-text small text-muted">Uploaded file will be securely stored and accessible by paid customers.</span>
+                                <span class="form-text small text-muted">Uploaded file will be securely stored and downloadable by paid customers.</span>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold"><i class="fa-brands fa-google-drive text-warning me-1"></i> Primary PDF Google Drive Link</label>
+                                <input type="url" name="pdf_drive_link" value="{{ old('pdf_drive_link') }}" class="form-control" placeholder="https://drive.google.com/file/d/...">
+                                <span class="form-text small text-muted">Optionally host the main PDF on Google Drive directly.</span>
+                            </div>
+                            <div class="col-md-4">
                                 <label class="form-label small fw-bold">Total Pages Count</label>
                                 <input type="number" name="total_pages" value="{{ old('total_pages') }}" class="form-control" placeholder="e.g. 150">
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-8">
                                 <label class="form-label small fw-bold"><i class="fa-solid fa-eye text-primary me-1"></i> Demo / Sample PDF Link</label>
-                                <input type="url" name="demo_url" value="{{ old('demo_url') }}" class="form-control" placeholder="Google Drive or sample PDF URL">
-                                <span class="form-text small text-muted">Demo button shown on product page (Free to view).</span>
+                                <input type="url" name="pdf_demo_url" id="pdf_demo_url" value="{{ old('pdf_demo_url', old('demo_url')) }}" class="form-control" placeholder="Google Drive preview link or sample PDF URL">
+                                <span class="form-text small text-muted">Triggers the prominent "Demo" button on PDF card &amp; details page (Free to view).</span>
                             </div>
 
                             <!-- Multiple PDF / Google Drive Resource Links -->
@@ -175,8 +180,8 @@
                             <!-- Demo Video URL -->
                             <div class="col-md-6">
                                 <label class="form-label small fw-bold"><i class="fa-solid fa-circle-play text-success me-1"></i> Demo Video Link (YouTube or Drive)</label>
-                                <input type="url" name="demo_url" value="{{ old('demo_url') }}" class="form-control" placeholder="YouTube or Drive Demo link">
-                                <span class="form-text small text-muted">Triggers the "Demo" button on the video card and details page.</span>
+                                <input type="url" name="video_demo_url" id="video_demo_url" value="{{ old('video_demo_url', old('demo_url')) }}" class="form-control" placeholder="YouTube or Drive Demo link">
+                                <span class="form-text small text-muted">Triggers the prominent "Demo" button on the video card and details page.</span>
                             </div>
 
                             <!-- Multiple Video Links Repeater -->
@@ -246,10 +251,14 @@ function toggleTypeFields() {
     if (isVideo) {
         pdfFields.classList.add('d-none');
         videoFields.classList.remove('d-none');
+        pdfFields.querySelectorAll('input, select, textarea').forEach(el => el.disabled = true);
+        videoFields.querySelectorAll('input, select, textarea').forEach(el => el.disabled = false);
         toggleVideoAccessMode();
     } else {
         pdfFields.classList.remove('d-none');
         videoFields.classList.add('d-none');
+        pdfFields.querySelectorAll('input, select, textarea').forEach(el => el.disabled = false);
+        videoFields.querySelectorAll('input, select, textarea').forEach(el => el.disabled = true);
     }
 }
 

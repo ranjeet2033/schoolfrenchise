@@ -51,6 +51,11 @@
                                         <a href="{{ route('store.download.pdf', $access->access_token) }}" class="btn btn-success btn-lg px-4 rounded-pill fw-bold shadow-sm">
                                             <i class="fa-solid fa-download me-2"></i> Download PDF
                                         </a>
+                                        @if($prod->pdf_drive_link)
+                                            <a href="{{ $prod->pdf_drive_link }}" target="_blank" class="btn btn-sm btn-outline-warning rounded-pill px-3 py-1 fw-bold text-dark mt-1" style="background: #fef3c7; border-color: #f59e0b;">
+                                                <i class="fa-brands fa-google-drive text-warning me-1"></i> Open Google Drive PDF
+                                            </a>
+                                        @endif
                                         <span class="d-block small text-muted">Downloads: {{ $access->pdf_download_count }} times</span>
 
                                         @if(!empty($prod->normalized_resource_links))

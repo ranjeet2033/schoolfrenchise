@@ -71,7 +71,7 @@ class AdminExamController extends Controller
             'exam_title'   => 'required|string|max:191',
             'exam_code'    => 'nullable|string|max:50|unique:exams,exam_code',
             'session_name' => 'required|string|max:50',
-            'exam_date'    => 'required|date',
+            'exam_date'    => 'nullable|date',
             'status'       => 'required|in:scheduled,ongoing,evaluated,published',
         ]);
 
@@ -129,7 +129,7 @@ class AdminExamController extends Controller
             'exam_title'   => 'required|string|max:191',
             'exam_code'    => 'required|string|max:50|unique:exams,exam_code,' . $exam->id,
             'session_name' => 'required|string|max:50',
-            'exam_date'    => 'required|date',
+            'exam_date'    => 'nullable|date',
             'status'       => 'required|in:scheduled,ongoing,evaluated,published',
         ]);
 

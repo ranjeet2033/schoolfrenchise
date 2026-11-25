@@ -84,7 +84,7 @@
                             <div class="small text-muted">{{ $ex->session_name }}</div>
                         </td>
                         <td>
-                            <div class="fw-semibold text-dark">{{ $ex->exam_date ? $ex->exam_date->format('d M, Y') : 'Announced' }}</div>
+                            <div class="fw-semibold text-dark">{{ $ex->exam_date ? $ex->exam_date->format('d M, Y') : 'Perpetual / Ongoing' }}</div>
                         </td>
                         <td class="text-center">
                             <span class="badge bg-light text-dark border font-monospace px-2 py-1 fs-6">{{ $candCount }}</span>

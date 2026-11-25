@@ -22,6 +22,7 @@ class DigitalProduct extends Model
         'sale_price',
         'thumbnail',
         'pdf_file_path',
+        'pdf_drive_link',
         'resource_links',
         'total_pages',
         'sample_pdf_path',

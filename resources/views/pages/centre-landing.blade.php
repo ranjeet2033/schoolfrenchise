@@ -6,8 +6,11 @@
     <title>{{ $centre->centre_name }} | Authorized Study Centre ({{ $centre->centre_code }})</title>
     <meta name="description" content="{{ $landingPage->tagline ?? ($centre->centre_name . ' - Authorized Tech Era Computer Education Centre offering certified diploma and vocational courses.') }}">
 
-    <!-- Favicon -->
+    <!-- Favicon & Touch Icons -->
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" type="image/png" href="{{ $instituteSettings['favicon_url'] ?? asset('images/tech-era-logo.png') }}">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
+    <link rel="apple-touch-icon" href="{{ $instituteSettings['favicon_url'] ?? asset('images/tech-era-logo.png') }}">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -891,8 +894,8 @@
 
                                         <div class="d-flex align-items-center gap-1.5 flex-wrap">
                                             @if($prod->has_demo)
-                                                <a href="{{ $prod->effective_demo_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-secondary rounded-2 px-2.5 fw-semibold shadow-sm" style="font-size: 0.72rem;" title="View Demo">
-                                                    <i class="fa-solid fa-eye me-1 text-primary"></i>Demo
+                                                <a href="{{ $prod->effective_demo_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-warning text-dark rounded-2 px-2.5 py-1 fw-bold shadow-sm" style="background: #f59e0b; border: 1px solid #d97706; color: #1e293b !important; font-size: 0.74rem;" title="View Demo">
+                                                    <i class="fa-solid {{ $prod->type === 'video' ? 'fa-circle-play' : 'fa-eye' }} me-1 text-dark"></i>Demo
                                                 </a>
                                             @endif
                                             @if($prod->isPublicVideo())

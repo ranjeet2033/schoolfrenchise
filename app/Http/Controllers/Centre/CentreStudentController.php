@@ -285,8 +285,9 @@ class CentreStudentController extends Controller
         }
 
         $validated = $request->validate([
-            'course_id' => 'required|exists:courses,id',
-            'net_fee'   => 'nullable|numeric|min:0',
+            'course_id'      => 'required|exists:courses,id',
+            'net_fee'        => 'nullable|numeric|min:0',
+            'admission_date' => 'nullable|date',
         ]);
 
         $course = Course::findOrFail($validated['course_id']);
@@ -307,15 +308,16 @@ class CentreStudentController extends Controller
         $courseFee = (float) ($course->default_course_fee ?? $course->course_fee ?? $course->fee ?? 0);
         $netFee = isset($validated['net_fee']) && $validated['net_fee'] !== '' ? (float) $validated['net_fee'] : $courseFee;
         $discountAmount = max(0, $courseFee - $netFee);
+        $admDate = !empty($validated['admission_date']) ? \Carbon\Carbon::parse($validated['admission_date'])->toDateString() : now()->toDateString();
 
         try {
-            DB::transaction(function () use ($studentModel, $centre, $course, $courseFee, $netFee, $discountAmount, $admissionFee) {
+            DB::transaction(function () use ($studentModel, $centre, $course, $courseFee, $netFee, $discountAmount, $admissionFee, $admDate) {
                 $admission = Admission::create([
                     'student_id'          => $studentModel->id,
                     'centre_id'           => $centre->id,
                     'course_id'           => $course->id,
                     'admission_no'        => 'ADM/' . date('Y') . '/' . strtoupper(Str::random(6)),
-                    'admission_date'      => now(),
+                    'admission_date'      => $admDate,
                     'batch_id'            => null,
                     'course_fee'          => $courseFee,
                     'discount_amount'     => $discountAmount,
@@ -342,6 +344,34 @@ class CentreStudentController extends Controller
         }
     }
 
+    public function updateAdmissionDate(Request $request, $student, $admission)
+    {
+        $centre = $this->getAuthCentre();
+        $studentModel = $student instanceof Student ? $student : Student::withoutGlobalScope('centre_isolation')->findOrFail($student);
+
+        if ($studentModel->centre_id !== $centre->id && !Auth::user()->isSuperAdmin()) {
+            abort(403, 'Unauthorized access.');
+        }
+
+        $adm = $studentModel->admissions()->findOrFail($admission instanceof Admission ? $admission->id : $admission);
+
+        $validated = $request->validate([
+            'admission_date' => 'required|date',
+        ]);
+
+        $oldDate = $adm->admission_date;
+        $newDate = \Carbon\Carbon::parse($validated['admission_date'])->toDateString();
+        $adm->update(['admission_date' => $newDate]);
+
+        AuditLog::record('centre_student_admission_date_updated', $adm, ['old_date' => $oldDate], [
+            'student_id'   => $studentModel->id,
+            'admission_id' => $adm->id,
+            'new_date'     => $newDate,
+        ]);
+
+        return back()->with('success', "Admission date for {$adm->course?->course_name} updated successfully to " . \Carbon\Carbon::parse($newDate)->format('d M, Y') . "!");
+    }
+
     public function idCard($student)
     {
         $centre = $this->getAuthCentre();
@@ -352,7 +382,13 @@ class CentreStudentController extends Controller
         }
 
         $studentModel->load(['centre.state', 'centre.district', 'admissions.course', 'admissions.batch', 'state', 'district']);
-        $admission = $studentModel->admissions->first();
+
+        $targetAdmissionId = request('admission_id');
+        $targetCourseId = request('course_id');
+        $admission = $studentModel->admissions
+            ->when($targetAdmissionId, fn($c) => $c->where('id', $targetAdmissionId))
+            ->when($targetCourseId, fn($c) => $c->where('course_id', $targetCourseId))
+            ->first() ?? $studentModel->admissions->first();
 
         return view('centre.students.id_card', ['centre' => $centre, 'student' => $studentModel, 'admission' => $admission]);
     }
@@ -367,7 +403,13 @@ class CentreStudentController extends Controller
         }
 
         $studentModel->load(['centre', 'state', 'district', 'admissions.course', 'admissions.batch', 'admissions.studentFees']);
-        $admission = $studentModel->admissions->first();
+
+        $targetAdmissionId = request('admission_id');
+        $targetCourseId = request('course_id');
+        $admission = $studentModel->admissions
+            ->when($targetAdmissionId, fn($c) => $c->where('id', $targetAdmissionId))
+            ->when($targetCourseId, fn($c) => $c->where('course_id', $targetCourseId))
+            ->first() ?? $studentModel->admissions->first();
 
         return view('centre.students.admission_form', ['centre' => $centre, 'student' => $studentModel, 'admission' => $admission]);
     }

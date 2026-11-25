@@ -61,6 +61,11 @@
                                                 <a href="{{ route('store.download.pdf', $acc->access_token) }}" class="btn btn-sm btn-success rounded-pill px-3 fw-bold shadow-sm">
                                                     <i class="fa-solid fa-download me-1"></i> Download PDF
                                                 </a>
+                                                @if($prod->pdf_drive_link)
+                                                    <a href="{{ $prod->pdf_drive_link }}" target="_blank" class="btn btn-xs btn-outline-warning rounded-pill px-2 py-0.5 fw-bold text-dark mt-1" style="background: #fef3c7; border-color: #f59e0b; font-size: 0.72rem;">
+                                                        <i class="fa-brands fa-google-drive text-warning me-1"></i> Drive PDF
+                                                    </a>
+                                                @endif
                                                 @if(!empty($prod->normalized_resource_links))
                                                     <div class="d-flex flex-wrap gap-1 mt-1 justify-content-sm-end">
                                                         @foreach($prod->normalized_resource_links as $rLink)

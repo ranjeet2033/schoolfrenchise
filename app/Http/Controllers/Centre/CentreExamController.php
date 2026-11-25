@@ -176,24 +176,30 @@ class CentreExamController extends Controller
             abort(403, 'Unauthorized access to student evaluation.');
         }
 
-        $admission = $student->admissions()->latest()->first();
+        if ($request->filled('admission_id')) {
+            $admission = $student->admissions()->find($request->admission_id);
+        } elseif ($request->filled('course_id')) {
+            $admission = $student->admissions()->where('course_id', $request->course_id)->first();
+        } else {
+            $admission = $student->admissions()->latest()->first();
+        }
+
         if (!$admission || !$admission->course_id) {
             return redirect()->route('centre.students.show', $student->id)
                 ->with('error', 'Student must have an active course enrollment before entering marks.');
         }
 
         $course = Course::findOrFail($admission->course_id);
-        $year = date('Y');
 
         $exam = Exam::firstOrCreate(
             [
                 'course_id' => $course->id,
-                'exam_code' => 'EXAM-' . $year . '-' . strtoupper($course->course_code),
+                'exam_code' => 'EXAM-' . strtoupper($course->course_code),
             ],
             [
                 'exam_title'   => 'Assessment Examination - ' . $course->course_name,
-                'session_name' => ($year - 1) . '-' . $year,
-                'exam_date'    => now()->toDateString(),
+                'session_name' => 'Perpetual Assessment',
+                'exam_date'    => null,
                 'status'       => 'published',
             ]
         );
@@ -214,7 +220,6 @@ class CentreExamController extends Controller
         }
 
         // Auto-provision standard exam sessions for active courses with enrolled candidates at this centre
-        $year = date('Y');
         $enrolledCourseIds = Student::where('centre_id', $centre->id)
             ->whereHas('admissions', function ($q) {
                 $q->where('status', 'active');
@@ -233,12 +238,12 @@ class CentreExamController extends Controller
                 Exam::firstOrCreate(
                     [
                         'course_id' => $course->id,
-                        'exam_code' => 'EXAM-' . $year . '-' . strtoupper($course->course_code),
+                        'exam_code' => 'EXAM-' . strtoupper($course->course_code),
                     ],
                     [
                         'exam_title'   => 'Assessment Examination - ' . $course->course_name,
-                        'session_name' => ($year - 1) . '-' . $year,
-                        'exam_date'    => now()->toDateString(),
+                        'session_name' => 'Perpetual Assessment',
+                        'exam_date'    => null,
                         'status'       => 'published',
                     ]
                 );
@@ -249,7 +254,7 @@ class CentreExamController extends Controller
             ->withCount(['results' => function ($q) use ($centre) {
                 $q->where('centre_id', $centre->id);
             }])
-            ->orderBy('exam_date', 'desc')
+            ->latest('id')
             ->get();
 
         foreach ($exams as $ex) {

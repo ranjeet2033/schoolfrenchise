@@ -444,6 +444,7 @@ Route::middleware(['role:super_admin,centre,staff', 'centre.active'])->prefix('c
     Route::post('/students', [CentreStudentController::class, 'store'])->name('students.store');
     Route::get('/students/{student}', [CentreStudentController::class, 'show'])->name('students.show');
     Route::post('/students/{student}/add-course', [CentreStudentController::class, 'addCourse'])->name('students.add-course');
+    Route::post('/students/{student}/admissions/{admission}/date', [CentreStudentController::class, 'updateAdmissionDate'])->name('students.admissions.date');
     Route::get('/students/{student}/edit', [CentreStudentController::class, 'edit'])->name('students.edit');
     Route::put('/students/{student}', [CentreStudentController::class, 'update'])->name('students.update');
     Route::get('/students/{student}/id-card', [CentreStudentController::class, 'idCard'])->name('students.id-card');
