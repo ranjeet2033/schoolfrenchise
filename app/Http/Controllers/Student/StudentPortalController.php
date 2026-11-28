@@ -188,13 +188,26 @@ class StudentPortalController extends Controller
     /**
      * Official Printable Admission Form Dossier.
      */
-    public function admissionForm()
+    public function admissionForm(Request $request)
     {
         $student = $this->getStudent();
-        $student->load(['centre.state', 'centre.district', 'state', 'district']);
-        $admission = $this->getActiveAdmission($student);
+        $student->load(['centre.state', 'centre.district', 'admissions.course', 'admissions.batch', 'state', 'district']);
+        
+        $admissions = $student->admissions;
+        $admissionId = $request->query('admission_id') ?: $request->query('course_id');
+        $admission = null;
 
-        return view('student.admission_form', compact('student', 'admission'));
+        if ($admissionId) {
+            $admission = $admissions->first(function ($adm) use ($admissionId) {
+                return $adm->id == $admissionId || $adm->course_id == $admissionId;
+            });
+        }
+
+        if (!$admission) {
+            $admission = $this->getActiveAdmission($student);
+        }
+
+        return view('student.admission_form', compact('student', 'admission', 'admissions'));
     }
 
     /**
@@ -213,14 +226,30 @@ class StudentPortalController extends Controller
 
     /**
      * Student Digital Identity Card.
+     * Supports multiple enrolled courses with course switcher tabs.
      */
-    public function idCard()
+    public function idCard(Request $request)
     {
         $student = $this->getStudent();
         $student->load(['centre.state', 'centre.district', 'admissions.course', 'admissions.batch', 'state', 'district']);
-        $admission = $this->getActiveAdmission($student);
 
-        return view('student.id_card', compact('student', 'admission'));
+        $admissions = $student->admissions;
+        $admissionId = $request->query('admission_id') ?: $request->query('course_id');
+        $admission = null;
+
+        if ($admissionId) {
+            $admission = $admissions->first(function ($adm) use ($admissionId) {
+                return $adm->id == $admissionId || $adm->course_id == $admissionId;
+            });
+        }
+
+        if (!$admission) {
+            $admission = $this->getActiveAdmission($student);
+        } else {
+            \App\Services\FeeService::reconcileAdmissionPayments($admission);
+        }
+
+        return view('student.id_card', compact('student', 'admission', 'admissions'));
     }
 
     /**

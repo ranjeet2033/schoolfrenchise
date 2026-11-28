@@ -247,7 +247,7 @@
                             </td>
                             <td>
                                 <span class="badge bg-info-subtle text-info">{{ $adm->course?->course_code }}</span>
-                                <div class="small fw-semibold text-dark text-truncate" style="max-width: 150px;">{{ $adm->course?->title }}</div>
+                                <div class="small fw-semibold text-dark text-truncate" style="max-width: 150px;">{{ $adm->course?->course_name }}</div>
                             </td>
                             <td>
                                 <span class="badge bg-light text-dark font-monospace border">{{ $adm->centre?->centre_code }}</span>

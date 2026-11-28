@@ -286,40 +286,100 @@
     <!-- Academics & Admissions Tab -->
     <div class="tab-pane fade" id="academic-tab-pane" role="tabpanel">
         <div class="card dce-table-card">
-            <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                <h6 class="fw-bold mb-0 text-dark">Course Enrollments & Admission History</h6>
+            <div class="card-header bg-white d-flex flex-wrap justify-content-between align-items-center py-2.5 gap-2">
+                <h6 class="fw-bold mb-0 text-dark">
+                    <i class="fa-solid fa-graduation-cap text-primary me-2"></i>Course Enrollments & Admission History ({{ $student->admissions->count() }})
+                </h6>
+                <button type="button" class="btn btn-sm btn-primary rounded-2 fw-semibold shadow-sm" data-bs-toggle="modal" data-bs-target="#adminAddCourseModal">
+                    <i class="fa-solid fa-plus-circle me-1"></i> Enroll Additional Course
+                </button>
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
                     <table class="table align-middle mb-0">
-                        <thead>
+                        <thead class="table-light">
                             <tr>
                                 <th>Admission No</th>
-                                <th>Course</th>
-                                <th>Centre</th>
+                                <th>Course Details</th>
+                                <th>Study Centre</th>
                                 <th>Admission Date</th>
-                                <th>Fee Agreed</th>
+                                <th>Fee Details</th>
                                 <th>Status</th>
+                                <th class="text-end pe-3">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($student->admissions as $adm)
                             <tr>
-                                <td class="font-monospace fw-bold text-primary">{{ $adm->admission_no }}</td>
-                                <td>
-                                    <div class="fw-bold text-dark">{{ $adm->course?->title }}</div>
-                                    <div class="text-muted small font-monospace">Code: {{ $adm->course?->course_code }} • Duration: {{ $adm->course?->duration_months }} Months</div>
+                                <td class="font-monospace fw-bold text-primary">
+                                    {{ $adm->admission_no }}
+                                    @if($loop->first)
+                                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle ms-1" style="font-size: 10px;">Primary</span>
+                                    @endif
                                 </td>
-                                <td>{{ $adm->centre?->centre_name }}</td>
-                                <td>{{ $adm->admission_date ? \Carbon\Carbon::parse($adm->admission_date)->format('d M Y') : '—' }}</td>
-                                <td class="fw-bold text-dark">₹{{ number_format($adm->total_fee, 2) }}</td>
                                 <td>
-                                    <span class="badge bg-success">{{ ucfirst($adm->status) }}</span>
+                                    <div class="fw-bold text-dark">{{ $adm->course?->course_name ?? 'Course #' . $adm->course_id }}</div>
+                                    <div class="text-muted small font-monospace">Code: {{ $adm->course?->course_code }} • Duration: {{ $adm->course?->duration_months ?? '—' }} Months</div>
+                                    @if($adm->batch)
+                                        <div class="small text-secondary mt-0.5"><i class="fa-solid fa-users me-1 text-info"></i>Batch: {{ $adm->batch->batch_name }}</div>
+                                    @endif
+                                </td>
+                                <td>
+                                    <span class="badge bg-light text-dark font-monospace border">{{ $adm->centre?->centre_code ?? 'HO' }}</span>
+                                    <div class="small text-dark">{{ $adm->centre?->centre_name }}</div>
+                                </td>
+                                <td>
+                                    <div class="fw-semibold text-dark">{{ $adm->admission_date ? \Carbon\Carbon::parse($adm->admission_date)->format('d M Y') : '—' }}</div>
+                                    <button type="button" class="btn btn-link btn-sm p-0 text-decoration-none text-primary small" data-bs-toggle="modal" data-bs-target="#adminEditAdmDateModal{{ $adm->id }}" title="Change Admission Date">
+                                        <i class="fa-solid fa-pen-to-square me-1"></i>Change Date
+                                    </button>
+                                </td>
+                                <td>
+                                    <div class="small fw-bold text-dark">Agreed: ₹{{ number_format($adm->net_fee, 2) }}</div>
+                                    <div class="small text-success">Paid: ₹{{ number_format($adm->total_paid, 2) }}</div>
+                                    @php $due = max(0, $adm->net_fee - $adm->total_paid); @endphp
+                                    @if($due > 0)
+                                        <div class="small text-danger fw-semibold">Due: ₹{{ number_format($due, 2) }}</div>
+                                    @endif
+                                </td>
+                                <td>
+                                    <span class="badge {{ $adm->status === 'active' ? 'bg-success' : ($adm->status === 'completed' ? 'bg-primary' : 'bg-secondary') }}">
+                                        {{ ucfirst($adm->status) }}
+                                    </span>
+                                </td>
+                                <td class="text-end pe-3">
+                                    <div class="dropdown">
+                                        <button class="btn btn-sm btn-light border dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end shadow border-0 py-2">
+                                            <li>
+                                                <a class="dropdown-item py-1.5" href="{{ route('admin.students.id-card', [$student->id, 'admission_id' => $adm->id]) }}" target="_blank">
+                                                    <i class="fa-solid fa-id-card text-primary me-2"></i> Print Course ID Card
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item py-1.5" href="{{ route('admin.admissions.print', $adm->id) }}" target="_blank">
+                                                    <i class="fa-solid fa-file-invoice text-dark me-2"></i> Print Admission Form
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item py-1.5" href="{{ route('admin.admissions.edit', $adm->id) }}">
+                                                    <i class="fa-solid fa-pen text-info me-2"></i> Edit Admission Details
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <button type="button" class="dropdown-item py-1.5 text-warning-emphasis" data-bs-toggle="modal" data-bs-target="#adminEditAdmDateModal{{ $adm->id }}">
+                                                    <i class="fa-solid fa-calendar-day me-2"></i> Change Admission Date
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </td>
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="6" class="text-center py-4 text-muted">No course admission assigned yet.</td>
+                                <td colspan="7" class="text-center py-4 text-muted">No course admission assigned yet.</td>
                             </tr>
                             @endforelse
                         </tbody>
@@ -398,9 +458,14 @@
                             <div class="border rounded p-3 mb-2 bg-light">
                                 <div class="d-flex justify-content-between align-items-center mb-1">
                                     <strong class="text-primary font-monospace">{{ $cert->certificate_no }}</strong>
-                                    <span class="badge bg-success">{{ ucfirst($cert->status) }}</span>
+                                    <div>
+                                        <span class="badge bg-success me-1">{{ ucfirst($cert->status) }}</span>
+                                        <a href="{{ route('admin.certificates.print', $cert->id) }}" target="_blank" class="btn btn-xs btn-outline-primary py-0 px-2 rounded" title="Print Certificate">
+                                            <i class="fa-solid fa-print me-1"></i>Print
+                                        </a>
+                                    </div>
                                 </div>
-                                <div class="small text-dark fw-semibold">{{ $cert->course?->title }}</div>
+                                <div class="small text-dark fw-semibold">{{ $cert->course?->course_name ?? 'Course #' . $cert->course_id }}</div>
                                 <div class="small text-muted">Issued on: {{ $cert->issue_date ? \Carbon\Carbon::parse($cert->issue_date)->format('d M Y') : '—' }} • Grade: {{ $cert->grade }}</div>
                             </div>
                         @empty
@@ -420,9 +485,14 @@
                             <div class="border rounded p-3 mb-2 bg-light">
                                 <div class="d-flex justify-content-between align-items-center mb-1">
                                     <strong class="text-primary font-monospace">{{ $mark->marksheet_no }}</strong>
-                                    <span class="badge bg-info">Issued</span>
+                                    <div>
+                                        <span class="badge bg-info me-1">Issued</span>
+                                        <a href="{{ route('admin.certificates.marksheet', $mark->exam_result_id ?? $mark->id) }}" target="_blank" class="btn btn-xs btn-outline-info py-0 px-2 rounded" title="Print Marksheet">
+                                            <i class="fa-solid fa-print me-1"></i>Print
+                                        </a>
+                                    </div>
                                 </div>
-                                <div class="small text-dark fw-semibold">{{ $mark->course?->title }}</div>
+                                <div class="small text-dark fw-semibold">{{ $mark->course?->course_name ?? 'Course #' . $mark->course_id }}</div>
                                 <div class="small text-muted">Total: {{ $mark->total_marks }} / {{ $mark->max_marks }} ({{ $mark->percentage }}%) • Grade: {{ $mark->grade }}</div>
                             </div>
                         @empty
@@ -479,4 +549,124 @@
         </div>
     </div>
 </div>
+
+<!-- ================= MODALS ================= -->
+
+<!-- Modal: Enroll Additional Course (Head Office) -->
+<div class="modal fade" id="adminAddCourseModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content rounded-4 border-0 shadow">
+            <form action="{{ route('admin.students.add-course', $student->id) }}" method="POST">
+                @csrf
+                <div class="modal-header border-bottom py-3">
+                    <h5 class="modal-title fw-bold text-dark">
+                        <i class="fa-solid fa-graduation-cap text-primary me-2"></i>Enroll Student into Additional Course
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="alert alert-info py-2 px-3 small rounded-3 mb-3">
+                        <i class="fa-solid fa-circle-info me-1"></i>
+                        Enrolling <strong>{{ $student->full_name }}</strong> (Roll: {{ $student->roll_no }}) into an additional course from Head Office.
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            <label class="form-label small fw-semibold">Select Course <span class="text-danger">*</span></label>
+                            <select name="course_id" id="adminCourseSelect" class="form-select" required>
+                                <option value="">-- Choose Course --</option>
+                                @foreach($courses as $c)
+                                    <option value="{{ $c->id }}" data-fee="{{ $c->course_fee }}">
+                                        {{ $c->course_name }} ({{ $c->course_code }}) - Fee: ₹{{ number_format($c->course_fee, 2) }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold">Admission Date <span class="text-danger">*</span></label>
+                            <input type="date" name="admission_date" class="form-control" value="{{ date('Y-m-d') }}" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold">Assign Batch (Optional)</label>
+                            <select name="batch_id" class="form-select">
+                                <option value="">-- No Batch Assigned --</option>
+                                @foreach($batches as $b)
+                                    <option value="{{ $b->id }}">{{ $b->batch_name }} ({{ $b->timing ?? 'Standard' }})</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold">Standard Course Fee (₹) <span class="text-danger">*</span></label>
+                            <input type="number" step="0.01" name="course_fee" id="adminCourseFee" class="form-control" placeholder="0.00" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold">Discount Amount (₹)</label>
+                            <input type="number" step="0.01" name="discount_amount" class="form-control" value="0.00">
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label small fw-semibold">Remarks / Notes</label>
+                            <input type="text" name="remarks" class="form-control" placeholder="e.g. Additional course enrollment approved by Head Office">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-top py-2.5">
+                    <button type="button" class="btn btn-secondary rounded-2 btn-sm px-3" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary rounded-2 btn-sm px-4 fw-bold">
+                        <i class="fa-solid fa-check me-1"></i> Enroll Course
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modals: Edit Admission Date for each course admission -->
+@foreach($student->admissions as $adm)
+<div class="modal fade" id="adminEditAdmDateModal{{ $adm->id }}" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content rounded-4 border-0 shadow">
+            <form action="{{ route('admin.students.admissions.date', [$student->id, $adm->id]) }}" method="POST">
+                @csrf
+                <div class="modal-header border-bottom py-2.5">
+                    <h6 class="modal-title fw-bold text-dark">
+                        <i class="fa-solid fa-calendar-day text-primary me-1"></i>Change Admission Date
+                    </h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-3">
+                    <div class="small text-muted mb-2">Course: <strong>{{ $adm->course?->course_name ?? 'Course #' . $adm->course_id }}</strong></div>
+                    <label class="form-label small fw-semibold">New Admission Date <span class="text-danger">*</span></label>
+                    <input type="date" name="admission_date" class="form-control" 
+                           value="{{ $adm->admission_date ? \Carbon\Carbon::parse($adm->admission_date)->toDateString() : date('Y-m-d') }}" required>
+                </div>
+                <div class="modal-footer border-top py-2">
+                    <button type="button" class="btn btn-secondary btn-sm rounded-2" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary btn-sm rounded-2 fw-semibold">Update Date</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endforeach
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const courseSelect = document.getElementById('adminCourseSelect');
+    const feeInput = document.getElementById('adminCourseFee');
+    if (courseSelect && feeInput) {
+        courseSelect.addEventListener('change', function() {
+            const selectedOpt = this.options[this.selectedIndex];
+            const fee = selectedOpt.getAttribute('data-fee');
+            if (fee) {
+                feeInput.value = parseFloat(fee).toFixed(2);
+            }
+        });
+    }
+});
+</script>
 @endsection

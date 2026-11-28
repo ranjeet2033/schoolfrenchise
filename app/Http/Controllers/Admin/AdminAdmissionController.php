@@ -141,7 +141,7 @@ class AdminAdmissionController extends Controller
             ]);
 
             return redirect()->route('admin.admissions.index', ['tab' => 'active'])
-                ->with('success', "Admission recorded successfully for {$admission->student?->full_name} in {$admission->course?->title}.");
+                ->with('success', "Admission recorded successfully for {$admission->student?->full_name} in {$admission->course?->course_name}.");
         });
     }
 

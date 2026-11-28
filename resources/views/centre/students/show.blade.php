@@ -174,7 +174,7 @@
                                 </a>
                             @endif
                             @if($studentCertificate)
-                                <a href="{{ route('verify.certificate') }}?search={{ $studentCertificate->certificate_no }}" target="_blank" class="btn btn-sm btn-success rounded-2 text-white" title="View Official Certificate">
+                                <a href="{{ route('centre.downloads.student-certificates.show', $studentCertificate->id) }}" target="_blank" class="btn btn-sm btn-success rounded-2 text-white" title="View Official Certificate">
                                     <i class="fa-solid fa-certificate me-1"></i>Certificate
                                 </a>
                             @endif

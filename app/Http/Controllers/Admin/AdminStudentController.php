@@ -162,7 +162,95 @@ class AdminStudentController extends Controller
     public function show(Student $student)
     {
         $student->load(['centre', 'state', 'district', 'admissions.course', 'fees', 'payments', 'attendances', 'certificates', 'marksheets']);
-        return view('admin.students.show', compact('student'));
+        $courses = \App\Models\Course::where('status', true)->orderBy('course_name')->get();
+        $batches = \App\Models\Batch::where('status', 'active')
+            ->where(function ($q) use ($student) {
+                $q->where('centre_id', $student->centre_id)
+                  ->orWhereNull('centre_id');
+            })
+            ->orderBy('batch_name')
+            ->get();
+
+        return view('admin.students.show', compact('student', 'courses', 'batches'));
+    }
+
+    /**
+     * Add another course admission for student directly from Head Office.
+     */
+    public function addCourse(Request $request, Student $student)
+    {
+        $validated = $request->validate([
+            'course_id'       => 'required|exists:courses,id',
+            'admission_date'  => 'required|date',
+            'batch_id'        => 'nullable|exists:batches,id',
+            'course_fee'      => 'required|numeric|min:0',
+            'discount_amount' => 'nullable|numeric|min:0',
+            'remarks'         => 'nullable|string|max:500',
+        ]);
+
+        $course = \App\Models\Course::findOrFail($validated['course_id']);
+        $courseFee = (float) $validated['course_fee'];
+        $discountAmount = (float) ($validated['discount_amount'] ?? 0);
+        $netFee = max(0, $courseFee - $discountAmount);
+
+        return DB::transaction(function () use ($student, $course, $validated, $courseFee, $discountAmount, $netFee) {
+            $centre = $student->centre ?? Centre::where('status', 'active')->first();
+            $centreId = $centre ? $centre->id : $student->centre_id;
+            $admDate = \Carbon\Carbon::parse($validated['admission_date'])->toDateString();
+
+            $admission = \App\Models\Admission::create([
+                'student_id'          => $student->id,
+                'centre_id'           => $centreId,
+                'course_id'           => $course->id,
+                'batch_id'            => $validated['batch_id'] ?? null,
+                'admission_date'      => $admDate,
+                'course_fee'          => $courseFee,
+                'discount_amount'     => $discountAmount,
+                'net_fee'             => $netFee,
+                'total_paid'          => 0,
+                'status'              => 'active',
+                'remarks'             => $validated['remarks'] ?? 'Direct enrollment from Head Office',
+                'commission_credited' => false,
+            ]);
+
+            if ($netFee > 0) {
+                \App\Services\FeeService::assignAdmissionFees($admission, $discountAmount);
+            }
+
+            \App\Services\WalletService::creditAdmissionCommission($admission);
+
+            AuditLog::record('admin_student_course_enrolled', $admission, null, [
+                'student_id'   => $student->id,
+                'course_id'    => $course->id,
+                'admission_id' => $admission->id,
+                'net_fee'      => $netFee,
+            ]);
+
+            return redirect()->route('admin.students.show', $student->id)
+                ->with('success', "Course [{$course->course_name}] enrolled successfully for student {$student->full_name}.");
+        });
+    }
+
+    /**
+     * Update admission date for an admission record from Head Office.
+     */
+    public function updateAdmissionDate(Request $request, Student $student, \App\Models\Admission $admission)
+    {
+        $validated = $request->validate([
+            'admission_date' => 'required|date',
+        ]);
+
+        $oldDate = $admission->admission_date;
+        $newDate = \Carbon\Carbon::parse($validated['admission_date'])->toDateString();
+        $admission->update(['admission_date' => $newDate]);
+
+        AuditLog::record('admin_student_admission_date_updated', $admission, ['old_date' => $oldDate], [
+            'student_id'   => $student->id,
+            'admission_id' => $admission->id,
+            'new_date'     => $newDate,
+        ]);
+
+        return back()->with('success', "Admission date updated to " . \Carbon\Carbon::parse($newDate)->format('d M Y') . " successfully.");
     }
 
     public function idCard(Student $student)

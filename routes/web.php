@@ -235,6 +235,8 @@ Route::middleware(['role:super_admin,admin'])->prefix('admin')->name('admin.')->
     // Module 2: Students
     Route::get('/students/export', [AdminStudentController::class, 'export'])->name('students.export');
     Route::get('/students/{student}/id-card', [AdminStudentController::class, 'idCard'])->name('students.id-card');
+    Route::post('/students/{student}/add-course', [AdminStudentController::class, 'addCourse'])->name('students.add-course');
+    Route::post('/students/{student}/admissions/{admission}/date', [AdminStudentController::class, 'updateAdmissionDate'])->name('students.admissions.date');
     Route::resource('students', AdminStudentController::class);
 
     // Module 3: Admissions & Applications

@@ -463,7 +463,7 @@
 @endphp
 <div class="container-fluid px-0">
     <!-- Action Header -->
-    <div class="d-flex flex-wrap align-items-center justify-content-between mb-4 no-print gap-2">
+    <div class="d-flex flex-wrap align-items-center justify-content-between mb-3 no-print gap-2">
         <div>
             <h4 class="fw-bold mb-1 text-dark">
                 <i class="fa-solid fa-id-card text-primary me-2"></i> Official Student Identity Card
@@ -479,6 +479,28 @@
             </a>
         </div>
     </div>
+
+    @php
+        $availableAdmissions = isset($admissions) && $admissions->count() ? $admissions : $student->admissions;
+    @endphp
+
+    @if($availableAdmissions && $availableAdmissions->count() > 1)
+    <!-- Course Selector Switcher Tabs for Multiple Admissions -->
+    <div class="card border-0 shadow-sm mb-4 no-print bg-white rounded-3">
+        <div class="card-body p-2.5 d-flex flex-wrap align-items-center gap-2">
+            <span class="small fw-bold text-dark me-1"><i class="fa-solid fa-layer-group text-primary me-1"></i>Switch Course ID Card:</span>
+            @foreach($availableAdmissions as $adm)
+                @php $isSelected = ($admission && $admission->id == $adm->id); @endphp
+                <a href="{{ route('student.id-card', ['admission_id' => $adm->id]) }}" 
+                   class="btn btn-sm {{ $isSelected ? 'btn-primary fw-bold text-white shadow-sm' : 'btn-outline-secondary' }} rounded-pill px-3 py-1 text-decoration-none">
+                    <i class="fa-solid fa-graduation-cap me-1"></i>
+                    {{ $adm->course?->course_name ?? 'Course #' . $adm->id }}
+                    <span class="badge {{ $isSelected ? 'bg-light text-primary' : 'bg-secondary' }} ms-1 font-monospace">{{ $adm->admission_no }}</span>
+                </a>
+            @endforeach
+        </div>
+    </div>
+    @endif
 
     <!-- Dual-Sided ID Canvas -->
     <div class="id-print-canvas py-3">

@@ -513,6 +513,26 @@
         </div>
     </div>
 
+    @if($student->admissions && $student->admissions->count() > 1)
+    <!-- Course Selector Switcher Tabs for Multiple Admissions -->
+    <div class="w-100 no-print mb-3" style="max-width: 740px;">
+        <div class="card border-0 shadow-sm bg-white rounded-3">
+            <div class="card-body p-2 d-flex flex-wrap align-items-center gap-2">
+                <span class="small fw-bold text-dark me-1"><i class="fa-solid fa-layer-group text-primary me-1"></i>Switch Course ID Card:</span>
+                @foreach($student->admissions as $adm)
+                    @php $isSelected = ($admission && $admission->id == $adm->id); @endphp
+                    <a href="?admission_id={{ $adm->id }}" 
+                       class="btn btn-sm {{ $isSelected ? 'btn-primary fw-bold text-white shadow-sm' : 'btn-outline-secondary' }} rounded-pill px-3 py-1 text-decoration-none">
+                        <i class="fa-solid fa-graduation-cap me-1"></i>
+                        {{ $adm->course?->course_name ?? 'Course #' . $adm->id }}
+                        <span class="badge {{ $isSelected ? 'bg-light text-primary' : 'bg-secondary' }} ms-1 font-monospace">{{ $adm->admission_no }}</span>
+                    </a>
+                @endforeach
+            </div>
+        </div>
+    </div>
+    @endif
+
     <!-- Dual-Sided ID Canvas -->
     <div class="id-print-canvas">
 
